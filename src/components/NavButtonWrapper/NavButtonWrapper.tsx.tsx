@@ -4,9 +4,14 @@ import Svg, { G, Circle } from 'react-native-svg';
 import { Box, theme, Text } from '..';
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   children: {
     position: 'absolute',
+    top: 8,
+    left: 8,
   },
 });
 
@@ -15,21 +20,32 @@ interface Props {
 }
 
 const size = 40;
-const strokeWidth = 4;
+const strokeWidth = 3;
 const center = size / 2;
 const radius = size / 2 - strokeWidth / 2;
 const circumfrence = 2 * Math.PI * radius;
 const NavButtonWrapper = ({ children }: Props) => {
   return (
-    <Box>
+    <Box style={styles.container}>
       <Svg width={size} height={size}>
-        <Circle
-          stroke={theme.colors.veryLightPurple}
-          cx={center}
-          cy={center}
-          r={radius}
-          strokeWidth={strokeWidth}
-        />
+        <G rotation="-330" origin={center}>
+          <Circle
+            stroke={theme.colors.white}
+            cx={center}
+            cy={center}
+            r={radius}
+            strokeWidth={strokeWidth}
+          />
+          <Circle
+            stroke={theme.colors.yellow}
+            cx={center}
+            cy={center}
+            r={radius}
+            strokeWidth={strokeWidth}
+            strokeDasharray={circumfrence}
+            strokeDashoffset={circumfrence - (circumfrence * 32) / 100}
+          />
+        </G>
       </Svg>
       <TouchableOpacity style={styles.children}>{children}</TouchableOpacity>
     </Box>

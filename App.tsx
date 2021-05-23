@@ -1,26 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
-import { HomeIcon } from './src/svg/homeNavIcons';
-import NavButtonWrapper from './src/components/NavButtonWrapper/NavButtonWrapper.tsx';
+import AppNav from './src/navigation/AppNav/AppNav';
+import LoadAssets from './src/utils/LoadAssets';
+import fonts from './src/utils/fonts';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <NavButtonWrapper>
-        <HomeIcon />
-      </NavButtonWrapper>
+    <LoadAssets fonts={fonts}>
+      <AppNav />
       <StatusBar style="auto" />
-    </View>
+    </LoadAssets>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

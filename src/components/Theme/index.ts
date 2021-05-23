@@ -15,6 +15,7 @@ const theme = createTheme({
     yellow: '#FDCA00',
     red: '#F44336',
     green: '#4CD964',
+    lightGrey: '#ABABAC',
   },
   constants: {
     screenPadding: 40,
