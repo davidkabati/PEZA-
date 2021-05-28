@@ -12,8 +12,9 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
     flexDirection: 'row',
-    height: hp(7),
+    height: hp(8),
     alignItems: 'center',
+    paddingBottom: hp(1),
   },
   imageContainer: {
     width: hp(7),

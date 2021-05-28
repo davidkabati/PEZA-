@@ -11,6 +11,10 @@ import { HomeCard } from '../../components/HomeCard';
 import { HomeHeader } from '../../components/HomeHeader';
 import { ScreenContainer } from '../../components/Screen';
 import { SearchInput } from '../../components/SearchInput';
+import { Listing } from '../../components/ListingItem';
+import { AgentCard } from '../../components/AgentCard';
+import listings from './listingData';
+import agentData from './agentData';
 
 const styles = StyleSheet.create({
   container: {
@@ -66,14 +70,18 @@ const home = () => {
   return (
     <ScreenContainer bgColor="secondary" horizontalPadding>
       <HomeHeader />
-      <ScrollView>
+
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Text variant="h1" color="dark" style={styles.headText}>
           Get your dream property
         </Text>
+
         <SearchInput placeholder="Search for listings" />
+
         <Text variant="h2B" color="dark" style={styles.subHeadText}>
           Might help you
         </Text>
+
         <Box style={styles.cardContainer}>
           {data.map((d) => (
             <TouchableOpacity key={d.id} onPress={() => setActive(d.id)}>
@@ -87,9 +95,29 @@ const home = () => {
             </TouchableOpacity>
           ))}
         </Box>
+
         <Text variant="h2B" color="dark" style={styles.subHeadText}>
           {active === 1 ? 'Featured Listings' : 'Featured Agents'}
         </Text>
+
+        {active === 1 ? (
+          <Box>
+            {listings.map((listing) => (
+              <Listing
+                key={listing.id}
+                listing={listing}
+                onPressFav={() => alert('Fav pressed!')}
+                onPress={() => alert('listing pressed')}
+              />
+            ))}
+          </Box>
+        ) : (
+          <Box>
+            {agentData.map((agent) => (
+              <AgentCard key={agent.id} agent={agent} />
+            ))}
+          </Box>
+        )}
       </ScrollView>
     </ScreenContainer>
   );
