@@ -39,6 +39,10 @@ const theme = createTheme({
       fontSize: 28,
       fontFamily: 'SofiaPro-Bold',
     },
+    h1M: {
+      fontSize: 28,
+      fontFamily: 'SofiaPro-Medium',
+    },
     h2: {
       fontSize: 22,
       fontFamily: 'SofiaPro-Medium',

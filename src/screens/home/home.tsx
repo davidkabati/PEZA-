@@ -114,7 +114,7 @@ const home = () => {
         ) : (
           <Box>
             {agentData.map((agent) => (
-              <AgentCard key={agent.id} agent={agent} />
+              <AgentCard key={agent.id} agent={agent} onPress={() => alert('Agent')} />
             ))}
           </Box>
         )}
