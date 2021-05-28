@@ -5,9 +5,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '../../components';
 import { AppNavParamList } from '../../types/navigation.types';
-import { Home, Categories, Favorites, Profile } from '../../screens';
+import { Categories, Favorites, Profile } from '../../screens';
+import HomeNav from '../HomeNav/HomeNav';
 import { HomeIcon, CategoryIcon, FavoriteIcon, ProfileIcon } from '../../svg/homeNavIcons';
-import NavButtonWrapper from '../../components/NavButtonWrapper/NavButtonWrapper.tsx';
 
 const AppStack = createBottomTabNavigator<AppNavParamList>();
 
@@ -22,14 +22,10 @@ const AppNav = () => {
           inactiveTintColor: theme.colors.lightGrey,
           inactiveBackgroundColor: theme.colors.secondary,
           activeBackgroundColor: theme.colors.secondary,
-          //   tabStyle: styles.tabBarItem,
-          style: {
-            backgroundColor: theme.colors.secondary,
-          },
         }}>
         <AppStack.Screen
           name="Home"
-          component={Home}
+          component={HomeNav}
           options={{
             tabBarIcon: ({ color }) => {
               return <HomeIcon color={color} />;

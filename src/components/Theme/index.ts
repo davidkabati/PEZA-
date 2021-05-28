@@ -19,6 +19,7 @@ const theme = createTheme({
   },
   constants: {
     screenPadding: 40,
+    screenWidth: width - 40,
   },
   spacing: {
     s: 5,
@@ -38,8 +39,28 @@ const theme = createTheme({
       fontSize: 28,
       fontFamily: 'SofiaPro-Bold',
     },
+    h2: {
+      fontSize: 22,
+      fontFamily: 'SofiaPro-Medium',
+    },
+    h2B: {
+      fontSize: 22,
+      fontFamily: 'SofiaPro-Bold',
+    },
+    h3: {
+      fontSize: 20,
+      fontFamily: 'SofiaPro-Medium',
+    },
     b1: {
       fontSize: 17,
+      fontFamily: 'SofiaPro-Medium',
+    },
+    b1B: {
+      fontSize: 17,
+      fontFamily: 'SofiaPro-Bold',
+    },
+    b2: {
+      fontSize: 15,
       fontFamily: 'SofiaPro-Regular',
     },
   },
