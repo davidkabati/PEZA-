@@ -4,15 +4,14 @@ import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import { InitialState, NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
 import Constants from 'expo-constants';
 
-const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion}`;
+const NAVIGATION_STATE_KEY = `NAVIGATION_STATE_KEY-${Constants.manifest.sdkVersion as string}`;
 
 export type FontSource = Parameters<typeof Font.loadAsync>[0];
 const usePromiseAll = (promises: Promise<void | void[]>[], cb: () => void) =>
   useEffect(() => {
-    (async () => {
+    void (async () => {
       await Promise.all(promises);
       cb();
     })();
@@ -48,7 +47,7 @@ const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
     };
 
     if (!isNavigationReady) {
-      restoreState();
+      void restoreState();
     }
   }, [isNavigationReady]);
   const onStateChange = useCallback(
@@ -58,12 +57,7 @@ const LoadAssets = ({ assets, fonts, children }: LoadAssetsProps) => {
   if (!ready || !isNavigationReady) {
     return <AppLoading />;
   }
-  return (
-    <NavigationContainer {...{ onStateChange, initialState }}>
-      <StatusBar style="light" />
-      {children}
-    </NavigationContainer>
-  );
+  return <NavigationContainer {...{ onStateChange, initialState }}>{children}</NavigationContainer>;
 };
 
 export default LoadAssets;

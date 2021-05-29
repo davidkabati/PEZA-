@@ -1,3 +1,6 @@
+import IAgent from './agent.type';
+import IListing from './listing.type';
+
 export type AppNavParamList = {
   Home: undefined;
   Categories: undefined;
@@ -8,6 +11,7 @@ export type AppNavParamList = {
 export type HomeNavParamList = {
   Home: undefined;
   Search: undefined;
-  ListingDetail: undefined;
+  ListingDetail: { listing: IListing };
+  AgentDetail: { agent: IAgent };
   // Notifications: undefined;
 };

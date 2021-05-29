@@ -12,7 +12,7 @@ export default function App() {
     <LoadAssets fonts={fonts}>
       <ThemeProvider theme={theme}>
         <AppNav />
-        <StatusBar backgroundColor={theme.colors.white} />
+        <StatusBar style="dark" />
       </ThemeProvider>
     </LoadAssets>
   );

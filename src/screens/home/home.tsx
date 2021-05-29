@@ -5,6 +5,8 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import { StackScreenProps } from '@react-navigation/stack';
+import { View } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -15,6 +17,7 @@ import { Listing } from '../../components/ListingItem';
 import { AgentCard } from '../../components/AgentCard';
 import listings from './listingData';
 import agentData from './agentData';
+import { HomeNavParamList } from '../../types/navigation.types';
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const home = () => {
+const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   const [active, setActive] = useState<number>(1);
 
   const data = [
@@ -69,7 +72,9 @@ const home = () => {
 
   return (
     <ScreenContainer bgColor="secondary" horizontalPadding>
+      {/* <View from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing' }}> */}
       <HomeHeader />
+      {/* </View> */}
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text variant="h1" color="dark" style={styles.headText}>
@@ -107,14 +112,18 @@ const home = () => {
                 key={listing.id}
                 listing={listing}
                 onPressFav={() => alert('Fav pressed!')}
-                onPress={() => alert('listing pressed')}
+                onPress={() => navigation.navigate('ListingDetail', { listing: listing })}
               />
             ))}
           </Box>
         ) : (
           <Box>
             {agentData.map((agent) => (
-              <AgentCard key={agent.id} agent={agent} onPress={() => alert('Agent')} />
+              <AgentCard
+                key={agent.id}
+                agent={agent}
+                onPress={() => navigation.navigate('AgentDetail', { agent: agent })}
+              />
             ))}
           </Box>
         )}
