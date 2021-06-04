@@ -4,7 +4,8 @@ const listings: IListing[] = [
   {
     id: 1,
     title: 'Great place for a picnic',
-    description: '',
+    description:
+      'This is a a test description for listing with somew of the details needed, at this point i am just trying to make up content. This is a a test description for listing with somew of the details needed, at this point i am just trying to make up content.',
     address: 'Sleman, Yogyakarta',
     features: '',
     type: 'for_rent',
@@ -14,7 +15,11 @@ const listings: IListing[] = [
     price: '2400',
     sale_price: '2300',
     on_sale: true,
-    images: [require('../../../assets/images/listing1.jpeg')],
+    images: [
+      require('../../../assets/images/listing1.jpeg'),
+      require('../../../assets/images/listing1.jpeg'),
+      require('../../../assets/images/listing1.jpeg'),
+    ],
   },
   {
     id: 2,

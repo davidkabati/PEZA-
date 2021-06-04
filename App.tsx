@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { ThemeProvider } from '@shopify/restyle';
 
@@ -12,7 +11,6 @@ export default function App() {
     <LoadAssets fonts={fonts}>
       <ThemeProvider theme={theme}>
         <AppNav />
-        <StatusBar style="dark" />
       </ThemeProvider>
     </LoadAssets>
   );

@@ -11,10 +11,12 @@ import { Box, theme, Text } from '..';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    paddingHorizontal: theme.constants.screenPadding / 2,
+    // paddingHorizontal: theme.constants.screenPadding / 2,
     alignItems: 'center',
     justifyContent: 'space-between',
+    width: '100%',
     backgroundColor: 'white',
+    zIndex: 1,
   },
   buttonContainer: {
     padding: wp(1),
@@ -23,6 +25,7 @@ const styles = StyleSheet.create({
 
 interface Props {
   bgColor?: 'primary' | 'secondary';
+  color?: 'light';
   transparent?: boolean;
   onPressBack: () => void;
   option1?: ReactNode;
@@ -31,6 +34,7 @@ interface Props {
 }
 const StackHeader = ({
   bgColor,
+  color,
   onPressBack,
   option1,
   onPressOption1,
@@ -51,7 +55,11 @@ const StackHeader = ({
           size={22}
         />
       </TouchableOpacity>
-      {title && <Text>{title}</Text>}
+      {title && (
+        <Text variant="h1" color="dark">
+          {title}
+        </Text>
+      )}
       <TouchableOpacity onPress={onPressOption1} style={styles.buttonContainer}>
         {option1}
       </TouchableOpacity>

@@ -12,6 +12,7 @@ export type HomeNavParamList = {
   Home: undefined;
   Search: undefined;
   ListingDetail: { listing: IListing };
+  ListingDetailExtra: { listing: IListing };
   AgentDetail: { agent: IAgent };
   // Notifications: undefined;
 };

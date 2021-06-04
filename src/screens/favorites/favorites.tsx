@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   container: {},
 });
 
-interface favoritesProps {}
+// interface favoritesProps {}
 const favorites = () => {
   return (
     <Box>
