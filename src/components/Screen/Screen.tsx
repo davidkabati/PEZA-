@@ -15,9 +15,10 @@ interface Props {
   bgColor: 'primary' | 'secondary';
   horizontalPadding?: boolean;
   scrollable?: boolean;
+  topPadding?: number;
   style?: ViewStyle;
 }
-const Screen = ({ children, bgColor, horizontalPadding, scrollable, style }: Props) => {
+const Screen = ({ children, bgColor, horizontalPadding, scrollable, style, topPadding }: Props) => {
   if (scrollable) {
     return (
       <SafeAreaView
@@ -29,7 +30,7 @@ const Screen = ({ children, bgColor, horizontalPadding, scrollable, style }: Pro
             ...style,
           },
         ]}>
-        <Box style={{ height: 30 }} />
+        <Box style={{ height: topPadding ? topPadding : 30 }} />
         <StatusBar backgroundColor={theme.colors[bgColor]} />
         <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
       </SafeAreaView>
@@ -45,7 +46,7 @@ const Screen = ({ children, bgColor, horizontalPadding, scrollable, style }: Pro
             ...style,
           },
         ]}>
-        <Box style={{ height: 30 }} />
+        <Box style={{ height: topPadding ? topPadding : 30 }} />
         <StatusBar backgroundColor={theme.colors[bgColor]} />
         {children}
       </SafeAreaView>
