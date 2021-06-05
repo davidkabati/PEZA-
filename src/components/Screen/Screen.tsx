@@ -19,39 +19,21 @@ interface Props {
   style?: ViewStyle;
 }
 const Screen = ({ children, bgColor, horizontalPadding, scrollable, style, topPadding }: Props) => {
-  if (scrollable) {
-    return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            paddingHorizontal: horizontalPadding ? 20 : 0,
-            backgroundColor: bgColor && theme.colors[bgColor],
-            ...style,
-          },
-        ]}>
-        <Box style={{ height: topPadding ? topPadding : 30 }} />
-        <StatusBar backgroundColor={theme.colors[bgColor]} />
-        <ScrollView showsVerticalScrollIndicator={false}>{children}</ScrollView>
-      </SafeAreaView>
-    );
-  } else {
-    return (
-      <SafeAreaView
-        style={[
-          styles.container,
-          {
-            paddingHorizontal: horizontalPadding ? 20 : 0,
-            backgroundColor: bgColor && theme.colors[bgColor],
-            ...style,
-          },
-        ]}>
-        <Box style={{ height: topPadding ? topPadding : 30 }} />
-        <StatusBar backgroundColor={theme.colors[bgColor]} />
-        {children}
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView
+      style={[
+        styles.container,
+        {
+          paddingHorizontal: horizontalPadding ? 20 : 0,
+          backgroundColor: bgColor && theme.colors[bgColor],
+          ...style,
+        },
+      ]}>
+      <StatusBar backgroundColor={theme.colors[bgColor]} />
+      <Box style={{ height: topPadding ? topPadding : 30 }} />
+      {children}
+    </SafeAreaView>
+  );
 };
 
 export default Screen;

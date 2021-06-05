@@ -1,26 +1,32 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 
 import { Box, theme, Text } from '../../components';
 import { FavoriteItem } from '../../components/FavoriteItem';
-import { ScreenContainer } from '../../components/Screen';
 import listings from '../home/listingData';
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: theme.colors.secondary,
+    flex: 1,
+    paddingTop: theme.constants.screenPadding,
+    alignItems: 'center',
+  },
 });
 
 // interface favoritesProps {}
 const favorites = () => {
   return (
-    <ScreenContainer bgColor="secondary" horizontalPadding scrollable topPadding={70}>
-      <Text variant="h1" mb="xl">
+    <Box style={styles.container}>
+      <Text variant="h1" mb="xl" ml="xl" style={{ alignSelf: 'flex-start' }}>
         Favorites
       </Text>
-      {listings.map((l, index) => (
-        <FavoriteItem key={index} listing={l} />
-      ))}
-    </ScreenContainer>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {listings.map((l, index) => (
+          <FavoriteItem key={index} listing={l} />
+        ))}
+      </ScrollView>
+    </Box>
   );
 };
 
