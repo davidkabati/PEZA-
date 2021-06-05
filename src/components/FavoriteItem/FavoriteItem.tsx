@@ -26,10 +26,10 @@ const styles = StyleSheet.create({
     height: '80%',
   },
   button: {
-    width: wp(12),
-    height: wp(12),
+    width: wp(9),
+    height: wp(9),
     backgroundColor: theme.colors.purple,
-    borderRadius: wp(4),
+    borderRadius: wp(2),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -57,7 +57,7 @@ const FavoriteItem = ({ listing }: Props) => {
       <Box style={{ flex: 1 }} />
 
       <TouchableOpacity style={styles.button} onPress={() => true}>
-        <Icon name="trash-2" color={theme.colors.white} size={28} />
+        <Icon name="trash-2" color={theme.colors.white} size={22} />
       </TouchableOpacity>
     </Box>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   widthPercentageToDP as wp,
@@ -8,7 +8,6 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 
 import { Box, theme, Text } from '../../components';
-import { ScreenContainer } from '../../components/Screen';
 import { StackHeader } from '../../components/StackHeader';
 import { HomeNavParamList } from '../../types/navigation.types';
 import listings from '../home/listingData';
@@ -16,7 +15,10 @@ import { Listing } from '../../components/ListingItem';
 import ProfileSvg from './profileSvg';
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    backgroundColor: theme.colors.secondary,
+    paddingTop: theme.constants.screenPadding - 10,
+  },
   profileImg: {
     width: wp(30),
     height: wp(30),
@@ -54,45 +56,49 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
   const { first_name, last_name, email, phone, whatsapp_link } = route.params.agent;
 
   return (
-    <ScreenContainer bgColor="secondary" horizontalPadding scrollable>
+    <Box style={styles.container}>
       <StackHeader onPressBack={() => navigation.goBack()} />
-      <Box style={{ alignItems: 'center' }}>
-        <Box style={styles.profileImg} />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ marginHorizontal: theme.constants.screenPadding / 2 }}>
+        <Box style={{ alignItems: 'center' }}>
+          <Box style={styles.profileImg} />
 
-        <Box style={styles.svg}>
-          <ProfileSvg />
+          <Box style={styles.svg}>
+            <ProfileSvg />
+          </Box>
+
+          <Text variant="h1M" color="dark" mt="xl">{`${first_name} ${last_name}`}</Text>
+
+          <Text variant="b2" color="lightGrey" mt="m">
+            {email}
+          </Text>
+
+          <Box style={styles.contactContainer}>
+            <Box style={styles.contactItem}>
+              <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
+            </Box>
+
+            <Box style={styles.contactItem}>
+              <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
+            </Box>
+          </Box>
         </Box>
 
-        <Text variant="h1M" color="dark" mt="xl">{`${first_name} ${last_name}`}</Text>
-
-        <Text variant="b2" color="lightGrey" mt="m">
-          {email}
+        <Text variant="h1" color="dark" marginVertical="xl">
+          Listings
         </Text>
 
-        <Box style={styles.contactContainer}>
-          <Box style={styles.contactItem}>
-            <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
-          </Box>
-
-          <Box style={styles.contactItem}>
-            <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
-          </Box>
-        </Box>
-      </Box>
-
-      <Text variant="h1" color="dark" marginVertical="xl">
-        Listings
-      </Text>
-
-      {listings.map((listing) => (
-        <Listing
-          key={listing.id}
-          listing={listing}
-          onPressFav={() => alert('Fav pressed!')}
-          onPress={() => navigation.navigate('ListingDetail', { listing: listing })}
-        />
-      ))}
-    </ScreenContainer>
+        {listings.map((listing) => (
+          <Listing
+            key={listing.id}
+            listing={listing}
+            onPressFav={() => alert('Fav pressed!')}
+            onPress={() => navigation.navigate('ListingDetail', { listing: listing })}
+          />
+        ))}
+      </ScrollView>
+    </Box>
   );
 };
 

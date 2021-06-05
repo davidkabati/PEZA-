@@ -16,3 +16,8 @@ export type HomeNavParamList = {
   AgentDetail: { agent: IAgent };
   // Notifications: undefined;
 };
+
+export type SortNavParamList = {
+  Sort: undefined;
+  SortResult: { sortParam: string };
+};
