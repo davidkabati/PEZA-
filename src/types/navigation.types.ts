@@ -21,3 +21,18 @@ export type SortNavParamList = {
   Sort: undefined;
   SortResult: { sortParam: string };
 };
+
+export type ProfileNavParamList = {
+  Profile: undefined;
+  MyListings: undefined;
+  EditAccount: undefined;
+  ManageListings: undefined;
+  NewListingInfo: undefined;
+  NewListingSpace: { listing: Partial<IListing> };
+  NewListingImg: { listing: Partial<IListing> };
+  NewListingFinal: { listing: Partial<IListing> };
+  ListingSuccess: { listing: Partial<IListing> };
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+};

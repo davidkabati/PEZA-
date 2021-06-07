@@ -11,7 +11,6 @@ import { View } from 'moti';
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
 import { HomeHeader } from '../../components/HomeHeader';
-import { ScreenContainer } from '../../components/Screen';
 import { SearchInput } from '../../components/SearchInput';
 import { Listing } from '../../components/ListingItem';
 import { AgentCard } from '../../components/AgentCard';
@@ -22,6 +21,8 @@ import { HomeNavParamList } from '../../types/navigation.types';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
+    paddingHorizontal: theme.constants.screenPadding / 2,
+    paddingTop: theme.constants.screenPadding,
   },
   headText: {
     marginTop: hp(4),
@@ -71,7 +72,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   ];
 
   return (
-    <ScreenContainer bgColor="secondary" horizontalPadding>
+    <Box style={styles.container}>
       {/* <View from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing' }}> */}
       <HomeHeader />
       {/* </View> */}
@@ -128,7 +129,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
           </Box>
         )}
       </ScrollView>
-    </ScreenContainer>
+    </Box>
   );
 };
 

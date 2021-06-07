@@ -2,5 +2,10 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true
-  }
+  },
+  "include": [
+    "node_modules/react-native-redash/v1/index.d.ts", 
+    "./src/**/*.tsx", 
+    "./src/**/*.ts"
+  ]
 }

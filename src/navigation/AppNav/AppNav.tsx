@@ -5,9 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '../../components';
 import { AppNavParamList } from '../../types/navigation.types';
-import { Favorites, Profile } from '../../screens';
+import { Favorites } from '../../screens';
 import HomeNav from '../HomeNav/HomeNav';
 import SortNav from '../SortNav/SortNav';
+import ProfileNav from '../ProfileNav/ProfileNav';
 import { HomeIcon, CategoryIcon, FavoriteIcon, ProfileIcon } from '../../svg/homeNavIcons';
 
 const AppStack = createBottomTabNavigator<AppNavParamList>();
@@ -68,7 +69,7 @@ const AppNav = () => {
         />
         <AppStack.Screen
           name="Profile"
-          component={Profile}
+          component={ProfileNav}
           options={{
             tabBarIcon: ({ color }) => {
               return <ProfileIcon color={color} />;

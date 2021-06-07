@@ -26,6 +26,8 @@ const theme = createTheme({
     m: 10,
     l: 15,
     xl: 20,
+    xxl: 30,
+    xxxl: 40,
   },
   borderRadii: {
     none: 0,
@@ -35,6 +37,10 @@ const theme = createTheme({
     xl: 20,
   },
   textVariants: {
+    h1Max: {
+      fontSize: 32,
+      fontFamily: 'SofiaPro-Bold',
+    },
     h1: {
       fontSize: 28,
       fontFamily: 'SofiaPro-Bold',

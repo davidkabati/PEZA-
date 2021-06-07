@@ -56,7 +56,10 @@ const StackHeader = ({
         />
       </TouchableOpacity>
       {title && (
-        <Text variant="h1" color="dark">
+        <Text
+          style={{ marginLeft: -30 }}
+          variant="h1"
+          color={bgColor === 'primary' ? 'white' : 'dark'}>
           {title}
         </Text>
       )}
