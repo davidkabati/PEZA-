@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { StyleSheet, Text, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
@@ -20,13 +20,14 @@ interface Props {
   width?: number;
   height?: number;
   borderRad?: number;
-  label: string;
+  label?: string;
   onPress: () => void;
   type: 'primary' | 'secondary' | 'light' | 'purple';
   loading?: boolean;
+  icon?: ReactNode;
 }
 
-const Button = ({ width, height, label, onPress, type, loading, borderRad }: Props) => {
+const Button = ({ width, height, label, onPress, type, loading, borderRad, icon }: Props) => {
   const backgroundColorValue =
     type === 'primary'
       ? theme.colors.primary
@@ -65,6 +66,8 @@ const Button = ({ width, height, label, onPress, type, loading, borderRad }: Pro
           ]}>
           {label}
         </Text>
+      ) : icon ? (
+        { icon }
       ) : (
         <ActivityIndicator color={theme.colors.white} />
       )}

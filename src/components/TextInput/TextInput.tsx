@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
   input: {
     width: theme.constants.screenWidth - wp(15),
-    height: 56,
+    height: '95%',
     color: theme.colors.text,
   },
   errorMessage: {
@@ -46,9 +46,10 @@ interface Props extends TextInputProps {
   width?: number;
   height?: number;
   secured?: boolean;
+  bgColor?: string;
 }
 
-const TextInput = ({ error, touched, width, height, secured, ...props }: Props) => {
+const TextInput = ({ error, touched, width, height, secured, bgColor, ...props }: Props) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const reBorderColor = !touched ? 'white' : error ? 'red' : 'green';
@@ -62,10 +63,15 @@ const TextInput = ({ error, touched, width, height, secured, ...props }: Props) 
     <View
       style={[
         styles.container,
-        { borderColor: borderColor, width: widthValue, height: heightValue },
+        {
+          borderColor: borderColor,
+          width: widthValue,
+          height: heightValue,
+          backgroundColor: bgColor ? bgColor : theme.colors.white,
+        },
       ]}>
       <RNTextInput
-        style={styles.input}
+        style={[styles.input, { backgroundColor: bgColor ? bgColor : theme.colors.white }]}
         underlineColorAndroid="transparent"
         placeholderTextColor={color}
         secureTextEntry={secured ? !visible : false}
