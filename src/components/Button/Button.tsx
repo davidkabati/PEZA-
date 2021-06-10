@@ -56,7 +56,9 @@ const Button = ({ width, height, label, onPress, type, loading, borderRad, icon 
           borderRadius: borderRad ? borderRad : 16,
         },
       ]}>
-      {!loading ? (
+      {icon ? (
+        icon
+      ) : (
         <Text
           style={[
             styles.buttonText,
@@ -66,10 +68,6 @@ const Button = ({ width, height, label, onPress, type, loading, borderRad, icon 
           ]}>
           {label}
         </Text>
-      ) : icon ? (
-        { icon }
-      ) : (
-        <ActivityIndicator color={theme.colors.white} />
       )}
     </TouchableOpacity>
   );

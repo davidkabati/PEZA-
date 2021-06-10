@@ -11,7 +11,6 @@ import { Box, theme, Text } from '..';
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    // paddingHorizontal: theme.constants.screenPadding / 2,
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
@@ -31,6 +30,7 @@ interface Props {
   option1?: ReactNode;
   onPressOption1?: () => void;
   title?: string;
+  padding?: boolean;
 }
 const StackHeader = ({
   bgColor,
@@ -40,13 +40,18 @@ const StackHeader = ({
   onPressOption1,
   title,
   transparent,
+  padding,
 }: Props) => {
   return (
     <Box
       style={[
         styles.container,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        { backgroundColor: transparent ? undefined : theme.colors[bgColor!] },
+        {
+          backgroundColor: transparent ? undefined : theme.colors[bgColor!],
+          paddingHorizontal: padding ? theme.constants.screenPadding / 2 : 0,
+          paddingTop: padding ? theme.constants.screenPadding : 0,
+        },
       ]}>
       <TouchableOpacity onPress={onPressBack} style={styles.buttonContainer}>
         <Icon
