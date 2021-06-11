@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: theme.constants.screenWidth,
-    marginTop: hp(2.5),
+    marginTop: theme.constants.screenPadding,
   },
   headingContainer: {
     flexDirection: 'row',
