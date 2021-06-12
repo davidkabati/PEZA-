@@ -6,7 +6,6 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
-import { View } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';

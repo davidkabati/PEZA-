@@ -37,7 +37,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.red,
   },
-  eye: {},
+  eye: {
+    zIndex: 1,
+  },
 });
 
 interface Props extends TextInputProps {

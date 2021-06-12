@@ -1,18 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
+import { StyleSheet, TouchableOpacity, Keyboard, Image } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
+import Constants from 'expo-constants';
+import firebase from 'firebase';
+import * as yup from 'yup';
+import { Formik } from 'formik';
 
-import { Box, theme, Text } from '../../components';
+import { Box, theme } from '../../components';
 import { Button } from '../../components/Button';
 import { StackHeader } from '../../components/StackHeader';
 import TextInput from '../../components/TextInput';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import ProfileSvg from '../agentDetail/profileSvg';
+import ActivityIndicator from '../../components/ActivityIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -26,7 +33,6 @@ const styles = StyleSheet.create({
     width: wp(30),
     height: wp(30),
     borderRadius: wp(15),
-    backgroundColor: theme.colors.dark,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -38,39 +44,149 @@ const styles = StyleSheet.create({
     marginTop: hp(10),
   },
   inputContainer: {
-    height: hp(18),
     justifyContent: 'space-between',
-    marginBottom: hp(3),
   },
 });
 
-// interface Props {}
-
 const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'EditAccount'>) => {
+  const userData = firebase.auth().currentUser;
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const updateAccountSchema = yup.object().shape({
+    full_name: yup.string(),
+  });
+
+  const [avatar, setAvatar] = useState<string>();
+  const [progress, setProgress] = useState<string>();
+
+  const ImageChoiceAndUpload = async () => {
+    try {
+      if (Constants.platform?.ios) {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Permission is required for use.');
+          return;
+        }
+      }
+      const result = await ImagePicker.launchImageLibraryAsync();
+      if (!result.cancelled) {
+        const actions = [];
+        actions.push({ resize: { width: 300 } });
+        const manipulatorResult = await ImageManipulator.manipulateAsync(result.uri, actions, {
+          compress: 0.4,
+        });
+        const localUri = await fetch(manipulatorResult.uri);
+        const localBlob = await localUri.blob();
+        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+        const filename = userData && userData.uid + new Date().getTime();
+        const storageRef = firebase
+          .storage()
+          .ref()
+          // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+          .child('avatar/' + filename);
+        const putTask = storageRef.put(localBlob);
+        putTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+            setProgress(progress + '%');
+          },
+          (error) => {
+            console.log(error);
+            alert('Upload failed.');
+          },
+          () => {
+            void putTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+              setProgress('');
+              setAvatar(downloadURL);
+            });
+          },
+        );
+      }
+    } catch (e) {
+      alert('The size may be too much.');
+    }
+  };
+
+  const avatarUpdate = (values: any) => {
+    setLoading(true);
+    const data = {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      full_name: values.full_name,
+      avatar: avatar,
+    };
+    userData?.updateProfile({
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      displayName: values.full_name,
+    });
+    const userRef = firebase.firestore().collection('user').doc(userData?.uid);
+    void userRef.update(data);
+    navigation.goBack();
+    setLoading(false);
+  };
+
   return (
     <Box style={styles.container}>
       <StackHeader onPressBack={() => navigation.goBack()} />
+      <ActivityIndicator visible={loading} />
       <TouchableOpacity
         activeOpacity={1}
         onPress={Keyboard.dismiss}
         style={{ alignItems: 'center', flex: 1 }}>
-        <Box style={styles.profileImg}>
-          <Icon name="camera" color={theme.colors.white} size={40} />
-        </Box>
+        <TouchableOpacity
+          onPress={ImageChoiceAndUpload}
+          style={[styles.profileImg, { backgroundColor: avatar ? undefined : theme.colors.dark }]}>
+          {avatar ? (
+            <Image
+              source={{ uri: avatar }}
+              style={{
+                width: wp(30),
+                height: wp(30),
+                borderRadius: wp(15),
+                alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+          ) : (
+            <Icon name="camera" color={theme.colors.white} size={40} />
+          )}
+        </TouchableOpacity>
+
         <Box style={styles.svg}>
           <ProfileSvg />
         </Box>
 
-        <Box mt="xxl" style={styles.inputContainer}>
-          <TextInput placeholder="First name" />
-          <TextInput placeholder="Last name" />
-        </Box>
-        <Button
-          type="purple"
-          onPress={() => alert('save')}
-          label="Save Details"
-          width={theme.constants.screenWidth}
-        />
+        <Formik
+          initialValues={{ full_name: '' }}
+          validationSchema={updateAccountSchema}
+          onSubmit={avatarUpdate}>
+          {({ errors, touched, handleChange, handleBlur, handleSubmit }) => (
+            <>
+              <Box mt="xxl" mb="xxl" style={styles.inputContainer}>
+                <TextInput
+                  placeholder="Full Name"
+                  onChangeText={handleChange('full_name')}
+                  onBlur={handleBlur('full_name')}
+                  touched={touched.full_name}
+                  error={errors.full_name}
+                  keyboardType="default"
+                  autoCapitalize="words"
+                  autoCompleteType="name"
+                />
+              </Box>
+
+              <Button
+                type="purple"
+                onPress={handleSubmit}
+                label="Save Details"
+                width={theme.constants.screenWidth}
+              />
+            </>
+          )}
+        </Formik>
       </TouchableOpacity>
     </Box>
   );

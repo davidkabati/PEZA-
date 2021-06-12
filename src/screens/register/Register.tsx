@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, SafeAreaView, KeyboardAvoidingView, Keyboard } from 'react-native';
+import { StyleSheet, SafeAreaView, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -16,6 +16,8 @@ import TextInput from '../../components/TextInput/TextInput';
 import Button from '../../components/Button/Button';
 import { CommonActions } from '@react-navigation/native';
 import { ProfileNavParamList } from '../../types/navigation.types';
+import ActivityIndicator from '../../components/ActivityIndicator';
+import firebaseAuthApi from '../../firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,16 +61,18 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
     fullName: string;
     email: string;
     password: string;
+    phone: string;
   }
 
-  const onSubmit = (values: RegisterProps) => {
+  const onSubmit = async (values: RegisterProps) => {
     try {
       setLoading(true);
-      // await firebaseFunc.registerUser(
-      //   values.email,
-      //   values.password,
-      //   values.fullName
-      // );
+      await firebaseAuthApi.registerUser(
+        values.email,
+        values.password,
+        values.fullName,
+        values.phone,
+      );
       navigation.dispatch(
         CommonActions.navigate({
           name: 'Home',
@@ -83,21 +87,23 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
         text2: 'You have been successfully registered',
       });
     } catch (error) {
+      console.log(error);
       setLoading(false);
       Toast.show({
         type: 'error',
         visibilityTime: 5000,
         autoHide: true,
         text1: 'Sign up Error',
-        text2: 'Error registering user',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        text2: error.message,
       });
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ActivityIndicator visible={loading} /> */}
-      <TouchableOpacity onPress={() => Keyboard.dismiss()} activeOpacity={1}>
+      <ActivityIndicator visible={loading} />
+      <ScrollView>
         <Formik
           initialValues={{ fullName: '', email: '', phone: '', password: '' }}
           validationSchema={registerSchema}
@@ -163,7 +169,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
                   />
                 </Box>
               </KeyboardAvoidingView>
-              <Box style={{ flex: 1 }} />
+              <Box style={{ height: hp(10) }} />
               <Box mb="xxxl">
                 <Button
                   label="Complete Registeration"
@@ -185,7 +191,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
             </Text>
           </TouchableOpacity>
         </Box>
-      </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 };

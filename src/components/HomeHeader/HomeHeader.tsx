@@ -4,6 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import firebase from 'firebase';
 
 import { theme, Box, Text } from '..';
 import { HeaderIcon } from '../../svg/homeIcons';
@@ -30,19 +31,30 @@ const styles = StyleSheet.create({
 });
 
 const HomeHeader = () => {
+  const user = firebase.auth().currentUser;
+
   return (
     <Box style={styles.container}>
-      <Box style={styles.imageContainer}>
-        <Box />
-      </Box>
-      <Box style={styles.textContainer}>
-        <Text variant="b2" color="text">
-          Welcome,
+      {user ? (
+        <>
+          <Box style={styles.imageContainer}>
+            <Box />
+          </Box>
+          <Box style={styles.textContainer}>
+            <Text variant="b2" color="text">
+              Welcome,
+            </Text>
+
+            <Text variant="b1" color="dark">
+              {user.displayName}
+            </Text>
+          </Box>
+        </>
+      ) : (
+        <Text variant="h1" color="dark">
+          Welcome to Peza
         </Text>
-        <Text variant="b1" color="dark">
-          Alex Abiola
-        </Text>
-      </Box>
+      )}
       <Box style={{ flex: 1 }} />
       <HeaderIcon />
     </Box>

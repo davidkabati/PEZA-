@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Formik } from 'formik';
-import { Feather as Icon } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
 import { CommonActions } from '@react-navigation/native';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import * as yup from 'yup';
 
 import { theme, Text, Box } from '../../components';
@@ -17,6 +13,8 @@ import TextInput from '../../components/TextInput/TextInput';
 import Button from '../../components/Button/Button';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { StackHeader } from '../../components/StackHeader';
+import firebaseAuthApi from '../../firebase/auth';
+import ActivityIndicator from '../../components/ActivityIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -50,7 +48,6 @@ const styles = StyleSheet.create({
 });
 
 const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) => {
-  // const { loginSchema } = useLogin();
   const [loading, setLoading] = useState<boolean>(false);
 
   const loginSchema = yup.object().shape({
@@ -63,10 +60,10 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
     password: string;
   }
 
-  const onSubmit = (values: LoginProps) => {
+  const onSubmit = async (values: LoginProps) => {
     try {
       setLoading(true);
-      // await firebaseFunc.signInUser(values.email, values.password);
+      await firebaseAuthApi.signInUser(values.email, values.password);
       navigation.dispatch(
         CommonActions.navigate({
           name: 'Home',
@@ -87,7 +84,8 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
         visibilityTime: 2000,
         autoHide: true,
         text1: 'Login Error',
-        text2: 'Error logging in',
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        text2: error.message,
       });
     }
   };
@@ -99,7 +97,7 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
       bounces={false}>
       <StackHeader bgColor="secondary" onPressBack={() => navigation.goBack()} padding />
       <SafeAreaView>
-        {/* <ActivityIndicator visible={loading} /> */}
+        <ActivityIndicator visible={loading} />
         <Box style={styles.welcomeContainer}>
           <Text variant="h1Max" color="dark">
             Login,

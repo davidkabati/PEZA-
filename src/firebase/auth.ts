@@ -1,12 +1,28 @@
 import firebase from 'firebase';
 
-const registerUser = async (email: string, password: string, displayName: string) => {
+const registerUser = async (
+  email: string,
+  password: string,
+  displayName: string,
+  phone: string,
+) => {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
   await firebase.auth().signInWithEmailAndPassword(email, password);
   const user = firebase.auth().currentUser;
   if (user) {
     await user.updateProfile({
       displayName,
+    });
+    const userRef = firebase.firestore().collection('user');
+    await userRef.doc(user.uid).set({
+      id: user.uid,
+      email,
+      phone,
+      img_uri: '',
+      is_premium: false,
+      whatsapp_link: '',
+      full_name: displayName,
+      created_at: new Date().toISOString(),
     });
   }
   return user;
