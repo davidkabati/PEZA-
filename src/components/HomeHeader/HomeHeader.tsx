@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -37,8 +37,15 @@ const HomeHeader = () => {
     <Box style={styles.container}>
       {user ? (
         <>
-          <Box style={styles.imageContainer}>
-            <Box />
+          <Box
+            style={[
+              styles.imageContainer,
+              { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
+            ]}>
+            <Image
+              source={{ uri: user.photoURL ? user.photoURL : undefined }}
+              style={{ width: hp(7), height: hp(7), borderRadius: hp(3.5) }}
+            />
           </Box>
           <Box style={styles.textContainer}>
             <Text variant="b2" color="text">

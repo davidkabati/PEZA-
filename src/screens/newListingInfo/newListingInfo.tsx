@@ -86,6 +86,8 @@ const NewListingInfo = ({
   navigation,
 }: StackScreenProps<ProfileNavParamList, 'NewListingInfo'>) => {
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
+  const [type, setType] = useState<string>();
+  const [listingType, setListingType] = useState<string>();
 
   const handleAmenity = (a: string) => {
     const amenityArray: string[] = [];
@@ -94,8 +96,8 @@ const NewListingInfo = ({
       amenityArray.splice(index, 1);
     } else {
       amenityArray.push(a);
-      console.log(amenityArray);
       setSelectedAmenity(amenityArray);
+      console.log(selectedAmenity);
     }
   };
 
@@ -114,7 +116,7 @@ const NewListingInfo = ({
           First, set listing type
         </Text>
 
-        <Tabs text1="For Sale" text2="For Rent" />
+        <Tabs text1="For Sale" text2="For Rent" setSelected={setType} />
 
         <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Then, lets narrow things down

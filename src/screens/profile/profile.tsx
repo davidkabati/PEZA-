@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     width: wp(30),
     height: wp(30),
     borderRadius: wp(15),
-    backgroundColor: theme.colors.dark,
     alignSelf: 'center',
     marginTop: hp(5),
     zIndex: 1,
@@ -88,7 +87,18 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
     <Box style={styles.container}>
       {user ? (
         <>
-          <Box style={styles.profileImg} />
+          <Box
+            style={[
+              styles.profileImg,
+              { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
+            ]}>
+            {user.photoURL && (
+              <Image
+                source={{ uri: user.photoURL }}
+                style={{ width: wp(30), height: wp(30), borderRadius: wp(15) }}
+              />
+            )}
+          </Box>
           <Box style={styles.svg}>
             <ProfileSvg />
           </Box>

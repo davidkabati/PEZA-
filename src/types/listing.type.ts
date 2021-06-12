@@ -14,4 +14,5 @@ export default interface IListing {
   sale_price: string;
   images: any[];
   amenities?: string[];
+  property_type?: string;
 }

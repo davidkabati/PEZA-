@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, Image } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import firebase from 'firebase';
 
 import { Box, theme, Text } from '../../components';
 import { ProfileNavParamList } from '../../types/navigation.types';
@@ -49,6 +50,8 @@ const styles = StyleSheet.create({
 // interface MyListingsProps {}
 
 const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyListings'>) => {
+  const user = firebase.auth().currentUser;
+
   return (
     <Box style={styles.container}>
       <StackHeader
@@ -59,13 +62,24 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
       <Box style={styles.lowerContainer}>
         <Box style={styles.userProfile}>
-          <Box style={styles.displayImg} />
+          <Box style={styles.displayImg}>
+            {user?.photoURL && (
+              <Image
+                source={{ uri: user.photoURL ? user.photoURL : undefined }}
+                style={{
+                  width: wp(12),
+                  height: wp(12),
+                  borderRadius: wp(6),
+                }}
+              />
+            )}
+          </Box>
           <Box>
             <Text variant="b1" color="text" mb="m">
               Welcome,
             </Text>
             <Text variant="h2" color="dark">
-              Jonah Ada
+              {user?.displayName}
             </Text>
           </Box>
         </Box>

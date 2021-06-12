@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, TouchableOpacity, Keyboard, Image } from 'react-native';
 import {
@@ -20,6 +20,8 @@ import TextInput from '../../components/TextInput';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import ProfileSvg from '../agentDetail/profileSvg';
 import ActivityIndicator from '../../components/ActivityIndicator';
+import { CommonActions } from '@react-navigation/routers';
+import Toast from 'react-native-toast-message';
 
 const styles = StyleSheet.create({
   container: {
@@ -59,6 +61,18 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
 
   const [avatar, setAvatar] = useState<string>();
   const [progress, setProgress] = useState<string>();
+
+  const restoreAvatar = () => {
+    const user = firebase.auth().currentUser;
+    setAvatar(user?.photoURL ? user.photoURL : undefined);
+  };
+
+  useEffect(() => {
+    restoreAvatar();
+    return () => {
+      restoreAvatar();
+    };
+  }, []);
 
   const ImageChoiceAndUpload = async () => {
     try {
@@ -120,11 +134,23 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
     userData?.updateProfile({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
       displayName: values.full_name,
+      photoURL: avatar,
     });
     const userRef = firebase.firestore().collection('user').doc(userData?.uid);
     void userRef.update(data);
-    navigation.goBack();
+    navigation.dispatch(
+      CommonActions.navigate({
+        name: 'Home',
+      }),
+    );
     setLoading(false);
+    Toast.show({
+      type: 'success',
+      autoHide: true,
+      visibilityTime: 2000,
+      text1: 'Account update',
+      text2: 'Account updated successfuly',
+    });
   };
 
   return (
