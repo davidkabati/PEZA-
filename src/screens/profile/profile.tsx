@@ -1,6 +1,6 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -8,6 +8,7 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 import firebase from 'firebase';
 import Toast from 'react-native-toast-message';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '../../components';
 import ProfileItem from '../../components/ProfileItem';
@@ -94,7 +95,9 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
             ]}>
             {user.photoURL && (
               <Image
-                source={{ uri: user.photoURL }}
+                {...{ uri: user.photoURL }}
+                tint="light"
+                transitionDuration={300}
                 style={{ width: wp(30), height: wp(30), borderRadius: wp(15) }}
               />
             )}

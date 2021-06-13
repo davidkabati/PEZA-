@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity, Keyboard, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, Keyboard } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,6 +12,9 @@ import Constants from 'expo-constants';
 import firebase from 'firebase';
 import * as yup from 'yup';
 import { Formik } from 'formik';
+import { CommonActions } from '@react-navigation/routers';
+import Toast from 'react-native-toast-message';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme } from '../../components';
 import { Button } from '../../components/Button';
@@ -20,8 +23,6 @@ import TextInput from '../../components/TextInput';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import ProfileSvg from '../agentDetail/profileSvg';
 import ActivityIndicator from '../../components/ActivityIndicator';
-import { CommonActions } from '@react-navigation/routers';
-import Toast from 'react-native-toast-message';
 
 const styles = StyleSheet.create({
   container: {
@@ -166,7 +167,7 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
           style={[styles.profileImg, { backgroundColor: avatar ? undefined : theme.colors.dark }]}>
           {avatar ? (
             <Image
-              source={{ uri: avatar }}
+              {...{ uri: avatar }}
               style={{
                 width: wp(30),
                 height: wp(30),
@@ -175,6 +176,8 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
+              tint="light"
+              transitionDuration={300}
             />
           ) : (
             <Icon name="camera" color={theme.colors.white} size={40} />

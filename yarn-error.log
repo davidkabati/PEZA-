@@ -1,5 +1,5 @@
 Arguments: 
-  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add expo-constants
+  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add expo-image-cache
 
 PATH: 
   /home/jacques/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,8 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
-      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+  Error: https://registry.yarnpkg.com/expo-image-cache: Not found
+      at Request.params.callback [as _callback] (/snap/node/4749/lib/cli.js:66988:18)
+      at Request.self.callback (/snap/node/4749/lib/cli.js:140749:22)
+      at Request.emit (events.js:314:20)
+      at Request.<anonymous> (/snap/node/4749/lib/cli.js:141721:10)
+      at Request.emit (events.js:314:20)
+      at IncomingMessage.<anonymous> (/snap/node/4749/lib/cli.js:141643:12)
+      at Object.onceWrapper (events.js:420:28)
+      at IncomingMessage.emit (events.js:326:22)
+      at endReadableNT (_stream_readable.js:1241:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
   {
@@ -40,6 +49,7 @@ npm manifest:
       "expo": "~41.0.1",
       "expo-app-loading": "^1.0.3",
       "expo-blur": "^9.0.3",
+      "expo-constants": "^10.1.3",
       "expo-haptics": "^10.0.0",
       "expo-image-manipulator": "^9.1.0",
       "expo-image-picker": "^10.1.4",
@@ -4645,7 +4655,7 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/expo-blur/-/expo-blur-9.0.3.tgz#5095b5bd04d000f73b351d0e4736767b86b49bbd"
     integrity sha512-7jMqzo53eg5t9Uc1Tg+yGu9lKL9the4CWAQO0kC6YMhrsDiB13mwOUesC+IScHDTSUKNMGcHI8kN+OmvEWfPig==
   
-  expo-constants@~10.1.3:
+  expo-constants@^10.1.3, expo-constants@~10.1.3:
     version "10.1.3"
     resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-10.1.3.tgz#dfbe30362d27d6f500318eb528621424034b72d5"
     integrity sha512-Eq/xeshnhSoe4ok89d5lrHvI9jq3bMe1FhJUbiHVGcGmW8mGCotwbQBIfDkkMrAKnSOwQq/Qfyg0XBxnG2XFjw==

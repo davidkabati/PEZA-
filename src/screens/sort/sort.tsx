@@ -69,33 +69,39 @@ const bathroomOptions = ['Any', '1', '2', '3', '4+'];
 export const amenities = [
   {
     id: 1,
-    name: 'Air Con.',
+    value: 'Air Con.',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 2,
-    name: 'Alarm',
+    value: 'Alarm',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 3,
-    name: 'Balcony',
+    value: 'Balcony',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 4,
-    name: 'Parking',
+    value: 'Parking',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 5,
-    name: 'Pool',
+    value: 'Pool',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 6,
-    name: 'CCTV',
+    value: 'CCTV',
     icon: <AirConIcon color={theme.colors.primary} />,
+    icon2: <AirConIcon color={theme.colors.white} />,
   },
 ];
 
@@ -137,7 +143,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
         <Text variant="h1" color="dark" style={styles.headerText}>
           Filter for your perfect property
         </Text>
-        <Tabs text1="For Sale" text2="For Rent" />
+        {/* <Tabs text1="For Sale" text2="For Rent" /> */}
         <Box style={styles.dash} />
         <Text variant="b1B" color="dark" mb="m">
           Minimum Asking
@@ -206,19 +212,22 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
         <Box style={styles.amenityContainer}>
           {amenities.map((a) => (
             <TouchableOpacity
-              onPress={() => handleAmenity(a.name)}
+              onPress={() => handleAmenity(a.value)}
               key={a.id}
               style={[
                 styles.amenity,
                 {
-                  backgroundColor: selectedAmenity.includes(a.name)
+                  backgroundColor: selectedAmenity.includes(a.value)
                     ? theme.colors.primary
                     : theme.colors.white,
                 },
               ]}>
               {a.icon}
-              <Text variant="b1" ml="m" color={selectedAmenity.includes(a.name) ? 'white' : 'dark'}>
-                {a.name}
+              <Text
+                variant="b1"
+                ml="m"
+                color={selectedAmenity.includes(a.value) ? 'white' : 'dark'}>
+                {a.value}
               </Text>
             </TouchableOpacity>
           ))}

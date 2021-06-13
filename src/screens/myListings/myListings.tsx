@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image as RNImage } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import firebase from 'firebase';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '../../components';
 import { ProfileNavParamList } from '../../types/navigation.types';
@@ -65,12 +66,14 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
           <Box style={styles.displayImg}>
             {user?.photoURL && (
               <Image
-                source={{ uri: user.photoURL ? user.photoURL : undefined }}
+                {...{ uri: user.photoURL ? user.photoURL : '' }}
                 style={{
                   width: wp(12),
                   height: wp(12),
                   borderRadius: wp(6),
                 }}
+                tint="light"
+                transitionDuration={300}
               />
             )}
           </Box>
@@ -85,7 +88,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
         </Box>
 
         <Box style={styles.image}>
-          <Image
+          <RNImage
             source={require('../../../assets/images/underConstruction.png')}
             style={{ width: 323.6, height: 216.5 }}
           />

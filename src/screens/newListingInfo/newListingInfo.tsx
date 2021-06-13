@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -12,6 +12,7 @@ import { ProfileNavParamList } from '../../types/navigation.types';
 import { Tabs } from '../../components/Tabs';
 import { amenities } from '../sort/sort';
 import { Button } from '../../components/Button';
+import Multiselect from '../../components/Multiselect';
 
 const styles = StyleSheet.create({
   container: {
@@ -48,35 +49,35 @@ const styles = StyleSheet.create({
 const propertyType = [
   {
     id: 1,
-    name: 'House',
+    value: 'House',
   },
   {
     id: 2,
-    name: 'TownHouse',
+    value: 'TownHouse',
   },
   {
     id: 3,
-    name: 'Cabin',
+    value: 'Cabin',
   },
   {
     id: 4,
-    name: 'Chalet',
+    value: 'Chalet',
   },
   {
     id: 5,
-    name: 'Earth house',
+    value: 'Earth house',
   },
   {
     id: 6,
-    name: 'Hut',
+    value: 'Hut',
   },
   {
     id: 7,
-    name: 'Villa',
+    value: 'Villa',
   },
   {
     id: 8,
-    name: 'Cottage',
+    value: 'Cottage',
   },
 ];
 
@@ -87,19 +88,7 @@ const NewListingInfo = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingInfo'>) => {
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
   const [type, setType] = useState<string>();
-  const [listingType, setListingType] = useState<string>();
-
-  const handleAmenity = (a: string) => {
-    const amenityArray: string[] = [];
-    if (amenityArray.includes(a)) {
-      const index = amenityArray.indexOf(a);
-      amenityArray.splice(index, 1);
-    } else {
-      amenityArray.push(a);
-      setSelectedAmenity(amenityArray);
-      console.log(selectedAmenity);
-    }
-  };
+  const [listingType, setListingType] = useState<string[]>();
 
   return (
     <Box style={styles.container}>
@@ -122,50 +111,13 @@ const NewListingInfo = ({
           Then, lets narrow things down
         </Text>
 
-        <Box style={styles.amenityContainer}>
-          {amenities.map((a) => (
-            <TouchableOpacity
-              onPress={() => handleAmenity(a.name)}
-              key={a.id}
-              style={[
-                styles.amenity,
-                {
-                  backgroundColor: selectedAmenity.includes(a.name)
-                    ? theme.colors.primary
-                    : theme.colors.white,
-                },
-              ]}>
-              {a.icon}
-              <Text variant="b1" ml="m" color={selectedAmenity.includes(a.name) ? 'white' : 'dark'}>
-                {a.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
+        <Multiselect items={amenities} setSelection={setSelectedAmenity} />
 
         <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Now choose property type
         </Text>
 
-        <Box style={styles.amenityContainer}>
-          {propertyType.map((a) => (
-            <TouchableOpacity
-              onPress={() => handleAmenity(a.name)}
-              key={a.id}
-              style={[
-                styles.amenity,
-                {
-                  backgroundColor: selectedAmenity.includes(a.name)
-                    ? theme.colors.primary
-                    : theme.colors.white,
-                },
-              ]}>
-              <Text variant="b1" color={selectedAmenity.includes(a.name) ? 'white' : 'dark'}>
-                {a.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
+        <Multiselect items={propertyType} setSelection={setListingType} />
 
         <Box marginVertical="xxl">
           <Button
