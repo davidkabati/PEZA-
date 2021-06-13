@@ -13,6 +13,7 @@ import { Tabs } from '../../components/Tabs';
 import { amenities } from '../sort/sort';
 import { Button } from '../../components/Button';
 import Multiselect from '../../components/Multiselect';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -88,7 +89,13 @@ const NewListingInfo = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingInfo'>) => {
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
   const [type, setType] = useState<string>();
-  const [listingType, setListingType] = useState<string[]>();
+  const [listingType, setListingType] = useState<string>();
+
+  const data: Partial<IListing> = {
+    type,
+    amenities: selectedAmenity,
+    property_type: listingType,
+  };
 
   return (
     <Box style={styles.container}>
@@ -111,21 +118,19 @@ const NewListingInfo = ({
           Then, lets narrow things down
         </Text>
 
-        <Multiselect items={amenities} setSelection={setSelectedAmenity} />
+        <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
 
         <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Now choose property type
         </Text>
 
-        <Multiselect items={propertyType} setSelection={setListingType} />
+        <Multiselect items={propertyType} setSelection={setListingType} multiple={false} />
 
         <Box marginVertical="xxl">
           <Button
             type="purple"
             width={theme.constants.screenWidth}
-            onPress={() =>
-              navigation.navigate('NewListingSpace', { listing: { type: 'for_rent' } })
-            }
+            onPress={() => navigation.navigate('NewListingSpace', { listing: data })}
             label="Next Step"
           />
         </Box>

@@ -10,6 +10,7 @@ import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,9 +47,18 @@ const bathroomOptions = ['Any', '1', '2', '3', '4+'];
 
 const NewListingSpace = ({
   navigation,
+  route,
 }: StackScreenProps<ProfileNavParamList, 'NewListingSpace'>) => {
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
+
+  const { listing } = route.params;
+
+  const data: Partial<IListing> = {
+    ...listing,
+    baths: bathrooms,
+    rooms,
+  };
 
   return (
     <Box style={styles.container}>
@@ -104,7 +114,7 @@ const NewListingSpace = ({
           <Button
             type="purple"
             width={theme.constants.screenWidth}
-            onPress={() => navigation.navigate('NewListingImg', { listing: { type: 'for_rent' } })}
+            onPress={() => navigation.navigate('NewListingImg', { listing: data })}
             label="Next Step"
           />
         </Box>

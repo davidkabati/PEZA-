@@ -14,6 +14,8 @@ import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import { Slider } from '../../components/Slider';
+import { string } from 'yup';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,14 +36,31 @@ const styles = StyleSheet.create({
 
 const NewListingFinal = ({
   navigation,
+  route,
 }: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
+  const { listing } = route.params;
+
   // Dropdown
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<any>(null);
+  const [location, setLocation] = useState<any>(null);
   const [items, setItems] = useState([
     { label: 'Lusaka', value: 'lusaka' },
     { label: 'Lagos', value: 'lagos' },
   ]);
+
+  const [title, setTitle] = useState<string>();
+  const [price, setPrice] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [address, setAddress] = useState<string>();
+
+  const data: Partial<IListing> = {
+    ...listing,
+    title,
+    price,
+    description,
+    address,
+    address_area: location,
+  };
 
   return (
     <Box style={styles.container}>
@@ -58,7 +77,10 @@ const NewListingFinal = ({
           Title of your listing
         </Text>
 
-        <TextInput placeholder="Type listing title here" />
+        <TextInput
+          placeholder="Type listing title here"
+          onChange={(e) => setTitle(e.nativeEvent.text)}
+        />
 
         <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Set the price
@@ -70,13 +92,21 @@ const NewListingFinal = ({
           Description
         </Text>
 
-        <TextInput placeholder="Enter descriptions" height={hp(15)} />
+        <TextInput
+          placeholder="Enter descriptions"
+          height={hp(15)}
+          onChange={(e) => setDescription(e.nativeEvent.text)}
+        />
 
         <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Address
         </Text>
 
-        <TextInput placeholder="Enter listing address" height={hp(15)} />
+        <TextInput
+          placeholder="Enter listing address"
+          height={hp(15)}
+          onChange={(e) => setAddress(e.nativeEvent.text)}
+        />
 
         <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Select location
@@ -88,9 +118,9 @@ const NewListingFinal = ({
             max={5}
             open={open}
             items={items}
-            value={value}
+            value={location}
             setOpen={setOpen}
-            setValue={setValue}
+            setValue={setLocation}
             setItems={setItems}
           />
         </Box>

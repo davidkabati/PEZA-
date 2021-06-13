@@ -31,11 +31,13 @@ type Item = {
 
 interface Props {
   items: Item[];
-  setSelection: (array: string[]) => void;
+  setSelection: (array: string[] | string | any) => void;
+  multiple?: boolean;
 }
 
-const Multiselect = ({ items, setSelection }: Props) => {
+const Multiselect = ({ items, setSelection, multiple }: Props) => {
   const [array, setArray] = useState<string[]>([]);
+  const [single, setSingle] = useState<string>();
 
   const checkIfExists = (arr: string[], value: string) => {
     if (arr.includes(value)) {
@@ -69,22 +71,70 @@ const Multiselect = ({ items, setSelection }: Props) => {
     }
   };
 
+  const handleSingleSelect = (value: string) => {
+    if (single === value) {
+      setSingle('');
+      setSelection('');
+    } else {
+      setSingle(value);
+      setSelection(value);
+    }
+  };
+
+  const returnBgColor = (value: string) => {
+    if (multiple) {
+      const isInArray = checkIfExists(array, value);
+      if (isInArray) {
+        return theme.colors.primary;
+      } else {
+        return theme.colors.white;
+      }
+    } else {
+      if (single === value) {
+        return theme.colors.primary;
+      } else {
+        return theme.colors.white;
+      }
+    }
+  };
+
+  const returnTextColor = (value: string) => {
+    if (multiple) {
+      const isInArray = checkIfExists(array, value);
+      if (isInArray) {
+        return theme.colors.white;
+      } else {
+        return theme.colors.dark;
+      }
+    } else {
+      if (single === value) {
+        return theme.colors.white;
+      } else {
+        return theme.colors.dark;
+      }
+    }
+  };
+
   return (
     <Box style={styles.container}>
       {items.map((a: Item) => (
         <TouchableOpacity
-          onPress={() => handleMultiselect(a.value)}
+          onPress={() => {
+            if (multiple) {
+              handleMultiselect(a.value);
+            } else {
+              handleSingleSelect(a.value);
+            }
+          }}
           key={a.id}
           style={[
             styles.amenity,
             {
-              backgroundColor: checkIfExists(array, a.value)
-                ? theme.colors.primary
-                : theme.colors.white,
+              backgroundColor: returnBgColor(a.value),
             },
           ]}>
           {checkIfExists(array, a.value) ? a.icon2 : a.icon}
-          <Text variant="b1" ml="m" color={checkIfExists(array, a.value) ? 'white' : 'dark'}>
+          <Text variant="b1" ml="m" style={{ color: returnTextColor(a.value) }}>
             {a.value}
           </Text>
         </TouchableOpacity>

@@ -1,16 +1,21 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import React, { useState, useRef } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
+import ImageInputList from '../../components/ImageInputList';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -32,13 +37,51 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: theme.constants.screenWidth,
-    height: hp(30),
+    height: hp(50),
+    paddingVertical: 15,
+    paddingHorizontal: 25,
   },
+  uploadContainerWithImg: {},
+  imageSlider: {},
 });
 
 // interface Props {}
 
-const NewListingImg = ({ navigation }: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
+const NewListingImg = ({
+  navigation,
+  route,
+}: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
+  const { listing } = route.params;
+
+  const [imgUris, setImgUris] = useState<string[]>([]);
+
+  const data: Partial<IListing> = {
+    ...listing,
+    images: imgUris,
+  };
+
+  const onAddImage = (uri: string | null) => {
+    const newUris = [...imgUris, uri as string];
+    setImgUris(newUris);
+  };
+
+  const onRemoveImage = (uri: string | null) => {
+    setImgUris(imgUris.filter((i) => i !== uri));
+  };
+
+  const selectImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 0.5,
+      });
+      if (!result.cancelled) onAddImage(result.uri);
+    } catch (error) {
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      console.log('Error reading image: ' + error);
+    }
+  };
+
   return (
     <Box style={styles.container}>
       <StackHeader onPressBack={() => navigation.goBack()} title="Step 3 of 4" />
@@ -48,25 +91,35 @@ const NewListingImg = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Ne
       </Text>
 
       <Box style={styles.uploadContainer}>
-        <Icon name="plus-square" color={theme.colors.veryLightPurple} size={35} />
-        <Text variant="h3" color="text" marginVertical="l">
-          Upload your photos at least 5
-        </Text>
-        <Button
-          type="primary"
-          label="Upload photos"
-          width={wp(35)}
-          height={hp(5)}
-          borderRad={7}
-          onPress={() => alert('upload images')}
-        />
+        {imgUris.length > 0 ? (
+          <ScrollView>
+            <ImageInputList {...{ onAddImage, onRemoveImage, imgUris }} />
+          </ScrollView>
+        ) : (
+          <>
+            <Icon name="plus-square" color={theme.colors.veryLightPurple} size={55} />
+
+            <Text variant="h2" color="text" marginVertical="xxl">
+              Upload at least 5 photos
+            </Text>
+
+            <Button
+              type="primary"
+              label="Upload photos"
+              width={wp(45)}
+              height={hp(8)}
+              borderRad={7}
+              onPress={() => selectImage()}
+            />
+          </>
+        )}
       </Box>
 
       <Box marginVertical="xxl">
         <Button
           type="purple"
           width={theme.constants.screenWidth}
-          onPress={() => navigation.navigate('NewListingFinal', { listing: { type: 'for_rent' } })}
+          onPress={() => navigation.navigate('NewListingFinal', { listing: data })}
           label="Next Step"
         />
       </Box>
