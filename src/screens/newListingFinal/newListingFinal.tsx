@@ -44,6 +44,8 @@ const NewListingFinal = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
   const { listing } = route.params;
 
+  console.log(listing.images);
+
   const user = firebase.auth().currentUser;
 
   // Dropdown

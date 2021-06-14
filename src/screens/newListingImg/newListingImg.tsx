@@ -74,7 +74,7 @@ const NewListingImg = ({
     actions.push({ resize: { width: 300 } });
 
     const manipulatorResult = await ImageManipulator.manipulateAsync(uri, actions, {
-      compress: 0.4,
+      compress: 0.8,
     });
 
     const localUri = await fetch(manipulatorResult.uri);
@@ -115,7 +115,7 @@ const NewListingImg = ({
         quality: 0.5,
       });
       if (!result.cancelled) {
-        await imageUpload(result.uri);
+        // await imageUpload(result.uri);
         onAddImage(result.uri);
       }
     } catch (error) {
@@ -162,12 +162,17 @@ const NewListingImg = ({
           type="purple"
           width={theme.constants.screenWidth}
           loading={loading}
-          onPress={() => {
+          onPress={async () => {
             setLoading(true);
+            let i;
+            for (i = 0; i < imgUris.length; i++) {
+              await imageUpload(imgUris[i]);
+            }
+
             setTimeout(() => {
               setLoading(false);
               navigation.navigate('NewListingFinal', { listing: data });
-            }, 3000);
+            }, 5000);
           }}
           label="Next Step"
         />

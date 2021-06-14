@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Feather as Icon } from '@expo/vector-icons';
 import {
@@ -15,7 +15,11 @@ import { HomeNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    flex: 1,
+    backgroundColor: theme.colors.secondary,
+    alignItems: 'center',
+  },
   imgSlider: {
     position: 'absolute',
   },
@@ -70,9 +74,11 @@ const listingDetail = ({
 }: StackScreenProps<HomeNavParamList, 'ListingDetail'>) => {
   const { images, title, address, price, rooms, baths, type, description, area } =
     route.params.listing;
+
   return (
-    <ScreenContainer bgColor="secondary">
+    <Box style={styles.container}>
       <StackHeader
+        padding
         onPressBack={() => navigation.goBack()}
         transparent
         option1={<Icon name="download" color={theme.colors.dark} size={20} />}
@@ -81,7 +87,6 @@ const listingDetail = ({
       <Box style={styles.imgSlider}>
         <ListingImgSlider images={images} />
       </Box>
-
       <Box style={styles.title}>
         <Text variant="h1" color="white">
           {title}
@@ -94,7 +99,6 @@ const listingDetail = ({
           </Text>
         </Box>
       </Box>
-
       <Box style={styles.lowerContainer}>
         <Box style={styles.topContainer}>
           <Box style={styles.displayImg} />
@@ -165,7 +169,7 @@ const listingDetail = ({
           />
         </Box>
       </Box>
-    </ScreenContainer>
+    </Box>
   );
 };
 

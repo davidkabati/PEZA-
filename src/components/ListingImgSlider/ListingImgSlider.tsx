@@ -1,10 +1,11 @@
 import React, { useRef } from 'react';
-import { StyleSheet, Animated, Dimensions, Image } from 'react-native';
+import { StyleSheet, Animated, Dimensions } from 'react-native';
 // import { Image } from 'react-native-expo-image-cache';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '..';
 
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     width: wp(1.4),
     height: wp(1.4),
     borderRadius: wp(0.7),
-    backgroundColor: theme.colors.primary,
+    backgroundColor: theme.colors.purple,
   },
   image: {
     width,
@@ -71,7 +72,7 @@ const ListingImgSlider = ({ images }: Props) => {
                 opacity: 0.4,
               }}
             />
-            <Image source={i} style={styles.image} />
+            <Image {...{ uri: i }} style={styles.image} />
           </Box>
         ))}
       </Animated.ScrollView>
