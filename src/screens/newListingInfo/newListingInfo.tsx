@@ -88,7 +88,7 @@ const NewListingInfo = ({
   navigation,
 }: StackScreenProps<ProfileNavParamList, 'NewListingInfo'>) => {
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
-  const [type, setType] = useState<string>();
+  const [type, setType] = useState<string>('for_sale');
   const [listingType, setListingType] = useState<string>();
 
   const data: Partial<IListing> = {
@@ -112,7 +112,13 @@ const NewListingInfo = ({
           First, set listing type
         </Text>
 
-        <Tabs text1="For Sale" text2="For Rent" setSelected={setType} />
+        <Tabs
+          text1="For Sale"
+          text2="For Rent"
+          value1="for_sale"
+          value2="for_rent"
+          setSelected={setType}
+        />
 
         <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Then, lets narrow things down

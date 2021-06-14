@@ -9,6 +9,8 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
+import firebase from 'firebase';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -55,9 +57,46 @@ const NewListingImg = ({
 
   const [imgUris, setImgUris] = useState<string[]>([]);
 
+  const [avatar, setAvatar] = useState<string[]>([]);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   const data: Partial<IListing> = {
     ...listing,
-    images: imgUris,
+    images: avatar,
+  };
+
+  const imageUpload = async (uri: string) => {
+    const userData = firebase.auth().currentUser;
+
+    const actions = [];
+
+    actions.push({ resize: { width: 300 } });
+
+    const manipulatorResult = await ImageManipulator.manipulateAsync(uri, actions, {
+      compress: 0.4,
+    });
+
+    const localUri = await fetch(manipulatorResult.uri);
+
+    const localBlob = await localUri.blob();
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    const filename = userData && userData.uid + new Date().getTime();
+
+    const storageRef = firebase
+      .storage()
+      .ref()
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      .child('avatar/' + filename);
+
+    const putTask = storageRef.put(localBlob);
+
+    // eslint-disable-next-line @typescript-eslint/await-thenable
+    putTask.on('state_changed', () => {
+      void putTask.snapshot.ref.getDownloadURL().then((URL) => {
+        avatar.push(URL);
+      });
+    });
   };
 
   const onAddImage = (uri: string | null) => {
@@ -75,7 +114,10 @@ const NewListingImg = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.cancelled) onAddImage(result.uri);
+      if (!result.cancelled) {
+        await imageUpload(result.uri);
+        onAddImage(result.uri);
+      }
     } catch (error) {
       // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       console.log('Error reading image: ' + error);
@@ -119,7 +161,14 @@ const NewListingImg = ({
         <Button
           type="purple"
           width={theme.constants.screenWidth}
-          onPress={() => navigation.navigate('NewListingFinal', { listing: data })}
+          loading={loading}
+          onPress={() => {
+            setLoading(true);
+            setTimeout(() => {
+              setLoading(false);
+              navigation.navigate('NewListingFinal', { listing: data });
+            }, 3000);
+          }}
           label="Next Step"
         />
       </Box>

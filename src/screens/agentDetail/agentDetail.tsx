@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
+import { ScrollView, StyleSheet, FlatList } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import { Image } from 'react-native-expo-image-cache';
+import { useQuery } from 'react-query';
+import firebase from 'firebase';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -13,17 +19,19 @@ import { HomeNavParamList } from '../../types/navigation.types';
 import listings from '../home/listingData';
 import { Listing } from '../../components/ListingItem';
 import ProfileSvg from './profileSvg';
+import agentsApi from '../../firebase/agent';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
     paddingTop: theme.constants.screenPadding - 10,
+    paddingHorizontal: theme.constants.screenPadding / 2,
+    flex: 1,
   },
   profileImg: {
     width: wp(30),
     height: wp(30),
     borderRadius: wp(15),
-    backgroundColor: theme.colors.dark,
     alignSelf: 'center',
     marginTop: hp(5),
     zIndex: 1,
@@ -53,7 +61,11 @@ const styles = StyleSheet.create({
 // interface AgentDetailProps {}
 
 const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, 'AgentDetail'>) => {
-  const { first_name, last_name, email, phone, whatsapp_link } = route.params.agent;
+  const { full_name, email, phone, whatsapp_link, avatar } = route.params.agent;
+
+  const user = firebase.auth().currentUser;
+
+  const { data } = useQuery('agentListings', () => agentsApi.getAllAgentListings(user?.uid));
 
   return (
     <Box style={styles.container}>
@@ -62,13 +74,27 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
         showsVerticalScrollIndicator={false}
         style={{ marginHorizontal: theme.constants.screenPadding / 2 }}>
         <Box style={{ alignItems: 'center' }}>
-          <Box style={styles.profileImg} />
+          <Box style={styles.profileImg}>
+            <Image
+              {...{ uri: avatar }}
+              style={{
+                width: wp(30),
+                height: wp(30),
+                borderRadius: wp(15),
+                zIndex: 1,
+              }}
+              transitionDuration={300}
+              tint="light"
+            />
+          </Box>
 
           <Box style={styles.svg}>
             <ProfileSvg />
           </Box>
 
-          <Text variant="h1M" color="dark" mt="xl">{`${first_name} ${last_name}`}</Text>
+          <Text variant="h1M" color="dark" mt="xl">
+            {full_name}
+          </Text>
 
           <Text variant="b2" color="lightGrey" mt="m">
             {email}
@@ -89,14 +115,24 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
           Listings
         </Text>
 
-        {listings.map((listing) => (
-          <Listing
-            key={listing.id}
-            listing={listing}
-            onPressFav={() => alert('Fav pressed!')}
-            onPress={() => navigation.navigate('ListingDetail', { listing: listing })}
+        {data && data.length > 0 ? (
+          <FlatList
+            data={data}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <Listing
+                listing={item}
+                onPressFav={() => alert('Fav pressed!')}
+                onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+              />
+            )}
           />
-        ))}
+        ) : (
+          <Text variant="h2B" color="dark" mt="xxl" style={{ alignSelf: 'center' }}>
+            No listings posted yet
+          </Text>
+        )}
       </ScrollView>
     </Box>
   );

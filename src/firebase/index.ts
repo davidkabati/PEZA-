@@ -17,6 +17,5 @@ export default () => {
   }
 
   const db = firebase.firestore();
-
   return db;
 };

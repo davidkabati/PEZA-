@@ -29,36 +29,38 @@ const styles = StyleSheet.create({
 interface Props {
   text1: string;
   text2: string;
+  value1: string;
+  value2: string;
   setSelected: (value: string) => void;
 }
 
-const Tabs = ({ text1, text2, setSelected }: Props) => {
-  const [active, setActive] = useState<string>(text1);
+const Tabs = ({ text1, text2, setSelected, value1, value2 }: Props) => {
+  const [active, setActive] = useState<string>(value1);
 
   return (
     <Box style={styles.container}>
       <TouchableOpacity
         onPress={() => {
-          setActive(text1);
-          setSelected(text1);
+          setActive(value1);
+          setSelected(value1);
         }}
         activeOpacity={1}
         style={styles.tab}>
-        <Box style={active === text1 && styles.innerTab}>
-          <Text variant="b1" color={active === text1 ? 'white' : 'dark'}>
+        <Box style={active === value1 && styles.innerTab}>
+          <Text variant="b1" color={active === value1 ? 'white' : 'dark'}>
             {text1}
           </Text>
         </Box>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          setActive(text2);
-          setSelected(text2);
+          setActive(value2);
+          setSelected(value2);
         }}
         activeOpacity={1}
         style={styles.tab}>
-        <Box style={active === text2 && styles.innerTab}>
-          <Text variant="b1" color={active === text2 ? 'white' : 'dark'}>
+        <Box style={active === value2 && styles.innerTab}>
+          <Text variant="b1" color={active === value2 ? 'white' : 'dark'}>
             {text2}
           </Text>
         </Box>

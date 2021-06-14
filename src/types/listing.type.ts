@@ -1,5 +1,6 @@
 export default interface IListing {
   id: number;
+  agent_id: string;
   title: string;
   description: string;
   address_area: string;
@@ -13,6 +14,10 @@ export default interface IListing {
   price: string;
   sale_price: string;
   images: string[];
-  amenities?: string[];
-  property_type?: string;
+  amenities: string[];
+  property_type: string;
+  verified: boolean;
+  created_at: string;
 }
+
+export type IAddListing = Omit<IListing, 'id'>;

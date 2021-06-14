@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useQuery } from 'react-query';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -13,9 +17,12 @@ import { HomeHeader } from '../../components/HomeHeader';
 import { SearchInput } from '../../components/SearchInput';
 import { Listing } from '../../components/ListingItem';
 import { AgentCard } from '../../components/AgentCard';
-import listings from './listingData';
-import agentData from './agentData';
 import { HomeNavParamList } from '../../types/navigation.types';
+import { CommonActions } from '@react-navigation/native';
+import listingsApi from '../../firebase/listing';
+import agentsApi from '../../firebase/agent';
+import ActivityIndicator from '../../components/ActivityIndicator';
+import Status from '../../components/Status';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,65 +77,86 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     },
   ];
 
+  const listingsQuery = useQuery('listings', listingsApi.getAllListings);
+  const agentsQuery = useQuery('agents', agentsApi.getAllAgents);
+
   return (
-    <Box style={styles.container}>
-      {/* <View from={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ type: 'timing' }}> */}
-      <HomeHeader />
-      {/* </View> */}
+    <>
+      <ActivityIndicator visible={listingsQuery.isLoading} />
+      <Box style={styles.container}>
+        <HomeHeader />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text variant="h1" color="dark" style={styles.headText}>
-          Get your dream property
-        </Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text variant="h1" color="dark" style={styles.headText}>
+            Get your dream property
+          </Text>
 
-        <SearchInput placeholder="Search for listings" />
+          <SearchInput
+            placeholder="Find Listings"
+            onFocus={() =>
+              navigation.dispatch(
+                CommonActions.navigate({
+                  name: 'Categories',
+                }),
+              )
+            }
+          />
 
-        <Text variant="h2B" color="dark" style={styles.subHeadText}>
-          Might help you
-        </Text>
+          <Text variant="h2B" color="dark" style={styles.subHeadText}>
+            Might help you
+          </Text>
 
-        <Box style={styles.cardContainer}>
-          {data.map((d) => (
-            <TouchableOpacity key={d.id} onPress={() => setActive(d.id)}>
-              <HomeCard
-                width={wp(42)}
-                active={active === d.id ? true : false}
-                icon={d.icon}
-                label={d.label}
-                info={d.info}
-              />
-            </TouchableOpacity>
-          ))}
-        </Box>
-
-        <Text variant="h2B" color="dark" style={styles.subHeadText}>
-          {active === 1 ? 'Featured Listings' : 'Featured Agents'}
-        </Text>
-
-        {active === 1 ? (
-          <Box>
-            {listings.map((listing) => (
-              <Listing
-                key={listing.id}
-                listing={listing}
-                onPressFav={() => alert('Fav pressed!')}
-                onPress={() => navigation.navigate('ListingDetail', { listing: listing })}
-              />
+          <Box style={styles.cardContainer}>
+            {data.map((d) => (
+              <TouchableOpacity key={d.id} onPress={() => setActive(d.id)}>
+                <HomeCard
+                  width={wp(42)}
+                  active={active === d.id ? true : false}
+                  icon={d.icon}
+                  label={d.label}
+                  info={d.info}
+                />
+              </TouchableOpacity>
             ))}
           </Box>
-        ) : (
-          <Box>
-            {agentData.map((agent) => (
-              <AgentCard
-                key={agent.id}
-                agent={agent}
-                onPress={() => navigation.navigate('AgentDetail', { agent: agent })}
+
+          <Text variant="h2B" color="dark" style={styles.subHeadText}>
+            {active === 1 ? 'Featured Listings' : 'Featured Agents'}
+          </Text>
+
+          {active === 1 ? (
+            <Box style={{ paddingBottom: 100 }}>
+              <FlatList
+                data={listingsQuery.data}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <Listing
+                    listing={item}
+                    onPressFav={() => alert('Fav pressed!')}
+                    onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+                  />
+                )}
               />
-            ))}
-          </Box>
-        )}
-      </ScrollView>
-    </Box>
+            </Box>
+          ) : (
+            <Box style={{ paddingBottom: 100 }}>
+              <FlatList
+                data={agentsQuery.data}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <AgentCard
+                    agent={item}
+                    onPress={() => navigation.navigate('AgentDetail', { agent: item })}
+                  />
+                )}
+              />
+            </Box>
+          )}
+        </ScrollView>
+      </Box>
+    </>
   );
 };
 

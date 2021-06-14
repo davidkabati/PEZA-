@@ -5,9 +5,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import { Image } from 'react-native-expo-image-cache';
+import { useQuery } from 'react-query';
+import firebase from 'firebase';
 
 import { Box, theme, Text } from '..';
 import IAgent from '../../types/agent.type';
+import agentsApi from '../../firebase/agent';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,12 +68,28 @@ interface Props {
   onPress: () => void;
 }
 const AgentCard = ({ agent, onPress }: Props) => {
+  const user = firebase.auth().currentUser;
+
+  const { data } = useQuery('agentListings', () => agentsApi.getAllAgentListings(user?.uid));
+
   return (
     <Box style={styles.container}>
       <Box style={styles.topContainer}>
-        <Box style={styles.displayImg} />
+        <Box style={styles.displayImg}>
+          <Image
+            {...{ uri: agent.avatar }}
+            style={{
+              width: wp(12),
+              height: wp(12),
+              borderRadius: wp(6),
+              marginRight: wp(5),
+            }}
+          />
+        </Box>
         <Box>
-          <Text variant="h2B" color="dark" mb="m">{`${agent.first_name} ${agent.last_name}`}</Text>
+          <Text variant="h2B" color="dark" mb="m">
+            {agent.full_name}
+          </Text>
           {agent.is_premium && (
             <Text variant="b1" color="text">
               Premium Agent
@@ -83,7 +103,7 @@ const AgentCard = ({ agent, onPress }: Props) => {
       </Box>
       <Box style={styles.activeListing}>
         <Text variant="h1M" mb="s">
-          34
+          {data ? data.length : 0}
         </Text>
         <Text variant="b1" color="text">
           Active Listings

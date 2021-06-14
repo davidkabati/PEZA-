@@ -28,8 +28,9 @@ const styles = StyleSheet.create({
 
 interface Props extends TextInputProps {
   width?: string;
+  onFocus?: () => void;
 }
-const SearchInput = ({ placeholder }: Props) => {
+const SearchInput = ({ placeholder, onFocus }: Props) => {
   return (
     <Box style={styles.container}>
       <Icon name="search" color={theme.colors.lightGrey} size={wp(6)} />
@@ -38,6 +39,7 @@ const SearchInput = ({ placeholder }: Props) => {
         placeholder={placeholder}
         style={styles.placeholder}
         placeholderTextColor={theme.colors.text}
+        onFocus={onFocus}
       />
     </Box>
   );

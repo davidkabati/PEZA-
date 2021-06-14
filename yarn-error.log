@@ -1,5 +1,5 @@
 Arguments: 
-  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add expo-image-cache
+  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add -D @types/react-native-slider
 
 PATH: 
   /home/jacques/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/expo-image-cache: Not found
+  Error: https://registry.yarnpkg.com/@types%2freact-native-slider: Not found
       at Request.params.callback [as _callback] (/snap/node/4749/lib/cli.js:66988:18)
       at Request.self.callback (/snap/node/4749/lib/cli.js:140749:22)
       at Request.emit (events.js:314:20)
@@ -70,6 +70,7 @@ npm manifest:
       "react-native-safe-area-context": "3.2.0",
       "react-native-screens": "~3.0.0",
       "react-native-skeleton-placeholder": "^4.0.0",
+      "react-native-slider": "^0.11.0",
       "react-native-svg": "12.1.0",
       "react-native-toast-message": "^1.4.9",
       "react-native-web": "~0.13.12",
@@ -8021,7 +8022,7 @@ Lockfile:
       kleur "^3.0.3"
       sisteransi "^1.0.5"
   
-  prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
+  prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
     version "15.7.2"
     resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
     integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -8211,6 +8212,13 @@ Lockfile:
     version "4.0.0"
     resolved "https://registry.yarnpkg.com/react-native-skeleton-placeholder/-/react-native-skeleton-placeholder-4.0.0.tgz#8c982cd9e00ffc69d5193da94945b75191eaa7c4"
     integrity sha512-nX0NM6GhurCIgz8Yf+H9VYIaxSF2mbtdozLgaJNh/8QIH9mi+aJ2G9BVHSpjQ0o1fNdKYbGzrXDsC+6v4hmqAA==
+  
+  react-native-slider@^0.11.0:
+    version "0.11.0"
+    resolved "https://registry.yarnpkg.com/react-native-slider/-/react-native-slider-0.11.0.tgz#b68a0bc43c8422b24cd57947cc5ac2bcdb58fadc"
+    integrity sha512-jV9K87eu9uWr0uJIyrSpBLnCKvVlOySC2wynq9TFCdV9oGgjt7Niq8Q1A8R8v+5GHsuBw/s8vEj1AAkkUi+u+w==
+    dependencies:
+      prop-types "^15.5.6"
   
   react-native-svg@12.1.0:
     version "12.1.0"

@@ -6,4 +6,5 @@ export default interface IAgent {
   email: string;
   whatsapp_link: string;
   is_premium: boolean;
+  avatar: string;
 }

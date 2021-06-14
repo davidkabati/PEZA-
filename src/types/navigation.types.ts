@@ -31,7 +31,7 @@ export type ProfileNavParamList = {
   NewListingSpace: { listing: Partial<IListing> };
   NewListingImg: { listing: Partial<IListing> };
   NewListingFinal: { listing: Partial<IListing> };
-  ListingSuccess: { listing: Partial<IListing> };
+  ListingSuccess: undefined;
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;

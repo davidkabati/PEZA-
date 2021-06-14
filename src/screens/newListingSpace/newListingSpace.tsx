@@ -11,6 +11,7 @@ import { StackHeader } from '../../components/StackHeader';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 import IListing from '../../types/listing.type';
+import TextInput from '../../components/TextInput';
 
 const styles = StyleSheet.create({
   container: {
@@ -40,8 +41,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const roomOptions = ['Any', '1', '2', '3', '4+'];
-const bathroomOptions = ['Any', '1', '2', '3', '4+'];
+const roomOptions = ['1', '2', '3', '4', '5+'];
+const bathroomOptions = ['1', '2', '3', '4', '5+'];
 
 // interface Props {}
 
@@ -51,6 +52,7 @@ const NewListingSpace = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingSpace'>) => {
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
+  const [area, setArea] = useState<string>('');
 
   const { listing } = route.params;
 
@@ -58,6 +60,7 @@ const NewListingSpace = ({
     ...listing,
     baths: bathrooms,
     rooms,
+    area,
   };
 
   return (
@@ -109,6 +112,12 @@ const NewListingSpace = ({
             </TouchableOpacity>
           ))}
         </Box>
+
+        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+          Area (m2)
+        </Text>
+
+        <TextInput placeholder="Add building area" onChange={(e) => setArea(e.nativeEvent.text)} />
 
         <Box marginVertical="xxl">
           <Button

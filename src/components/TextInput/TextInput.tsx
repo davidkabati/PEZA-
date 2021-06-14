@@ -49,9 +49,19 @@ interface Props extends TextInputProps {
   height?: number;
   secured?: boolean;
   bgColor?: string;
+  multiline?: boolean;
 }
 
-const TextInput = ({ error, touched, width, height, secured, bgColor, ...props }: Props) => {
+const TextInput = ({
+  error,
+  touched,
+  width,
+  height,
+  secured,
+  bgColor,
+  multiline,
+  ...props
+}: Props) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const reBorderColor = !touched ? 'white' : error ? 'red' : 'green';
@@ -73,10 +83,17 @@ const TextInput = ({ error, touched, width, height, secured, bgColor, ...props }
         },
       ]}>
       <RNTextInput
-        style={[styles.input, { backgroundColor: bgColor ? bgColor : theme.colors.white }]}
+        style={[
+          styles.input,
+          {
+            backgroundColor: bgColor ? bgColor : theme.colors.white,
+            paddingTop: multiline ? 20 : 0,
+          },
+        ]}
         underlineColorAndroid="transparent"
         placeholderTextColor={color}
         secureTextEntry={secured ? !visible : false}
+        multiline={multiline}
         {...props}
       />
       {error && touched && <Text style={styles.errorMessage}>{error}</Text>}

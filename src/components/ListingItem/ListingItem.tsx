@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '..';
 import IListing from '../../types/listing.type';
@@ -69,7 +70,12 @@ const Listing = ({ listing, onPressFav, onPress }: Props) => {
   return (
     <Box style={styles.container}>
       <Box>
-        <Image source={listing.images[0]} style={styles.image} />
+        <Image
+          {...{ uri: listing.images[0] }}
+          style={styles.image}
+          tint="light"
+          transitionDuration={300}
+        />
         <TouchableOpacity onPress={onPressFav} style={styles.favButton}>
           <Icon name="heart" color={theme.colors.red} size={24} />
         </TouchableOpacity>
