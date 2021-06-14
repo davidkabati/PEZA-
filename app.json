@@ -18,7 +18,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.peza.pezaiosapp",
+      "bundleIdentifier": "com.jacquesikot.peza-mobile-apps",
       "buildNumber": "1.0.0"
     },
     "android": {
