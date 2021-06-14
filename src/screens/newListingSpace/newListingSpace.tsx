@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -12,6 +12,7 @@ import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 import IListing from '../../types/listing.type';
 import TextInput from '../../components/TextInput';
+import { Tabs } from '../../components/Tabs';
 
 const styles = StyleSheet.create({
   container: {
@@ -53,11 +54,17 @@ const NewListingSpace = ({
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
   const [area, setArea] = useState<string>('');
+  const [furnish, setFurnish] = useState<string>('furnished');
+  const [floors, setFloors] = useState<string>('');
+  const [buildYear, setBuildYear] = useState<string>('');
 
   const { listing } = route.params;
 
   const data: Partial<IListing> = {
     ...listing,
+    floors,
+    build_year: buildYear,
+    furnish: furnish === 'furnished' ? true : false,
     baths: bathrooms,
     rooms,
     area,
@@ -118,6 +125,33 @@ const NewListingSpace = ({
         </Text>
 
         <TextInput placeholder="Add building area" onChange={(e) => setArea(e.nativeEvent.text)} />
+
+        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+          Floors
+        </Text>
+
+        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+          Build Year
+        </Text>
+
+        <TextInput
+          placeholder="Year property was completed"
+          onChange={(e) => setBuildYear(e.nativeEvent.text)}
+        />
+
+        <TextInput placeholder="Number of floors" onChange={(e) => setFloors(e.nativeEvent.text)} />
+
+        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+          Furnishing
+        </Text>
+
+        <Tabs
+          text1="Furnished"
+          text2="Not Furnished"
+          value1="furnished"
+          value2="not_furnished"
+          setSelected={setFurnish}
+        />
 
         <Box marginVertical="xxl">
           <Button

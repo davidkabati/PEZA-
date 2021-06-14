@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Feather as Icon } from '@expo/vector-icons';
+import { Image } from 'react-native-expo-image-cache';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { useQuery } from 'react-query';
 
 import { Box, theme, Text } from '../../components';
-import { ScreenContainer } from '../../components/Screen';
 import { ListingImgSlider } from '../../components/ListingImgSlider';
 import { StackHeader } from '../../components/StackHeader';
 import { HomeNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
+import agentsApi from '../../firebase/agent';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,7 +67,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     marginTop: hp(2),
-    marginBottom: hp(2),
+    marginBottom: hp(3),
+  },
+  contactContainer: {
+    bottom: hp(15),
+    left: hp(2),
+    position: 'absolute',
+    flexDirection: 'row',
+    width: wp(25),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  contactItem: {
+    backgroundColor: theme.colors.secondary,
+    width: wp(10),
+    height: wp(10),
+    borderRadius: wp(5),
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: hp(14),
+    left: wp(60),
   },
 });
 
@@ -72,8 +94,10 @@ const listingDetail = ({
   route,
   navigation,
 }: StackScreenProps<HomeNavParamList, 'ListingDetail'>) => {
-  const { images, title, address, price, rooms, baths, type, description, area } =
+  const { images, title, address, price, rooms, baths, type, description, area, agent_id } =
     route.params.listing;
+
+  const { data } = useQuery('my-agent', () => agentsApi.getAgent(agent_id));
 
   return (
     <Box style={styles.container}>
@@ -93,35 +117,59 @@ const listingDetail = ({
         </Text>
 
         <Box style={styles.addressContainer}>
-          <Icon name="map-pin" color={theme.colors.text} size={18} />
-          <Text variant="b1" color="white" ml="m">
+          {/* <Icon name="map-pin" color={theme.colors.text} size={24} /> */}
+          <Text variant="b1" color="white">
             {address}
           </Text>
         </Box>
       </Box>
       <Box style={styles.lowerContainer}>
         <Box style={styles.topContainer}>
-          <Box style={styles.displayImg} />
+          <Box style={styles.displayImg}>
+            <Image
+              {...{ uri: data ? data[0].avatar : '' }}
+              style={{
+                width: wp(12),
+                height: wp(12),
+                borderRadius: wp(6),
+                marginRight: wp(5),
+              }}
+              transitionDuration={300}
+              tint="dark"
+            />
+          </Box>
           <Box>
-            <Text variant="h3" color="dark" mb="m">{`${'Jack'} ${'Saunders'}`}</Text>
+            <Text variant="h3" color="dark" mb="m">
+              {data ? data[0].full_name : ''}
+            </Text>
 
             <Text variant="b1" color="text">
               Agent
             </Text>
           </Box>
           <Box style={{ flex: 1 }} />
-          <Box style={styles.asking}>
-            <Text variant="h3" color="dark">
-              Asking
-            </Text>
-            <Text variant="h2B" color="dark" mt="s">
-              {`ZK ${price}`}
-            </Text>
+
+          <Box style={styles.contactContainer}>
+            <Box style={styles.contactItem}>
+              <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
+            </Box>
+            <Box style={styles.contactItem}>
+              <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
+            </Box>
           </Box>
         </Box>
 
         <Box style={styles.propertyDetail}>
-          <Text variant="h2B" color="dark">
+          <Box>
+            <Text variant="h2B" color="dark">
+              Asking
+            </Text>
+            <Text variant="h2B" color="green" mt="s">
+              {`ZK ${price} K`}
+            </Text>
+          </Box>
+
+          <Text variant="h2B" color="dark" mt="xxl">
             Property detail
           </Text>
 
@@ -147,17 +195,17 @@ const listingDetail = ({
                 Area
               </Text>
               <Text variant="b1B" color="dark" mt="s">
-                {area}
+                {`${area} m2`}
               </Text>
             </Box>
           </Box>
 
-          <Text variant="h2B" color="dark" mt="m">
+          {/* <Text variant="h2B" color="dark" mt="m">
             Description
           </Text>
           <Text numberOfLines={2} variant="b2" color="lightGrey" lineHeight={25} mt="s" mb="m">
             {description}
-          </Text>
+          </Text> */}
 
           <Button
             type="primary"

@@ -1,5 +1,5 @@
 Arguments: 
-  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add -D @types/react-native-slider
+  /snap/node/4749/bin/node /snap/node/4749/bin/yarn.js add axios
 
 PATH: 
   /home/jacques/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
@@ -14,17 +14,8 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-native-slider: Not found
-      at Request.params.callback [as _callback] (/snap/node/4749/lib/cli.js:66988:18)
-      at Request.self.callback (/snap/node/4749/lib/cli.js:140749:22)
-      at Request.emit (events.js:314:20)
-      at Request.<anonymous> (/snap/node/4749/lib/cli.js:141721:10)
-      at Request.emit (events.js:314:20)
-      at IncomingMessage.<anonymous> (/snap/node/4749/lib/cli.js:141643:12)
-      at Object.onceWrapper (events.js:420:28)
-      at IncomingMessage.emit (events.js:326:22)
-      at endReadableNT (_stream_readable.js:1241:12)
-      at processTicksAndRejections (internal/process/task_queues.js:84:21)
+  Error: getaddrinfo EAI_AGAIN registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
 
 npm manifest: 
   {
@@ -9381,9 +9372,9 @@ Lockfile:
     integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
   
   tslib@^2.1.0:
-    version "2.2.0"
-    resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
-    integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==
+    version "2.3.0"
+    resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.3.0.tgz#803b8cdab3e12ba581a4ca41c8839bbb0dacb09e"
+    integrity sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==
   
   tsutils@^3.17.1:
     version "3.21.0"

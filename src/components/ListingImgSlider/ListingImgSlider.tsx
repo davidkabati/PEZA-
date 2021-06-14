@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     width: wp(1.4),
     height: wp(1.4),
     borderRadius: wp(0.7),
-    backgroundColor: theme.colors.purple,
+    backgroundColor: theme.colors.white,
   },
   image: {
     width,

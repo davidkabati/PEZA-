@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '..';
 import IListing from '../../types/listing.type';
@@ -37,12 +38,13 @@ const styles = StyleSheet.create({
 
 interface Props {
   listing: IListing;
+  bgColor: 'white' | 'secondary';
 }
 
-const FavoriteItem = ({ listing }: Props) => {
+const FavoriteItem = ({ listing, bgColor }: Props) => {
   return (
-    <Box style={styles.container}>
-      <Image source={listing.images[0]} style={{ width: 90, height: 70, borderRadius: 16 }} />
+    <Box style={[styles.container, { backgroundColor: theme.colors[bgColor] }]}>
+      <Image {...{ uri: listing.images[0] }} style={{ width: 90, height: 70, borderRadius: 16 }} />
 
       <Box style={styles.textContainer}>
         <Text numberOfLines={1} variant="b1B" color="dark">

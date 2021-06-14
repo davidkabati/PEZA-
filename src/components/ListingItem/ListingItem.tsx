@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
@@ -6,6 +8,8 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
+import { useSelector, useDispatch } from 'react-redux';
+import firebase from 'firebase';
 
 import { Box, theme, Text } from '..';
 import IListing from '../../types/listing.type';
@@ -67,6 +71,18 @@ interface Props {
   onPress: () => void;
 }
 const Listing = ({ listing, onPressFav, onPress }: Props) => {
+  // const user = firebase.auth().currentUser;
+
+  // const { favorites } = useSelector((state: any) => state.favoriteReducer);
+
+  // const handleAddFavorite = (listingToAdd: IListing) => {
+  //   const fav = {
+  //     ...listing,
+  //     product_id: listing.id,
+  //     user_id: user ? user?.uid : '',
+  //   };
+  // };
+
   return (
     <Box style={styles.container}>
       <Box>

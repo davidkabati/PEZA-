@@ -3,25 +3,31 @@ import { StatusBar } from 'expo-status-bar';
 import { ThemeProvider } from '@shopify/restyle';
 import Toast from 'react-native-toast-message';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
 
 import AppNav from './src/navigation/AppNav/AppNav';
 import LoadAssets from './src/utils/LoadAssets';
 import fonts from './src/utils/fonts';
 import { theme } from './src/components';
 import firebaseInit from './src/firebase';
+import { store } from './src/redux/store';
 
 export default function App() {
   const queryClient = new QueryClient();
 
+  const assets = [require('./assets/images/noContent.png')];
+
   firebaseInit();
   return (
-    <LoadAssets fonts={fonts}>
+    <LoadAssets {...{ ...fonts, assets }}>
       <ThemeProvider theme={theme}>
-        <QueryClientProvider client={queryClient}>
-          <AppNav />
-          <StatusBar backgroundColor={theme.colors.primary} />
-          <Toast ref={(ref) => Toast.setRef(ref)} />
-        </QueryClientProvider>
+        <Provider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <AppNav />
+            <StatusBar backgroundColor={theme.colors.primary} />
+            <Toast ref={(ref) => Toast.setRef(ref)} />
+          </QueryClientProvider>
+        </Provider>
       </ThemeProvider>
     </LoadAssets>
   );

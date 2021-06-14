@@ -28,7 +28,20 @@ const getAllAgentListings = async (user_id: string | undefined) => {
   return data;
 };
 
+const getAgent = async (agent_id: string) => {
+  const data: any[] = [];
+  const querySnapshot = await db.collection('user').where('id', '==', agent_id).get();
+  querySnapshot.forEach((doc) => {
+    data.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+  return data;
+};
+
 export default {
   getAllAgents,
   getAllAgentListings,
+  getAgent,
 };

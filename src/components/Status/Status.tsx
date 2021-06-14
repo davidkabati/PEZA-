@@ -16,12 +16,13 @@ const styles = StyleSheet.create({
 interface Props {
   image: number;
   text: string;
-  onPress: () => void;
+  onPress: any;
+  bgColor: 'secondary' | 'white';
 }
 
-const Status = ({ onPress, image, text }: Props) => {
+const Status = ({ onPress, image, text, bgColor }: Props) => {
   return (
-    <Box style={styles.container}>
+    <Box style={[styles.container, { backgroundColor: theme.colors[bgColor] }]}>
       <Box style={{ marginVertical: 40 }}>
         <Image source={image} style={{ width: theme.constants.screenWidth, height: 300 }} />
       </Box>
@@ -34,12 +35,14 @@ const Status = ({ onPress, image, text }: Props) => {
         {text}
       </Text>
 
-      <Button
-        type="purple"
-        label="Add More"
-        onPress={onPress}
-        width={theme.constants.screenWidth}
-      />
+      {onPress !== false && (
+        <Button
+          type="purple"
+          label="Add More"
+          onPress={onPress}
+          width={theme.constants.screenWidth}
+        />
+      )}
     </Box>
   );
 };

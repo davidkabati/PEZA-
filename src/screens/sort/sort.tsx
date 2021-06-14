@@ -7,6 +7,7 @@ import {
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
 import DropDownPicker from 'react-native-dropdown-picker';
+import { useQuery } from 'react-query';
 
 import { Box, theme, Text } from '../../components';
 import { SortNavParamList } from '../../types/navigation.types';
@@ -14,6 +15,10 @@ import { Tabs } from '../../components/Tabs';
 import { Slider } from '../../components/Slider';
 import { AirConIcon } from './amenitiesIcon';
 import { Button } from '../../components/Button';
+import TextInput from '../../components/TextInput';
+import Multiselect from '../../components/Multiselect';
+import sortApi from '../../firebase/sort';
+import ActivityIndicator from '../../components/ActivityIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,178 +75,173 @@ export const amenities = [
   {
     id: 1,
     value: 'Air Con.',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 2,
     value: 'Alarm',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 3,
     value: 'Balcony',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 4,
     value: 'Parking',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 5,
     value: 'Pool',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
   {
     id: 6,
     value: 'CCTV',
-    icon: <AirConIcon color={theme.colors.primary} />,
-    icon2: <AirConIcon color={theme.colors.white} />,
   },
 ];
 
 // interface Props {}
 const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
+  const handleSort = async () => {
+    try {
+      setLoading(true);
+      const data = await sortApi.filterListings({ type });
+      setSortResult(data);
+      setLoading(false);
+      navigation.navigate('SortResult', { listings: sortResult });
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
+  };
+
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
+  const [sortResult, setSortResult] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
+  const [type, setType] = useState<string>('for_sale');
 
-  const [minValue, setMinValue] = useState<number>();
-  const [maxValue, setMaxValue] = useState<number>();
+  const [minValue, setMinValue] = useState<string>();
+  const [maxValue, setMaxValue] = useState<string>();
 
   // Dropdown
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<any>(null);
   const [items, setItems] = useState([
-    { label: 'Apple', value: 'apple' },
-    { label: 'Banana', value: 'banana' },
+    { label: 'Lusaka', value: 'lusaka' },
+    { label: 'Eket', value: 'eket' },
   ]);
 
-  const handleAmenity = (a: string) => {
-    const amenityArray: string[] = [];
-    if (amenityArray.includes(a)) {
-      const index = amenityArray.indexOf(a);
-      amenityArray.splice(index, 1);
-    } else {
-      amenityArray.push(a);
-      console.log(amenityArray);
-      setSelectedAmenity(amenityArray);
-    }
-  };
-
-  // console.log(`min: ${minValue}`);
-  // console.log(`max: ${maxValue}`);
-
   return (
-    <Box style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Text variant="h1" color="dark" style={styles.headerText}>
-          Filter for your perfect property
-        </Text>
-        {/* <Tabs text1="For Sale" text2="For Rent" /> */}
-        <Box style={styles.dash} />
-        <Text variant="b1B" color="dark" mb="m">
-          Minimum Asking
-        </Text>
-        <Slider getValue={(v) => setMinValue(v)} />
-        <Text variant="b1B" color="dark" mb="m" mt="xl">
-          Maximum Asking
-        </Text>
-        <Slider getValue={(v) => setMaxValue(v)} />
-        <Text variant="h2" color="dark" mt="xxl" mb="l">
-          Location
-        </Text>
-        <DropDownPicker
-          multiple
-          min={0}
-          max={5}
-          open={open}
-          items={items}
-          value={value}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
-        />
-        <Text variant="b1" color="text" mt="xxl" textAlign="center">
-          The average price in this area is ZK 4000
-        </Text>
-        <Text variant="h2" color="dark" mt="xxl">
-          Rooms
-        </Text>
-        <Box style={styles.roomsContainer}>
-          {roomOptions.map((r, index) => (
-            <TouchableOpacity
-              onPress={() => setRooms(r)}
-              key={index}
-              style={[
-                styles.roomOption,
-                { backgroundColor: rooms === r ? theme.colors.primary : theme.colors.white },
-              ]}>
-              <Text variant="b1" color={rooms === r ? 'white' : 'dark'}>
-                {r}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
-        <Text variant="h2" color="dark" mt="xxl">
-          Bathrooms
-        </Text>
-        <Box style={styles.roomsContainer}>
-          {bathroomOptions.map((r, index) => (
-            <TouchableOpacity
-              onPress={() => setBathrooms(r)}
-              key={index}
-              style={[
-                styles.roomOption,
-                { backgroundColor: bathrooms === r ? theme.colors.primary : theme.colors.white },
-              ]}>
-              <Text variant="b1" color={bathrooms === r ? 'white' : 'dark'}>
-                {r}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
-        <Text variant="h2" color="dark" mt="xxl">
-          Amenities
-        </Text>
-        <Box style={styles.amenityContainer}>
-          {amenities.map((a) => (
-            <TouchableOpacity
-              onPress={() => handleAmenity(a.value)}
-              key={a.id}
-              style={[
-                styles.amenity,
-                {
-                  backgroundColor: selectedAmenity.includes(a.value)
-                    ? theme.colors.primary
-                    : theme.colors.white,
-                },
-              ]}>
-              {a.icon}
-              <Text
-                variant="b1"
-                ml="m"
-                color={selectedAmenity.includes(a.value) ? 'white' : 'dark'}>
-                {a.value}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
-        <Box marginVertical="xxl">
-          <Button
-            type="primary"
-            width={theme.constants.screenWidth}
-            onPress={() => navigation.navigate('SortResult', { sortParam: 'fixed' })}
-            label="Filter properties"
+    <>
+      <ActivityIndicator visible={loading} />
+      <Box style={styles.container}>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text variant="h1" color="dark" style={styles.headerText}>
+            Filter for your perfect property
+          </Text>
+          <Tabs
+            text1="For Sale"
+            text2="For Rent"
+            value1="for_sale"
+            value2="for_rent"
+            setSelected={setType}
           />
-        </Box>
-      </ScrollView>
-    </Box>
+          <Box style={styles.dash} />
+          <Text variant="b1B" color="dark" mb="m">
+            Minimum Asking
+          </Text>
+
+          <TextInput
+            placeholder="Minimum Price"
+            onChange={(e) => setMinValue(e.nativeEvent.text)}
+          />
+
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
+            Maximum Asking
+          </Text>
+
+          <TextInput
+            placeholder="Minimum Price"
+            onChange={(e) => setMaxValue(e.nativeEvent.text)}
+          />
+
+          <Text variant="h2" color="dark" mt="xxl" mb="l">
+            Location
+          </Text>
+
+          <DropDownPicker
+            multiple
+            min={0}
+            max={5}
+            open={open}
+            items={items}
+            value={value}
+            setOpen={setOpen}
+            setValue={setValue}
+            setItems={setItems}
+          />
+
+          <Text variant="b1" color="text" mt="xxl" textAlign="center">
+            The average price in this area is ZK 4000
+          </Text>
+
+          <Text variant="h2" color="dark" mt="xxl">
+            Rooms
+          </Text>
+
+          <Box style={styles.roomsContainer}>
+            {roomOptions.map((r, index) => (
+              <TouchableOpacity
+                onPress={() => setRooms(r)}
+                key={index}
+                style={[
+                  styles.roomOption,
+                  { backgroundColor: rooms === r ? theme.colors.primary : theme.colors.white },
+                ]}>
+                <Text variant="b1" color={rooms === r ? 'white' : 'dark'}>
+                  {r}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </Box>
+
+          <Text variant="h2" color="dark" mt="xxl">
+            Bathrooms
+          </Text>
+
+          <Box style={styles.roomsContainer}>
+            {bathroomOptions.map((r, index) => (
+              <TouchableOpacity
+                onPress={() => setBathrooms(r)}
+                key={index}
+                style={[
+                  styles.roomOption,
+                  { backgroundColor: bathrooms === r ? theme.colors.primary : theme.colors.white },
+                ]}>
+                <Text variant="b1" color={bathrooms === r ? 'white' : 'dark'}>
+                  {r}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </Box>
+
+          <Text variant="h2" color="dark" mt="xxl" mb="m">
+            Amenities
+          </Text>
+
+          <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
+
+          <Box marginVertical="xxl">
+            <Button
+              type="primary"
+              width={theme.constants.screenWidth}
+              onPress={handleSort}
+              label="Filter properties"
+            />
+          </Box>
+        </ScrollView>
+      </Box>
+    </>
   );
 };
 

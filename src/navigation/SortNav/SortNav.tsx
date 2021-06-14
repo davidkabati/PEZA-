@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { SortNavParamList } from '../../types/navigation.types';
-import { Sort, SortResult } from '../../screens';
+import { Sort, SortResult, ListingDetail, ListingDetailsExtra } from '../../screens';
 
 const SortStack = createStackNavigator<SortNavParamList>();
 
@@ -11,6 +11,8 @@ const SortNav = () => {
     <SortStack.Navigator headerMode="none">
       <SortStack.Screen name="Sort" component={Sort} />
       <SortStack.Screen name="SortResult" component={SortResult} />
+      <SortStack.Screen name="ListingDetail" component={ListingDetail} />
+      <SortStack.Screen name="ListingDetailsExtra" component={ListingDetailsExtra} />
     </SortStack.Navigator>
   );
 };
