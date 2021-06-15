@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import {
   widthPercentageToDP as wp,
@@ -9,6 +10,7 @@ import {
 } from 'react-native-responsive-screen';
 import { Image } from 'react-native-expo-image-cache';
 import { useQuery } from 'react-query';
+import * as Linking from 'expo-linking';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -42,8 +44,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: theme.colors.primary,
     height: hp(12),
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
     padding: 20,
   },
   displayImg: {
@@ -86,12 +86,7 @@ const ListingDetailsExtra = ({
 
   return (
     <Box style={styles.container}>
-      <StackHeader
-        padding
-        onPressBack={() => navigation.goBack()}
-        transparent
-        option1={<Icon name="download" color={theme.colors.dark} size={20} />}
-      />
+      <StackHeader padding onPressBack={() => navigation.goBack()} transparent />
 
       <Box style={{ paddingHorizontal: theme.constants.screenPadding / 2, width: '100%' }}>
         <Text numberOfLines={4} variant="h2B" color="dark" mt="xxl">
@@ -207,12 +202,16 @@ const ListingDetailsExtra = ({
         <Box style={{ flex: 1 }} />
 
         <Box style={styles.contactContainer}>
-          <Box style={styles.contactItem}>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(`tel:${data ? data[0].phone : ''}`)}
+            style={styles.contactItem}>
             <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
-          </Box>
-          <Box style={styles.contactItem}>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => Linking.openURL(data ? data[0].whatsapp_link : '')}
+            style={styles.contactItem}>
             <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
-          </Box>
+          </TouchableOpacity>
         </Box>
       </Box>
     </Box>

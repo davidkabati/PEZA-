@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -10,6 +11,7 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useQuery } from 'react-query';
+import * as Linking from 'expo-linking';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -91,7 +93,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             Get your dream property
           </Text>
 
-          <SearchInput
+          {/* <SearchInput
             placeholder="Find Listings"
             onFocus={() =>
               navigation.dispatch(
@@ -104,7 +106,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
           <Text variant="h2B" color="dark" style={styles.subHeadText}>
             Might help you
-          </Text>
+          </Text> */}
 
           <Box style={styles.cardContainer}>
             {data.map((d) => (
@@ -148,6 +150,8 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                   <AgentCard
                     agent={item}
                     onPress={() => navigation.navigate('AgentDetail', { agent: item })}
+                    onPressMessage={() => Linking.openURL(item.whatsapp_link)}
+                    onPressPhone={() => Linking.openURL(`tel:${item.phone}`)}
                   />
                 )}
               />

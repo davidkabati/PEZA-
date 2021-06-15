@@ -66,8 +66,10 @@ const styles = StyleSheet.create({
 interface Props {
   agent: IAgent;
   onPress: () => void;
+  onPressPhone: () => void;
+  onPressMessage: () => void;
 }
-const AgentCard = ({ agent, onPress }: Props) => {
+const AgentCard = ({ agent, onPress, onPressPhone, onPressMessage }: Props) => {
   const user = firebase.auth().currentUser;
 
   const { data } = useQuery('agentListings', () => agentsApi.getAllAgentListings(user?.uid));
@@ -110,12 +112,12 @@ const AgentCard = ({ agent, onPress }: Props) => {
         </Text>
       </Box>
       <Box style={styles.contactContainer}>
-        <Box style={styles.contactItem}>
+        <TouchableOpacity onPress={onPressPhone} style={styles.contactItem}>
           <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
-        </Box>
-        <Box style={styles.contactItem}>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onPressMessage} style={styles.contactItem}>
           <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
-        </Box>
+        </TouchableOpacity>
       </Box>
     </Box>
   );

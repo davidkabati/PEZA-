@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import React from 'react';
-import { ScrollView, StyleSheet, FlatList } from 'react-native';
+import { ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
   widthPercentageToDP as wp,
@@ -12,6 +12,7 @@ import { Feather as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
 import { useQuery } from 'react-query';
 import firebase from 'firebase';
+import * as Linking from 'expo-linking';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -23,7 +24,6 @@ import agentsApi from '../../firebase/agent';
 const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
-    paddingTop: theme.constants.screenPadding - 10,
     flex: 1,
   },
   profileImg: {
@@ -67,7 +67,7 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
 
   return (
     <Box style={styles.container}>
-      <StackHeader onPressBack={() => navigation.goBack()} />
+      <StackHeader onPressBack={() => navigation.goBack()} padding />
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{ marginHorizontal: theme.constants.screenPadding / 2 }}>
@@ -99,13 +99,17 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
           </Text>
 
           <Box style={styles.contactContainer}>
-            <Box style={styles.contactItem}>
+            <TouchableOpacity
+              style={styles.contactItem}
+              onPress={() => Linking.openURL(`tel:${phone}`)}>
               <Icon name="phone" color={theme.colors.veryLightPurple} size={24} />
-            </Box>
+            </TouchableOpacity>
 
-            <Box style={styles.contactItem}>
+            <TouchableOpacity
+              onPress={() => Linking.openURL(whatsapp_link !== '' ? whatsapp_link : '')}
+              style={styles.contactItem}>
               <Icon name="message-circle" color={theme.colors.veryLightPurple} size={24} />
-            </Box>
+            </TouchableOpacity>
           </Box>
         </Box>
 
