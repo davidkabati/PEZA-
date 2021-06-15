@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, ScrollView } from 'react-native';
 import {
@@ -11,6 +11,7 @@ import { Feather as Icon } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import firebase from 'firebase';
 import * as ImageManipulator from 'expo-image-manipulator';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -66,6 +67,29 @@ const NewListingImg = ({
     images: avatar,
   };
 
+  const handleNext = async () => {
+    if (imgUris.length < 5) {
+      return Toast.show({
+        type: 'error',
+        position: 'top',
+        visibilityTime: 4000,
+        autoHide: true,
+        text1: 'Listing Image',
+        text2: 'Add at least 5 images to continue.',
+      });
+    } else {
+      setLoading(true);
+      let i;
+      for (i = 0; i < imgUris.length; i++) {
+        await imageUpload(imgUris[i]);
+      }
+
+      setTimeout(() => {
+        setLoading(false);
+        navigation.navigate('NewListingFinal', { listing: data });
+      }, 5000);
+    }
+  };
   const imageUpload = async (uri: string) => {
     const userData = firebase.auth().currentUser;
 
@@ -162,18 +186,7 @@ const NewListingImg = ({
           type="purple"
           width={theme.constants.screenWidth}
           loading={loading}
-          onPress={async () => {
-            setLoading(true);
-            let i;
-            for (i = 0; i < imgUris.length; i++) {
-              await imageUpload(imgUris[i]);
-            }
-
-            setTimeout(() => {
-              setLoading(false);
-              navigation.navigate('NewListingFinal', { listing: data });
-            }, 5000);
-          }}
+          onPress={handleNext}
           label="Next Step"
         />
       </Box>

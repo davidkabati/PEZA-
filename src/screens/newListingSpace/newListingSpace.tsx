@@ -5,6 +5,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -70,6 +71,20 @@ const NewListingSpace = ({
     area,
   };
 
+  const handleNext = () => {
+    if (floors === '' || buildYear === '' || area === '') {
+      return Toast.show({
+        type: 'error',
+        position: 'top',
+        visibilityTime: 4000,
+        autoHide: true,
+        text1: 'Listing Info',
+        text2: 'Complete all fields to continue.',
+      });
+    }
+    navigation.navigate('NewListingImg', { listing: data });
+  };
+
   return (
     <Box style={styles.container}>
       <StackHeader onPressBack={() => navigation.goBack()} title="Step 2 of 4" />
@@ -124,11 +139,21 @@ const NewListingSpace = ({
           Area (m2)
         </Text>
 
-        <TextInput placeholder="Add building area" onChange={(e) => setArea(e.nativeEvent.text)} />
+        <TextInput
+          placeholder="Add building area"
+          onChange={(e) => setArea(e.nativeEvent.text)}
+          keyboardType="number-pad"
+        />
 
         <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Floors
         </Text>
+
+        <TextInput
+          keyboardType="number-pad"
+          placeholder="Number of floors"
+          onChange={(e) => setFloors(e.nativeEvent.text)}
+        />
 
         <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Build Year
@@ -137,9 +162,8 @@ const NewListingSpace = ({
         <TextInput
           placeholder="Year property was completed"
           onChange={(e) => setBuildYear(e.nativeEvent.text)}
+          keyboardType="number-pad"
         />
-
-        <TextInput placeholder="Number of floors" onChange={(e) => setFloors(e.nativeEvent.text)} />
 
         <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Furnishing
@@ -157,7 +181,7 @@ const NewListingSpace = ({
           <Button
             type="purple"
             width={theme.constants.screenWidth}
-            onPress={() => navigation.navigate('NewListingImg', { listing: data })}
+            onPress={handleNext}
             label="Next Step"
           />
         </Box>

@@ -3,21 +3,17 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, ScrollView } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from 'react-native-toast-message';
 import firebase from 'firebase';
-import * as ImageManipulator from 'expo-image-manipulator';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 import TextInput from '../../components/TextInput';
-import IListing, { IAddListing } from '../../types/listing.type';
+import IListing from '../../types/listing.type';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import listingApi from '../../firebase/listing';
 
@@ -44,8 +40,6 @@ const NewListingFinal = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
   const { listing } = route.params;
 
-  console.log(listing.images);
-
   const user = firebase.auth().currentUser;
 
   // Dropdown
@@ -57,7 +51,7 @@ const NewListingFinal = ({
   ]);
 
   const [title, setTitle] = useState<string>('');
-  const [price, setPrice] = useState<string>('');
+  const [price, setPrice] = useState<number>(0);
   const [description, setDescription] = useState<string>('');
   const [address, setAddress] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -73,20 +67,37 @@ const NewListingFinal = ({
 
   const handleSubmit = async () => {
     try {
-      setLoading(true);
-      const finalListing = {
-        ...data,
-        created_at: new Date().toISOString(),
-        sale_price: '',
-        on_sale: false,
-        agent_id: user?.uid as string,
-      };
+      if (
+        title === '' ||
+        price === 0 ||
+        description === '' ||
+        address === '' ||
+        location === null
+      ) {
+        return Toast.show({
+          type: 'error',
+          position: 'top',
+          visibilityTime: 4000,
+          autoHide: true,
+          text1: 'Listing Info',
+          text2: 'Complete all fields to continue.',
+        });
+      } else {
+        setLoading(true);
+        const finalListing = {
+          ...data,
+          created_at: new Date().toISOString(),
+          sale_price: '',
+          on_sale: false,
+          agent_id: user?.uid as string,
+        };
 
-      await listingApi.addListing(finalListing);
+        await listingApi.addListing(finalListing);
 
-      navigation.navigate('ListingSuccess');
+        navigation.navigate('ListingSuccess');
 
-      setLoading(false);
+        setLoading(false);
+      }
     } catch (error) {
       setLoading(false);
       console.log(error);
@@ -126,7 +137,10 @@ const NewListingFinal = ({
             Set the price
           </Text>
 
-          <TextInput placeholder="Enter Price" onChange={(e) => setPrice(e.nativeEvent.text)} />
+          <TextInput
+            placeholder="Enter Price"
+            onChange={(e) => setPrice(Number(e.nativeEvent.text))}
+          />
 
           <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
             Description

@@ -129,12 +129,12 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
     setLoading(true);
     const data = {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      full_name: values.full_name,
+      full_name: values.full_name !== '' ? values.full_name : userData?.displayName,
       avatar: avatar,
     };
     userData?.updateProfile({
       // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      displayName: values.full_name,
+      displayName: values.full_name !== '' ? values.full_name : userData.displayName,
       photoURL: avatar,
     });
     const userRef = firebase.firestore().collection('user').doc(userData?.uid);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -12,6 +12,7 @@ import firebase from 'firebase';
 import { Box, theme, Text } from '..';
 import IAgent from '../../types/agent.type';
 import agentsApi from '../../firebase/agent';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -70,9 +71,19 @@ interface Props {
   onPressMessage: () => void;
 }
 const AgentCard = ({ agent, onPress, onPressPhone, onPressMessage }: Props) => {
-  const user = firebase.auth().currentUser;
+  const [data, setData] = useState<any[]>([]);
 
-  const { data } = useQuery('agentListings', () => agentsApi.getAllAgentListings(user?.uid));
+  const loadData = async () => {
+    const result = await agentsApi.getAllAgentListings(agent.id);
+    if (result) setData(result);
+  };
+
+  useEffect(() => {
+    void loadData();
+    return () => {
+      void loadData();
+    };
+  }, [agent]);
 
   return (
     <Box style={styles.container}>
@@ -92,11 +103,10 @@ const AgentCard = ({ agent, onPress, onPressPhone, onPressMessage }: Props) => {
           <Text variant="h2B" color="dark" mb="m">
             {agent.full_name}
           </Text>
-          {agent.is_premium && (
-            <Text variant="b1" color="text">
-              Premium Agent
-            </Text>
-          )}
+
+          <Text numberOfLines={1} variant="b1" color="text">
+            {agent.email}
+          </Text>
         </Box>
         <Box style={{ flex: 1 }} />
         <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -108,7 +118,7 @@ const AgentCard = ({ agent, onPress, onPressPhone, onPressMessage }: Props) => {
           {data ? data.length : 0}
         </Text>
         <Text variant="b1" color="text">
-          Active Listings
+          Active Listing{data && data.length > 1 ? 's' : ''}
         </Text>
       </Box>
       <Box style={styles.contactContainer}>

@@ -16,11 +16,9 @@ import * as Linking from 'expo-linking';
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
 import { HomeHeader } from '../../components/HomeHeader';
-import { SearchInput } from '../../components/SearchInput';
 import { Listing } from '../../components/ListingItem';
 import { AgentCard } from '../../components/AgentCard';
 import { HomeNavParamList } from '../../types/navigation.types';
-import { CommonActions } from '@react-navigation/native';
 import listingsApi from '../../firebase/listing';
 import agentsApi from '../../firebase/agent';
 import ActivityIndicator from '../../components/ActivityIndicator';
@@ -31,6 +29,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
     paddingHorizontal: theme.constants.screenPadding / 2,
     paddingTop: theme.constants.screenPadding,
+    flex: 1,
   },
   headText: {
     marginTop: hp(4),
@@ -63,7 +62,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
         />
       ),
       label: 'Homes',
-      info: '43',
+      info: '50+',
     },
     {
       id: 2,

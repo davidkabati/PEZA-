@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginVertical: hp(1),
     alignItems: 'center',
-    marginTop: hp(2),
   },
   listingType: {
     position: 'absolute',
@@ -177,16 +176,16 @@ const Listing = ({ listing, onPress }: Props) => {
         </Box>
       </Box>
       <TouchableOpacity activeOpacity={0.85} onPress={onPress} style={styles.infoContainer}>
-        <Box>
-          <Text variant="h2" color="dark" mt="l">
+        <Box style={{ width: wp(68) }}>
+          <Text numberOfLines={1} variant="h2" color="dark" mt="l">
             {listing.title}
           </Text>
-          <Text variant="b1B" color="text" mt="m">
+          <Text numberOfLines={1} variant="b1B" color="text" mt="m">
             {listing.address}
           </Text>
         </Box>
         <Box style={styles.priceContainer}>
-          <Text variant="b1" color="white">{`ZK ${listing.price}`}</Text>
+          <Text variant="b1" color="white">{`ZK ${listing.price.toString()}`}</Text>
         </Box>
       </TouchableOpacity>
       <Box style={styles.iconContainer}>

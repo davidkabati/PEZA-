@@ -21,7 +21,7 @@ export type SortNavParamList = {
   Sort: undefined;
   SortResult: { listings: any[] };
   ListingDetail: { listing: IListing };
-  ListingDetailsExtra: { listing: IListing };
+  ListingDetailExtra: { listing: IListing };
 };
 
 export type ProfileNavParamList = {

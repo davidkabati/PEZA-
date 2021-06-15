@@ -24,18 +24,14 @@ const styles = StyleSheet.create({
 const SortResult = ({ navigation, route }: StackScreenProps<SortNavParamList, 'SortResult'>) => {
   return (
     <Box style={styles.container}>
-      <StackHeader onPressBack={() => navigation.goBack()} padding />
-
-      <Text variant="h1" color="dark" mb="xxxl">
-        Search Results
-      </Text>
+      <StackHeader onPressBack={() => navigation.goBack()} padding title="Search Result" />
 
       {route.params.listings.length < 1 ? (
-        <Text variant="b1B" color="dark">
+        <Text mt="xxxl" variant="b1B" color="dark">
           No listing found matching your search
         </Text>
       ) : (
-        <Box style={{ paddingBottom: 100, width: theme.constants.screenWidth }}>
+        <Box pt="xxl" style={{ width: theme.constants.screenWidth }}>
           <FlatList
             data={route.params.listings}
             showsVerticalScrollIndicator={false}
@@ -43,7 +39,6 @@ const SortResult = ({ navigation, route }: StackScreenProps<SortNavParamList, 'S
             renderItem={({ item }) => (
               <Listing
                 listing={item}
-                onPressFav={() => alert('Fav pressed!')}
                 onPress={() => navigation.navigate('ListingDetail', { listing: item })}
               />
             )}

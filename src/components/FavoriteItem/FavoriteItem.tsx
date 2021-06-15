@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     justifyContent: 'space-between',
     height: '80%',
+    width: wp(40),
   },
   button: {
     width: wp(9),
@@ -55,7 +56,7 @@ const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
         <Text numberOfLines={1} variant="b2" color="lightGrey">
           {listing.address}
         </Text>
-        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${listing.price}`}</Text>
+        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${listing.price.toString()}`}</Text>
       </TouchableOpacity>
 
       <Box style={{ flex: 1 }} />

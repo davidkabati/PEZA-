@@ -12,7 +12,7 @@ const SortNav = () => {
       <SortStack.Screen name="Sort" component={Sort} />
       <SortStack.Screen name="SortResult" component={SortResult} />
       <SortStack.Screen name="ListingDetail" component={ListingDetail} />
-      <SortStack.Screen name="ListingDetailsExtra" component={ListingDetailsExtra} />
+      <SortStack.Screen name="ListingDetailExtra" component={ListingDetailsExtra} />
     </SortStack.Navigator>
   );
 };

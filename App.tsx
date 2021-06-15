@@ -15,7 +15,11 @@ import { store } from './src/redux/store';
 export default function App() {
   const queryClient = new QueryClient();
 
-  const assets = [require('./assets/images/noContent.png')];
+  const assets = [
+    require('./assets/images/noContent.png'),
+    require('./assets/images/forgotPassword.png'),
+    require('./assets/images/underConstruction.png'),
+  ];
 
   firebaseInit();
   return (

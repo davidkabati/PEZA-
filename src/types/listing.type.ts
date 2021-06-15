@@ -11,7 +11,7 @@ export default interface IListing {
   baths: string;
   area: string;
   on_sale: boolean;
-  price: string;
+  price: number;
   sale_price: string;
   images: string[];
   amenities: string[];

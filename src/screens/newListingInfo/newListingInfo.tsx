@@ -5,6 +5,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -89,12 +90,26 @@ const NewListingInfo = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingInfo'>) => {
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
   const [type, setType] = useState<string>('for_sale');
-  const [listingType, setListingType] = useState<string>();
+  const [listingType, setListingType] = useState<string>('');
 
   const data: Partial<IListing> = {
     type,
     amenities: selectedAmenity,
     property_type: listingType,
+  };
+
+  const handleNext = () => {
+    if (listingType === '') {
+      return Toast.show({
+        type: 'error',
+        position: 'top',
+        visibilityTime: 4000,
+        autoHide: true,
+        text1: 'Listing Info',
+        text2: 'Property field is empty, add to contiue.',
+      });
+    }
+    navigation.navigate('NewListingSpace', { listing: data });
   };
 
   return (
@@ -136,7 +151,7 @@ const NewListingInfo = ({
           <Button
             type="purple"
             width={theme.constants.screenWidth}
-            onPress={() => navigation.navigate('NewListingSpace', { listing: data })}
+            onPress={handleNext}
             label="Next Step"
           />
         </Box>

@@ -142,7 +142,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
         <ProfileItem
           icon={<Icon name="info" color={theme.colors.veryLightPurple} size={24} />}
           label="About"
-          onPress={() => alert('About')}
+          onPress={() => true}
         />
 
         <ProfileItem

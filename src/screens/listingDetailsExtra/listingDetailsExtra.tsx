@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import {
   widthPercentageToDP as wp,
@@ -88,91 +88,118 @@ const ListingDetailsExtra = ({
     <Box style={styles.container}>
       <StackHeader padding onPressBack={() => navigation.goBack()} transparent />
 
-      <Box style={{ paddingHorizontal: theme.constants.screenPadding / 2, width: '100%' }}>
-        <Text numberOfLines={4} variant="h2B" color="dark" mt="xxl">
-          Description
-        </Text>
+      <ScrollView>
+        <Box style={{ paddingHorizontal: theme.constants.screenPadding / 2, width: '100%' }}>
+          <Text numberOfLines={4} variant="h2B" color="dark" mt="xxl">
+            Description
+          </Text>
 
-        <Text
-          variant="b1"
-          color="lightGrey"
-          mt="l"
-          style={{ alignSelf: 'flex-start', lineHeight: 28 }}>
-          {listing.description}
-        </Text>
+          <Text
+            variant="b1"
+            color="lightGrey"
+            mt="l"
+            style={{ alignSelf: 'flex-start', lineHeight: 28 }}>
+            {listing.description}
+          </Text>
 
-        <Text variant="h2B" color="dark" mt="xxl">
-          Amenities
-        </Text>
+          <Text variant="h2B" color="dark" mt="xxl">
+            Amenities
+          </Text>
 
-        <Box mt="l" style={styles.amenityContainer}>
-          {listing.amenities.map((a) => (
-            <Box style={styles.amenityTab} key={a}>
-              <Text variant="b1" color="white">
-                {a}
+          <Box mt="l" style={styles.amenityContainer}>
+            {listing.amenities.map((a) => (
+              <Box style={styles.amenityTab} key={a}>
+                <Text variant="b1" color="white">
+                  {a}
+                </Text>
+              </Box>
+            ))}
+          </Box>
+
+          <Text variant="h2B" color="dark" mt="xxl">
+            Others
+          </Text>
+
+          <Box
+            style={{
+              flexDirection: 'row',
+              width: theme.constants.screenWidth,
+              justifyContent: 'space-between',
+            }}
+            mt="l">
+            <Box>
+              <Text variant="b1" color="lightGrey">
+                Type
+              </Text>
+              <Text variant="h3" color="dark" mt="m">
+                {listing.type === 'for_sale' ? 'For Sale' : 'For Rent'}
               </Text>
             </Box>
-          ))}
+
+            <Box>
+              <Text variant="b1" color="lightGrey" textAlign="right">
+                Property Type
+              </Text>
+              <Text variant="h3" color="dark" mt="m" textAlign="right">
+                {listing.property_type}
+              </Text>
+            </Box>
+          </Box>
+
+          <Box
+            style={{
+              flexDirection: 'row',
+              width: theme.constants.screenWidth,
+              justifyContent: 'space-between',
+            }}
+            mt="xxl">
+            <Box>
+              <Text variant="b1" color="lightGrey">
+                Area
+              </Text>
+              <Text variant="h3" color="dark" mt="m">
+                {listing.address_area}
+              </Text>
+            </Box>
+
+            <Box>
+              <Text variant="b1" color="lightGrey" textAlign="right">
+                Furnishing
+              </Text>
+              <Text variant="h3" color="dark" mt="m" textAlign="right">
+                {listing.furnish ? 'Furnished' : 'Not Furnished'}
+              </Text>
+            </Box>
+          </Box>
+
+          <Box
+            style={{
+              flexDirection: 'row',
+              width: theme.constants.screenWidth,
+              justifyContent: 'space-between',
+            }}
+            mt="xxl"
+            pb="xxxl">
+            <Box>
+              <Text variant="b1" color="lightGrey">
+                Build Year
+              </Text>
+              <Text variant="h3" color="dark" mt="m">
+                {listing.build_year == '' ? 'n/a' : listing.build_year}
+              </Text>
+            </Box>
+
+            {/* <Box>
+              <Text variant="b1" color="lightGrey">
+                Furnishing
+              </Text>
+              <Text variant="h3" color="dark" mt="m">
+                {listing.furnish ? 'Furnished' : 'Not Furnished'}
+              </Text>
+            </Box> */}
+          </Box>
         </Box>
-
-        <Text variant="h2B" color="dark" mt="xxl">
-          Others
-        </Text>
-
-        <Box
-          style={{
-            flexDirection: 'row',
-            width: theme.constants.screenWidth,
-          }}
-          mt="l">
-          <Box>
-            <Text variant="b1" color="lightGrey">
-              Type
-            </Text>
-            <Text variant="h3" color="dark" mt="m">
-              {listing.type === 'for_sale' ? 'For Sale' : 'For Rent'}
-            </Text>
-          </Box>
-
-          <Box style={{ width: wp(50) }} />
-
-          <Box>
-            <Text variant="b1" color="lightGrey">
-              Property Type
-            </Text>
-            <Text variant="h3" color="dark" mt="m">
-              {listing.property_type}
-            </Text>
-          </Box>
-        </Box>
-
-        <Box
-          style={{
-            flexDirection: 'row',
-            width: theme.constants.screenWidth,
-          }}
-          mt="xxl">
-          <Box>
-            <Text variant="b1" color="lightGrey">
-              Build Year
-            </Text>
-            <Text variant="h3" color="dark" mt="m">
-              {listing.build_year !== '' ? 'n/a' : listing.build_year}
-            </Text>
-          </Box>
-
-          <Box style={{ width: wp(49) }} />
-
-          <Box>
-            <Text variant="b1" color="lightGrey">
-              Furnishing
-            </Text>
-            <Text variant="h3" color="dark" mt="m">
-              {listing.furnish ? 'Furnished' : 'Not Furnished'}
-            </Text>
-          </Box>
-        </Box>
-      </Box>
+      </ScrollView>
 
       <Box style={{ flex: 1 }} />
 

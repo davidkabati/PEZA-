@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import {
@@ -10,8 +10,6 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
-import { useQuery } from 'react-query';
-import firebase from 'firebase';
 import * as Linking from 'expo-linking';
 
 import { Box, theme, Text } from '../../components';
@@ -59,11 +57,21 @@ const styles = StyleSheet.create({
 // interface AgentDetailProps {}
 
 const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, 'AgentDetail'>) => {
-  const { full_name, email, phone, whatsapp_link, avatar } = route.params.agent;
+  const { full_name, email, phone, whatsapp_link, avatar, id } = route.params.agent;
 
-  const user = firebase.auth().currentUser;
+  const [data, setData] = useState<any[]>([]);
 
-  const { data } = useQuery('agentListings', () => agentsApi.getAllAgentListings(user?.uid));
+  const loadData = async () => {
+    const result = await agentsApi.getAllAgentListings(id);
+    if (result) setData(result);
+  };
+
+  useEffect(() => {
+    void loadData();
+    return () => {
+      void loadData();
+    };
+  }, []);
 
   return (
     <Box style={styles.container}>

@@ -2,23 +2,18 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
-import {
-  heightPercentageToDP as hp,
-  widthPercentageToDP as wp,
-} from 'react-native-responsive-screen';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { useQuery } from 'react-query';
 
 import { Box, theme, Text } from '../../components';
 import { SortNavParamList } from '../../types/navigation.types';
 import { Tabs } from '../../components/Tabs';
-import { Slider } from '../../components/Slider';
-import { AirConIcon } from './amenitiesIcon';
 import { Button } from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import Multiselect from '../../components/Multiselect';
 import sortApi from '../../firebase/sort';
 import ActivityIndicator from '../../components/ActivityIndicator';
+import { AnyAction } from 'redux';
 
 const styles = StyleSheet.create({
   container: {
@@ -100,36 +95,40 @@ export const amenities = [
 
 // interface Props {}
 const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
+  const [rooms, setRooms] = useState<string>(roomOptions[0]);
+  const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
+  const [type, setType] = useState<string>('for_sale');
+
+  const [min, setMinValue] = useState<number>(0);
+  const [max, setMaxValue] = useState<number>(0);
+
+  // Dropdown
+  const [open, setOpen] = useState<boolean>(false);
+  const [value, setValue] = useState<any>('Any');
+  const [items, setItems] = useState([
+    { label: 'All Areas', value: 'Any' },
+    { label: 'Lusaka', value: 'lusaka' },
+    { label: 'Lagos', value: 'lagos' },
+  ]);
+
   const handleSort = async () => {
     try {
       setLoading(true);
-      const data = await sortApi.filterListings({ type });
-      setSortResult(data);
+      const data = await sortApi.filterListings({
+        type,
+        min,
+        max,
+        location: value,
+      });
       setLoading(false);
-      navigation.navigate('SortResult', { listings: sortResult });
+      navigation.navigate('SortResult', { listings: data });
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
-
-  const [rooms, setRooms] = useState<string>(roomOptions[0]);
-  const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
-  const [sortResult, setSortResult] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
-  const [type, setType] = useState<string>('for_sale');
-
-  const [minValue, setMinValue] = useState<string>();
-  const [maxValue, setMaxValue] = useState<string>();
-
-  // Dropdown
-  const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<any>(null);
-  const [items, setItems] = useState([
-    { label: 'Lusaka', value: 'lusaka' },
-    { label: 'Eket', value: 'eket' },
-  ]);
 
   return (
     <>
@@ -153,7 +152,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
 
           <TextInput
             placeholder="Minimum Price"
-            onChange={(e) => setMinValue(e.nativeEvent.text)}
+            onChange={(e) => setMinValue(Number(e.nativeEvent.text))}
           />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
@@ -161,8 +160,8 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           </Text>
 
           <TextInput
-            placeholder="Minimum Price"
-            onChange={(e) => setMaxValue(e.nativeEvent.text)}
+            placeholder="Maximum Price"
+            onChange={(e) => setMaxValue(Number(e.nativeEvent.text))}
           />
 
           <Text variant="h2" color="dark" mt="xxl" mb="l">
@@ -170,9 +169,6 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           </Text>
 
           <DropDownPicker
-            multiple
-            min={0}
-            max={5}
             open={open}
             items={items}
             value={value}
@@ -185,11 +181,11 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             The average price in this area is ZK 4000
           </Text>
 
-          <Text variant="h2" color="dark" mt="xxl">
+          {/* <Text variant="h2" color="dark" mt="xxl">
             Rooms
-          </Text>
+          </Text> */}
 
-          <Box style={styles.roomsContainer}>
+          {/* <Box style={styles.roomsContainer}>
             {roomOptions.map((r, index) => (
               <TouchableOpacity
                 onPress={() => setRooms(r)}
@@ -203,9 +199,9 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </Box>
+          </Box> */}
 
-          <Text variant="h2" color="dark" mt="xxl">
+          {/* <Text variant="h2" color="dark" mt="xxl">
             Bathrooms
           </Text>
 
@@ -229,7 +225,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             Amenities
           </Text>
 
-          <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
+          <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple /> */}
 
           <Box marginVertical="xxl">
             <Button

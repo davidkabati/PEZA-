@@ -38,8 +38,22 @@ const getUserListings = async (user_id: string) => {
   return data;
 };
 
+const deleteUserListing = async (user_id: string, listing_id: string) => {
+  const data: any[] = [];
+  const querySnapshot = await db.collection('listing').where('agent_id', '==', user_id).get();
+  querySnapshot.forEach((doc) => {
+    data.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+
+  await db.collection('listing').doc(listing_id).delete();
+};
+
 export default {
   addListing,
   getAllListings,
   getUserListings,
+  deleteUserListing,
 };

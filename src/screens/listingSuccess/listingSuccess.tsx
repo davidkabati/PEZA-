@@ -42,8 +42,8 @@ const ListingSuccess = ({
 
       <Button
         type="purple"
-        label="Add More"
-        onPress={() => navigation.navigate('MyListings')}
+        label="Finish"
+        onPress={() => navigation.navigate('Profile')}
         width={theme.constants.screenWidth}
       />
     </Box>

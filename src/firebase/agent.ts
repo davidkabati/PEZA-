@@ -16,16 +16,20 @@ const getAllAgents = async () => {
   return data;
 };
 
-const getAllAgentListings = async (user_id: string | undefined) => {
-  const data: any[] = [];
-  const querySnapshot = await db.collection('listing').where('agent_id', '==', user_id).get();
-  querySnapshot.forEach((doc) => {
-    data.push({
-      id: doc.id,
-      ...doc.data(),
+const getAllAgentListings = async (user_id: string) => {
+  try {
+    const data: any[] = [];
+    const querySnapshot = await db.collection('listing').where('agent_id', '==', user_id).get();
+    querySnapshot.forEach((doc) => {
+      data.push({
+        id: doc.id,
+        ...doc.data(),
+      });
     });
-  });
-  return data;
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 const getAgent = async (agent_id: string) => {

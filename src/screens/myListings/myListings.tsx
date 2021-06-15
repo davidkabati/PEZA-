@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import React from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, Image as RNImage, FlatList } from 'react-native';
+import { StyleSheet, Image as RNImage, FlatList, Alert } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,15 +12,14 @@ import firebase from 'firebase';
 import { Image } from 'react-native-expo-image-cache';
 import { useQuery } from 'react-query';
 import { Feather as Icon } from '@expo/vector-icons';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { StackHeader } from '../../components/StackHeader';
 import { Button } from '../../components/Button';
 import listingsApi from '../../firebase/listing';
-import { Listing } from '../../components/ListingItem';
 import { FavoriteItem } from '../../components/FavoriteItem';
-import { backgroundColor } from '@shopify/restyle';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const styles = StyleSheet.create({
@@ -65,6 +64,31 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
   const { data } = useQuery('my-listing', () => listingsApi.getUserListings(user ? user.uid : ''));
 
+  const handleRemoveListing = (listing_id: string) => {
+    Alert.alert('Delete Listing', 'Are you sure you want to delete this listing?', [
+      {
+        text: 'No',
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: async () => {
+          navigation.navigate('Profile');
+          await listingsApi.deleteUserListing(user ? user?.uid : '', listing_id);
+          Toast.show({
+            type: 'success',
+            position: 'top',
+            visibilityTime: 2000,
+            autoHide: true,
+            text1: 'Listings',
+            text2: 'Successfully removed listing.',
+          });
+        },
+      },
+    ]);
+  };
+
   return (
     <Box style={styles.container}>
       <StackHeader
@@ -97,10 +121,14 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
               {user?.displayName}
             </Text>
           </Box>
-          <Box style={{ flex: 1 }} />
-          <TouchableOpacity onPress={() => navigation.navigate('NewListingInfo')}>
-            <Icon name="plus-circle" size={34} color={theme.colors.veryLightPurple} />
-          </TouchableOpacity>
+          {data && data.length > 0 && (
+            <>
+              <Box style={{ flex: 1 }} />
+              <TouchableOpacity onPress={() => navigation.navigate('NewListingInfo')}>
+                <Icon name="plus-circle" size={34} color={theme.colors.veryLightPurple} />
+              </TouchableOpacity>
+            </>
+          )}
         </Box>
 
         {data && data.length < 1 ? (
@@ -131,13 +159,19 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
             style={{
               paddingBottom: 100,
               width: theme.constants.screenWidth,
-              height: hp(57),
+              height: hp(68),
             }}>
             <FlatList
               data={data}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => <FavoriteItem listing={item} bgColor="secondary" />}
+              renderItem={({ item }) => (
+                <FavoriteItem
+                  listing={item}
+                  bgColor="secondary"
+                  onPressButton={() => handleRemoveListing(item.id)}
+                />
+              )}
             />
           </Box>
         )}
