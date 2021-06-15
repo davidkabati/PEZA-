@@ -34,11 +34,11 @@ const AppNav = () => {
             },
             unmountOnBlur: true,
           }}
-          listeners={() => ({
-            tabPress: () => {
-              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            },
-          })}
+          // listeners={() => ({
+          //   tabPress: () => {
+          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          //   },
+          // })}
         />
         <AppStack.Screen
           name="Categories"
@@ -48,11 +48,11 @@ const AppNav = () => {
               return <CategoryIcon color={color} />;
             },
           }}
-          listeners={() => ({
-            tabPress: () => {
-              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            },
-          })}
+          // listeners={() => ({
+          //   tabPress: () => {
+          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          //   },
+          // })}
         />
         <AppStack.Screen
           name="Favorites"
@@ -62,11 +62,11 @@ const AppNav = () => {
               return <FavoriteIcon color={color} />;
             },
           }}
-          listeners={() => ({
-            tabPress: () => {
-              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            },
-          })}
+          // listeners={() => ({
+          //   tabPress: () => {
+          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          //   },
+          // })}
         />
         <AppStack.Screen
           name="Profile"
@@ -77,11 +77,11 @@ const AppNav = () => {
             },
             unmountOnBlur: true,
           }}
-          listeners={() => ({
-            tabPress: () => {
-              void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-            },
-          })}
+          // listeners={() => ({
+          //   tabPress: () => {
+          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          //   },
+          // })}
         />
       </AppStack.Navigator>
     </SafeAreaView>

@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   amenityTab: {
-    width: 100,
+    width: 95,
     height: 48,
     backgroundColor: theme.colors.primary,
     marginHorizontal: 12,

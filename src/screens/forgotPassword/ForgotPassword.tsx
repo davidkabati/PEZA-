@@ -79,7 +79,7 @@ const ForgotPassword = ({
 
   return (
     <>
-      <StackHeader onPressBack={() => navigation.goBack()} padding transparent />
+      <StackHeader onPressBack={() => navigation.goBack()} padding bgColor="white" />
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}

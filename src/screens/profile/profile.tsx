@@ -116,7 +116,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
         </>
       ) : (
         <Box style={styles.noLoginContainer}>
-          <Text style={{ textAlign: 'center' }} variant="h2" color="dark">
+          <Text style={{ textAlign: 'center', lineHeight: 25 }} variant="h3" color="dark">
             Login/sign up to save details and do more
           </Text>
         </Box>

@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 
 interface Props {
-  bgColor?: 'primary' | 'secondary';
+  bgColor?: 'primary' | 'secondary' | 'white';
   color?: 'light';
   transparent?: boolean;
   onPressBack: () => void;

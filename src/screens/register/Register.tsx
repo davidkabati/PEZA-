@@ -103,7 +103,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
   return (
     <SafeAreaView style={styles.container}>
       <ActivityIndicator visible={loading} />
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
           initialValues={{ fullName: '', email: '', phone: '', password: '' }}
           validationSchema={registerSchema}
@@ -116,7 +116,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
                   onPress={() => navigation.goBack()}
                   style={styles.backContainer}>
                   <Icon name="chevron-left" size={20} color={theme.colors.dark} />
-                  <Text variant="h2B" mt="s" color="dark">
+                  <Text variant="h2B" color="dark">
                     Back
                   </Text>
                 </TouchableOpacity>

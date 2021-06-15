@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     backgroundColor: theme.colors.white,
-    height: hp(23),
+    height: hp(24),
     borderRadius: wp(6),
     marginBottom: hp(5),
-    padding: wp(7),
+    padding: wp(5),
   },
   topContainer: {
     flexDirection: 'row',
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   activeListing: {
-    marginTop: hp(3),
+    marginTop: hp(1),
   },
   contactContainer: {
     position: 'absolute',
@@ -99,8 +99,8 @@ const AgentCard = ({ agent, onPress, onPressPhone, onPressMessage }: Props) => {
             }}
           />
         </Box>
-        <Box>
-          <Text variant="h2B" color="dark" mb="m">
+        <Box style={{ width: wp(40) }}>
+          <Text variant="h2B" color="dark" mb="s">
             {agent.full_name}
           </Text>
 

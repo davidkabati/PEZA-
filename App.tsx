@@ -28,7 +28,7 @@ export default function App() {
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <AppNav />
-            <StatusBar backgroundColor={theme.colors.primary} />
+            <StatusBar backgroundColor={theme.colors.secondary} />
             <Toast ref={(ref) => Toast.setRef(ref)} />
           </QueryClientProvider>
         </Provider>

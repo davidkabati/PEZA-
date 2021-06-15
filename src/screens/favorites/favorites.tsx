@@ -10,6 +10,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Toast from 'react-native-toast-message';
+import firebase from 'firebase';
 
 import { Box, theme, Text } from '../../components';
 import { FavoriteItem } from '../../components/FavoriteItem';
@@ -30,6 +31,8 @@ const styles = StyleSheet.create({
 // interface favoritesProps {}
 const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favorite'>) => {
   const { favorites } = useSelector((state: any) => state.favoriteReducer);
+
+  const user = firebase.auth().currentUser;
 
   const dispatch = useDispatch();
 
@@ -54,7 +57,7 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
       <Text variant="h1" mb="xl" ml="xl" style={{ alignSelf: 'flex-start' }}>
         Favorites
       </Text>
-      {favorites.length < 1 ? (
+      {favorites.length < 1 || !user?.uid ? (
         <Status
           image={require('../../../assets/images/noContent.png')}
           text="Sorry, you have no favorites"

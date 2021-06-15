@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     width: theme.constants.screenWidth,
   },
   amenity: {
-    width: 100,
+    width: 95,
     height: 48,
     backgroundColor: theme.colors.white,
     marginHorizontal: 12,
@@ -133,8 +133,7 @@ const Multiselect = ({ items, setSelection, multiple }: Props) => {
               backgroundColor: returnBgColor(a.value),
             },
           ]}>
-          {checkIfExists(array, a.value) ? a.icon2 : a.icon}
-          <Text variant="b1" ml="m" style={{ color: returnTextColor(a.value) }}>
+          <Text variant="b1" style={{ color: returnTextColor(a.value) }}>
             {a.value}
           </Text>
         </TouchableOpacity>

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   title: {
     marginLeft: theme.constants.screenPadding / 2,
     position: 'absolute',
-    top: hp(32),
+    top: hp(25),
   },
   addressContainer: {
     flexDirection: 'row',
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   },
   asking: {},
   propertyDetail: {
-    marginTop: hp(5),
+    marginTop: hp(2),
   },
   amenities: {
     flexDirection: 'row',
@@ -98,7 +98,20 @@ const listingDetail = ({
 }: StackScreenProps<HomeNavParamList, 'ListingDetail'>) => {
   const { images, title, address, price, rooms, baths, area, agent_id } = route.params.listing;
 
-  const { data } = useQuery('my-agent', () => agentsApi.getAgent(agent_id));
+  const [data, setData] = useState<any[]>([]);
+
+  const loadData = async () => {
+    const data = await agentsApi.getAgent(agent_id);
+    setData(data);
+  };
+
+  useEffect(() => {
+    void loadData();
+    console.log(data);
+    return () => {
+      void loadData();
+    };
+  }, []);
 
   return (
     <Box style={styles.container}>
@@ -123,7 +136,7 @@ const listingDetail = ({
         <Box style={styles.topContainer}>
           <Box style={styles.displayImg}>
             <Image
-              {...{ uri: data ? data[0].avatar : '' }}
+              {...{ uri: data.length > 0 ? data[0].avatar : '' }}
               style={{
                 width: wp(12),
                 height: wp(12),
@@ -136,7 +149,7 @@ const listingDetail = ({
           </Box>
           <Box>
             <Text variant="h3" color="dark" mb="m">
-              {data ? data[0].full_name : ''}
+              {data.length > 0 ? data[0].full_name : ''}
             </Text>
 
             <Text variant="b1" color="text">
@@ -169,7 +182,7 @@ const listingDetail = ({
             </Text>
           </Box>
 
-          <Text variant="h2B" color="dark" mt="xxl">
+          <Text variant="h2B" color="dark" mt="l">
             Property detail
           </Text>
 

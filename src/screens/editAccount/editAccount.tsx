@@ -126,32 +126,43 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
   };
 
   const avatarUpdate = (values: any) => {
-    setLoading(true);
-    const data = {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      full_name: values.full_name !== '' ? values.full_name : userData?.displayName,
-      avatar: avatar,
-    };
-    userData?.updateProfile({
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      displayName: values.full_name !== '' ? values.full_name : userData.displayName,
-      photoURL: avatar,
-    });
-    const userRef = firebase.firestore().collection('user').doc(userData?.uid);
-    void userRef.update(data);
-    navigation.dispatch(
-      CommonActions.navigate({
-        name: 'Home',
-      }),
-    );
-    setLoading(false);
-    Toast.show({
-      type: 'success',
-      autoHide: true,
-      visibilityTime: 2000,
-      text1: 'Account update',
-      text2: 'Account updated successfuly',
-    });
+    try {
+      setLoading(true);
+      const data = {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        full_name: values.full_name !== '' ? values.full_name : userData?.displayName,
+        avatar: avatar,
+      };
+      userData?.updateProfile({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        displayName: values.full_name !== '' ? values.full_name : userData.displayName,
+        photoURL: avatar,
+      });
+      const userRef = firebase.firestore().collection('user').doc(userData?.uid);
+      void userRef.update(data);
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'Home',
+        }),
+      );
+      setLoading(false);
+      Toast.show({
+        type: 'success',
+        autoHide: true,
+        visibilityTime: 2000,
+        text1: 'Account update',
+        text2: 'Account updated successfuly',
+      });
+    } catch (error) {
+      setLoading(false);
+      Toast.show({
+        type: 'error',
+        autoHide: true,
+        visibilityTime: 2000,
+        text1: 'Account update',
+        text2: 'Error updating account, try again',
+      });
+    }
   };
 
   return (

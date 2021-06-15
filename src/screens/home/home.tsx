@@ -132,10 +132,12 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                  <Listing
-                    listing={item}
-                    onPress={() => navigation.navigate('ListingDetail', { listing: item })}
-                  />
+                  <Box mb="xl">
+                    <Listing
+                      listing={item}
+                      onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+                    />
+                  </Box>
                 )}
               />
             </Box>

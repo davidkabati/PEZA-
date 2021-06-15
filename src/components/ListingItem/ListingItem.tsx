@@ -98,7 +98,7 @@ const Listing = ({ listing, onPress }: Props) => {
 
       const fav: IListingFavorite = {
         ...newFav,
-        agent_id: user ? user.uid : '',
+        user_id: user ? user.uid : '',
         product_id: listing.id,
       };
 
@@ -169,14 +169,21 @@ const Listing = ({ listing, onPress }: Props) => {
             )}
           </TouchableOpacity>
         )}
-        <Box style={styles.listingType}>
+        <Box
+          style={[
+            styles.listingType,
+            {
+              backgroundColor:
+                listing.type === 'for_sale' ? theme.colors.yellow : theme.colors.green,
+            },
+          ]}>
           <Text variant="b1" color="white">
             {listing.type === 'for_sale' ? 'For Sale' : 'For Rent'}
           </Text>
         </Box>
       </Box>
       <TouchableOpacity activeOpacity={0.85} onPress={onPress} style={styles.infoContainer}>
-        <Box style={{ width: wp(68) }}>
+        <Box style={{ width: wp(65) }}>
           <Text numberOfLines={1} variant="h2" color="dark" mt="l">
             {listing.title}
           </Text>

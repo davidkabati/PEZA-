@@ -53,10 +53,7 @@ const propertyType = [
     id: 1,
     value: 'House',
   },
-  {
-    id: 2,
-    value: 'TownHouse',
-  },
+
   {
     id: 3,
     value: 'Cabin',
@@ -65,10 +62,7 @@ const propertyType = [
     id: 4,
     value: 'Chalet',
   },
-  {
-    id: 5,
-    value: 'Earth house',
-  },
+
   {
     id: 6,
     value: 'Hut',

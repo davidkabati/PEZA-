@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     width: theme.constants.screenWidth,
-    height: 109,
+    height: 129,
     borderRadius: 16,
     backgroundColor: theme.colors.white,
     marginBottom: 20,

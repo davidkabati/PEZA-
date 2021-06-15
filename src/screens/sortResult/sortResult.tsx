@@ -31,19 +31,19 @@ const SortResult = ({ navigation, route }: StackScreenProps<SortNavParamList, 'S
           No listing found matching your search
         </Text>
       ) : (
-        <Box pt="xxl" style={{ width: theme.constants.screenWidth }}>
-          <FlatList
-            data={route.params.listings}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+        <FlatList
+          data={route.params.listings}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <Box mt="xl">
               <Listing
                 listing={item}
                 onPress={() => navigation.navigate('ListingDetail', { listing: item })}
               />
-            )}
-          />
-        </Box>
+            </Box>
+          )}
+        />
       )}
     </Box>
   );
