@@ -1,13 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { ScrollView, StyleSheet } from 'react-native';
-import { useSelector } from 'react-redux';
+import { StackScreenProps } from '@react-navigation/stack';
+import { FlatList, StyleSheet } from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { FavoriteItem } from '../../components/FavoriteItem';
-import listings from '../home/listingData';
 import Status from '../../components/Status';
+import { removeFavorite } from '../../redux/actions';
+import { IListingFavorite } from '../../types/listing.type';
+import { FavoritesNavParamList } from '../../types/navigation.types';
 
 const styles = StyleSheet.create({
   container: {
@@ -19,8 +28,27 @@ const styles = StyleSheet.create({
 });
 
 // interface favoritesProps {}
-const favorites = () => {
+const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favorite'>) => {
   const { favorites } = useSelector((state: any) => state.favoriteReducer);
+
+  const dispatch = useDispatch();
+
+  const removeFromFavorite = (favorite: IListingFavorite) => {
+    dispatch(removeFavorite(favorite));
+  };
+
+  const handleRemoveFavorite = (favorite: IListingFavorite) => {
+    removeFromFavorite(favorite);
+    Toast.show({
+      type: 'success',
+      position: 'top',
+      visibilityTime: 2000,
+      autoHide: true,
+      text1: 'Favorites',
+      text2: 'Successfully removed from favorites.',
+    });
+  };
+
   return (
     <Box style={styles.container}>
       <Text variant="h1" mb="xl" ml="xl" style={{ alignSelf: 'flex-start' }}>
@@ -34,11 +62,27 @@ const favorites = () => {
           bgColor="white"
         />
       ) : (
-        <ScrollView showsVerticalScrollIndicator={false}>
-          {listings.map((l, index) => (
-            <FavoriteItem key={index} listing={l} />
-          ))}
-        </ScrollView>
+        <Box
+          mt="xl"
+          style={{
+            paddingBottom: 100,
+            width: theme.constants.screenWidth,
+            height: hp(75),
+          }}>
+          <FlatList
+            data={favorites}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <FavoriteItem
+                listing={item}
+                bgColor="secondary"
+                onPressButton={() => handleRemoveFavorite(item)}
+                onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+              />
+            )}
+          />
+        </Box>
       )}
     </Box>
   );

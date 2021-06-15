@@ -17,11 +17,11 @@ export const addFavorite = (favorite: Omit<IListingFavorite, 'id'>) => async (di
   });
 };
 
-export const removeFavorite = (favorite_id: string) => async (dispatch: any) => {
-  await favoritesApi.deleteFavorite(favorite_id);
+export const removeFavorite = (favorite: IListingFavorite) => async (dispatch: any) => {
+  await favoritesApi.deleteFavorite(favorite.id);
 
   dispatch({
     type: REMOVE_FAVORITE_ITEM,
-    payload: favorite_id,
+    payload: favorite,
   });
 };

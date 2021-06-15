@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -10,10 +11,12 @@ import { Feather as Icon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
 import { useSelector, useDispatch } from 'react-redux';
 import firebase from 'firebase';
+import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '..';
-import IListing from '../../types/listing.type';
+import IListing, { IListingFavorite } from '../../types/listing.type';
 import { Area, Baths, Rooms } from '../../svg/listingsIcon';
+import { removeFavorite, addFavorite } from '../../redux/actions';
 
 const styles = StyleSheet.create({
   container: {
@@ -67,21 +70,87 @@ const styles = StyleSheet.create({
 
 interface Props {
   listing: IListing;
-  onPressFav: () => void;
   onPress: () => void;
 }
-const Listing = ({ listing, onPressFav, onPress }: Props) => {
-  // const user = firebase.auth().currentUser;
+const Listing = ({ listing, onPress }: Props) => {
+  const user = firebase.auth().currentUser;
 
-  // const { favorites } = useSelector((state: any) => state.favoriteReducer);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
-  // const handleAddFavorite = (listingToAdd: IListing) => {
-  //   const fav = {
-  //     ...listing,
-  //     product_id: listing.id,
-  //     user_id: user ? user?.uid : '',
-  //   };
-  // };
+  const { favorites } = useSelector((state: any) => state.favoriteReducer);
+
+  const dispatch = useDispatch();
+
+  const removeFromFavorite = (favorite: IListingFavorite) => {
+    dispatch(removeFavorite(favorite));
+  };
+
+  const addToFavorite = (favorite: IListingFavorite) => {
+    dispatch(addFavorite(favorite));
+  };
+
+  const handleAddFavorite = (listingToAdd: any) => {
+    try {
+      const newFav = {
+        ...listingToAdd,
+      };
+
+      delete newFav.id;
+
+      const fav: IListingFavorite = {
+        ...newFav,
+        agent_id: user ? user.uid : '',
+        product_id: listing.id,
+      };
+
+      console.log(fav);
+
+      if (isFavorite) {
+        const fav = favorites.filter((f: IListingFavorite) => f.product_id == listing.id);
+        removeFromFavorite(fav[0]);
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          visibilityTime: 2000,
+          autoHide: true,
+          text1: 'Favorites',
+          text2: 'Successfully removed from favorites.',
+        });
+      } else {
+        addToFavorite(fav);
+        Toast.show({
+          type: 'success',
+          position: 'top',
+          visibilityTime: 2000,
+          autoHide: true,
+          text1: 'Favorites',
+          text2: 'Successfully added to favorites.',
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        position: 'top',
+        visibilityTime: 2000,
+        autoHide: true,
+        text1: 'Favorites',
+        text2: 'Error handling favorite.',
+      });
+    }
+  };
+
+  const isFav = () => {
+    const isFav = favorites.some((f: IListingFavorite) => f.product_id === listing.id);
+    isFav && setIsFavorite(true);
+  };
+
+  useEffect(() => {
+    isFav();
+    return () => {
+      isFav();
+    };
+  }, [favorites]);
 
   return (
     <Box style={styles.container}>
@@ -92,9 +161,15 @@ const Listing = ({ listing, onPressFav, onPress }: Props) => {
           tint="light"
           transitionDuration={300}
         />
-        <TouchableOpacity onPress={onPressFav} style={styles.favButton}>
-          <Icon name="heart" color={theme.colors.red} size={24} />
-        </TouchableOpacity>
+        {user && (
+          <TouchableOpacity onPress={() => handleAddFavorite(listing)} style={styles.favButton}>
+            {isFavorite ? (
+              <Icon name="minus-circle" color={theme.colors.white} size={24} />
+            ) : (
+              <Icon name="plus-circle" color={theme.colors.white} size={24} />
+            )}
+          </TouchableOpacity>
+        )}
         <Box style={styles.listingType}>
           <Text variant="b1" color="white">
             {listing.type === 'for_sale' ? 'For Sale' : 'For Rent'}

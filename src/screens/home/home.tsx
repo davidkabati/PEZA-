@@ -133,7 +133,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                 renderItem={({ item }) => (
                   <Listing
                     listing={item}
-                    onPressFav={() => alert('Fav pressed!')}
                     onPress={() => navigation.navigate('ListingDetail', { listing: item })}
                   />
                 )}

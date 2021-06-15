@@ -39,14 +39,16 @@ const styles = StyleSheet.create({
 interface Props {
   listing: IListing;
   bgColor: 'white' | 'secondary';
+  onPressButton: () => void;
+  onPress?: () => void;
 }
 
-const FavoriteItem = ({ listing, bgColor }: Props) => {
+const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
   return (
     <Box style={[styles.container, { backgroundColor: theme.colors[bgColor] }]}>
       <Image {...{ uri: listing.images[0] }} style={{ width: 90, height: 70, borderRadius: 16 }} />
 
-      <Box style={styles.textContainer}>
+      <TouchableOpacity activeOpacity={0.7} onPress={onPress} style={styles.textContainer}>
         <Text numberOfLines={1} variant="b1B" color="dark">
           {listing.title}
         </Text>
@@ -54,11 +56,11 @@ const FavoriteItem = ({ listing, bgColor }: Props) => {
           {listing.address}
         </Text>
         <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${listing.price}`}</Text>
-      </Box>
+      </TouchableOpacity>
 
       <Box style={{ flex: 1 }} />
 
-      <TouchableOpacity style={styles.button} onPress={() => true}>
+      <TouchableOpacity style={styles.button} onPress={onPressButton}>
         <Icon name="trash-2" color={theme.colors.white} size={22} />
       </TouchableOpacity>
     </Box>

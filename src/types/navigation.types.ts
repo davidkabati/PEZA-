@@ -38,3 +38,9 @@ export type ProfileNavParamList = {
   Register: undefined;
   ForgotPassword: undefined;
 };
+
+export type FavoritesNavParamList = {
+  Favorite: undefined;
+  ListingDetail: { listing: any };
+  ListingDetailExtra: { listing: any };
+};

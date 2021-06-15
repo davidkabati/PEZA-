@@ -19,7 +19,7 @@ export default function App() {
 
   firebaseInit();
   return (
-    <LoadAssets {...{ ...fonts, assets }}>
+    <LoadAssets fonts={fonts} assets={assets}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>

@@ -16,7 +16,6 @@ import firebase from 'firebase';
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
 import { HomeNavParamList } from '../../types/navigation.types';
-import listings from '../home/listingData';
 import { Listing } from '../../components/ListingItem';
 import ProfileSvg from './profileSvg';
 import agentsApi from '../../firebase/agent';
@@ -25,7 +24,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
     paddingTop: theme.constants.screenPadding - 10,
-    paddingHorizontal: theme.constants.screenPadding / 2,
     flex: 1,
   },
   profileImg: {
@@ -123,7 +121,6 @@ const AgentDetail = ({ navigation, route }: StackScreenProps<HomeNavParamList, '
             renderItem={({ item }) => (
               <Listing
                 listing={item}
-                onPressFav={() => alert('Fav pressed!')}
                 onPress={() => navigation.navigate('ListingDetail', { listing: item })}
               />
             )}
