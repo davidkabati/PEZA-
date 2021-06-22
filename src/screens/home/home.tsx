@@ -89,7 +89,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text variant="h1" color="dark" style={styles.headText}>
-            Get your dream property
+            Get your dream properties
           </Text>
 
           {/* <SearchInput
