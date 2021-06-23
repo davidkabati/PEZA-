@@ -32,7 +32,7 @@ const HomeCard = ({ width, icon, info, label, active, height }: Props) => {
         {
           width: width ? width : 144,
           height: height ? height : 147,
-          backgroundColor: active ? theme.colors.primary : theme.colors.veryLightPurple,
+          backgroundColor: active ? theme.colors.primary : theme.colors.white,
         },
       ]}>
       {active && <CardActiveDots />}

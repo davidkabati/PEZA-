@@ -32,7 +32,7 @@ const AppNav = () => {
             tabBarIcon: ({ color }) => {
               return <HomeIcon color={color} />;
             },
-            unmountOnBlur: true,
+            // unmountOnBlur: true,
           }}
           // listeners={() => ({
           //   tabPress: () => {

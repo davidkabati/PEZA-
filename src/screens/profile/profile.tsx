@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import React, { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import React from 'react';
 import { StyleSheet } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -16,6 +17,7 @@ import { ProfileNavParamList } from '../../types/navigation.types';
 import ProfileSvg from '../agentDetail/profileSvg';
 import firebaseAuthApi from '../../firebase/auth';
 import { CommonActions } from '@react-navigation/routers';
+import authApi from '../../firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -52,6 +54,19 @@ const styles = StyleSheet.create({
 
 const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'>) => {
   const user = firebase.auth().currentUser;
+  const [userDetails, setUserDetails] = useState<any>({});
+
+  const fetchUserDetails = async () => {
+    const details = await authApi.getUsersFullDetails(user ? user.uid : '');
+    setUserDetails(details);
+  };
+
+  useEffect(() => {
+    void fetchUserDetails();
+    return () => {
+      void fetchUserDetails();
+    };
+  }, [user]);
 
   const handleAuth = async () => {
     try {
@@ -123,7 +138,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
       )}
 
       <Box style={styles.lowerContainer}>
-        {user && (
+        {userDetails.full_name && (
           <ProfileItem
             icon={<Icon name="user" color={theme.colors.veryLightPurple} size={24} />}
             label="My Account"
@@ -131,7 +146,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           />
         )}
 
-        {user && (
+        {userDetails.is_admin && (
           <ProfileItem
             icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
             label="My Listings"

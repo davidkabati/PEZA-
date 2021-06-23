@@ -93,6 +93,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   const loadData = async () => {
     setIsLoading(true);
     const listings = await listingsApi.getAllListings();
+    setIsLoading(false);
 
     if (!active.label) {
       const result = listings.filter((l) => {
@@ -115,8 +116,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       });
       SetListingData(result);
     }
-
-    setIsLoading(false);
   };
 
   useEffect(() => {

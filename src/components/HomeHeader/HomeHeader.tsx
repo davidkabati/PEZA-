@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import React, { useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -9,6 +10,7 @@ import { Image } from 'react-native-expo-image-cache';
 
 import { theme, Box, Text } from '..';
 import { HeaderIcon } from '../../svg/homeIcons';
+import authApi from '../../firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -34,6 +36,20 @@ const styles = StyleSheet.create({
 const HomeHeader = () => {
   const user = firebase.auth().currentUser;
 
+  const [userDetails, setUserDetails] = useState<any>({});
+
+  const fetchUserDetails = async () => {
+    const details = await authApi.getUsersFullDetails(user ? user.uid : '');
+    setUserDetails(details);
+  };
+
+  useEffect(() => {
+    void fetchUserDetails();
+    return () => {
+      void fetchUserDetails();
+    };
+  }, [user]);
+
   return (
     <Box style={styles.container}>
       {user ? (
@@ -44,7 +60,7 @@ const HomeHeader = () => {
               { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
             ]}>
             <Image
-              {...{ uri: user.photoURL ? user.photoURL : '' }}
+              {...{ uri: userDetails.avatar ? userDetails.avatar : '' }}
               tint="light"
               transitionDuration={300}
               style={{ width: hp(7), height: hp(7), borderRadius: hp(3.5) }}
@@ -56,7 +72,7 @@ const HomeHeader = () => {
             </Text>
 
             <Text variant="b1" color="dark">
-              {user.displayName}
+              {userDetails.full_name}
             </Text>
           </Box>
         </>

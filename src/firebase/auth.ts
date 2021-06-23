@@ -1,4 +1,7 @@
 import firebase from 'firebase';
+import firebaseInit from '../firebase';
+
+const db = firebaseInit();
 
 const registerUser = async (
   email: string,
@@ -23,6 +26,7 @@ const registerUser = async (
       whatsapp_link: '',
       full_name: displayName,
       created_at: new Date().toISOString(),
+      is_admin: false,
     });
   }
   return user;
@@ -39,6 +43,11 @@ const getUserDetails = () => {
   return user;
 };
 
+const getUsersFullDetails = async (user_id: string) => {
+  const user = await db.collection('user').doc(user_id).get();
+  return user.data();
+};
+
 const logOutUser = async () => {
   await firebase.auth().signOut();
 };
@@ -52,5 +61,6 @@ export default {
   signInUser,
   logOutUser,
   getUserDetails,
+  getUsersFullDetails,
   sendResetPasswordEmail,
 };

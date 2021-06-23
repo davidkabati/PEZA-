@@ -72,16 +72,16 @@ const NewListingSpace = ({
   };
 
   const handleNext = () => {
-    if (floors === '' || buildYear === '' || area === '') {
-      return Toast.show({
-        type: 'error',
-        position: 'top',
-        visibilityTime: 4000,
-        autoHide: true,
-        text1: 'Listing Info',
-        text2: 'Complete all fields to continue.',
-      });
-    }
+    // if (floors === '' || buildYear === '' || area === '') {
+    //   return Toast.show({
+    //     type: 'error',
+    //     position: 'top',
+    //     visibilityTime: 4000,
+    //     autoHide: true,
+    //     text1: 'Listing Info',
+    //     text2: 'Complete all fields to continue.',
+    //   });
+    // }
     navigation.navigate('NewListingImg', { listing: data });
   };
 

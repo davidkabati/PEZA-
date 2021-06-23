@@ -280,8 +280,8 @@ const listingDetail = ({
             <Text variant="h2B" color="dark">
               Asking
             </Text>
-            <Text variant="h2B" color="green" mt="s">
-              {`ZK ${price} K`}
+            <Text variant="h2B" color="green" mt="l">
+              {`ZK ${Intl.NumberFormat('en-US').format(price)}`}
             </Text>
           </Box>
 
