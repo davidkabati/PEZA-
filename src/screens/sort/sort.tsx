@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -14,10 +15,8 @@ import { Tabs } from '../../components/Tabs';
 import { Button } from '../../components/Button';
 import TextInput from '../../components/TextInput';
 import Multiselect from '../../components/Multiselect';
-import sortApi from '../../firebase/sort';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import listingsApi from '../../firebase/listing';
-import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -100,12 +99,11 @@ export const amenities = [
 // interface Props {}
 const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
   const [listings, setListings] = useState<any[]>([]);
-  const [filterResult, setFilterResult] = useState<any[]>([]);
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
-  const [type, setType] = useState<string>('for_sale');
+  const [typeValue, setType] = useState<string>('for_sale');
 
   const [min, setMinValue] = useState<number>(0);
   const [max, setMaxValue] = useState<number>(0);
@@ -120,12 +118,11 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
   ]);
 
   // Sort params
-
   const minValue = min ? min : 0;
   const maxValue = max ? max : 1000000000000000000;
   const locationValue = value !== 'Any' ? value : '';
-  const roomValue = rooms ? rooms : '';
-  const bathValue = bathrooms ? bathrooms : '';
+  const roomValue = rooms !== 'Any' ? rooms : '';
+  const bathValue = bathrooms !== 'Any' ? bathrooms : '';
   const amenitiesValue = selectedAmenity.length > 0 ? selectedAmenity : [];
 
   function filterArray(array: any[], filters: any) {
@@ -140,14 +137,23 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
     });
   }
 
+  const filterParams = {
+    price: (price: number) => price > minValue && price < maxValue,
+    type: (type: string) => type === typeValue,
+    ...(locationValue !== '' && { address_area: (address_area: string) => address_area === value }),
+    ...(roomValue !== '' && { rooms: (rooms: string) => rooms === roomValue }),
+    ...(bathValue !== '' && { baths: (baths: string) => baths === bathValue }),
+    ...(amenitiesValue.length > 0 && {
+      amenities: (amenities: string[]) =>
+        JSON.stringify(amenities) === JSON.stringify(amenitiesValue),
+    }),
+  };
+
   const handleSort = () => {
     try {
       setLoading(true);
 
-      const result = filterArray(listings, {
-        price: (price: number) => price > minValue && price < maxValue,
-        address_area: (address_area: string) => address_area === locationValue,
-      });
+      const result = filterArray(listings, filterParams);
 
       setLoading(false);
       navigation.navigate('SortResult', { listings: result });
@@ -192,6 +198,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           <TextInput
             placeholder="Minimum Price"
             onChange={(e) => setMinValue(Number(e.nativeEvent.text))}
+            keyboardType="number-pad"
           />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
@@ -201,6 +208,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           <TextInput
             placeholder="Maximum Price"
             onChange={(e) => setMaxValue(Number(e.nativeEvent.text))}
+            keyboardType="number-pad"
           />
 
           <Text variant="h2" color="dark" mt="xxl" mb="l">
@@ -216,9 +224,9 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             setItems={setItems}
           />
 
-          <Text variant="b1" color="text" mt="xxl" textAlign="center">
+          {/* <Text variant="b1" color="text" mt="xxl" textAlign="center">
             The average price in this area is ZK 4000
-          </Text>
+          </Text> */}
 
           <Text variant="h2" color="dark" mt="xxl">
             Rooms
