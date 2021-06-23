@@ -11,7 +11,7 @@ import { CardActiveDots } from '../../svg/homeIcons';
 const styles = StyleSheet.create({
   container: {
     borderRadius: wp(4),
-    padding: wp(7),
+    padding: wp(4),
     justifyContent: 'space-between',
   },
 });
@@ -20,18 +20,18 @@ interface Props {
   width?: number;
   height?: number;
   icon: ReactNode;
-  info: string;
+  info?: string;
   label: string;
   active: boolean;
 }
-const HomeCard = ({ width, icon, info, label, active }: Props) => {
+const HomeCard = ({ width, icon, info, label, active, height }: Props) => {
   return (
     <Box
       style={[
         styles.container,
         {
           width: width ? width : 144,
-          height: active ? 162 : 147,
+          height: height ? height : 147,
           backgroundColor: active ? theme.colors.primary : theme.colors.white,
         },
       ]}>

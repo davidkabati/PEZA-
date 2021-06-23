@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -23,6 +23,9 @@ import listingsApi from '../../firebase/listing';
 import agentsApi from '../../firebase/agent';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Status from '../../components/Status';
+import { Tabs } from '../../components/Tabs';
+import IListing from '../../types/listing.type';
+import listing from '../../firebase/listing';
 
 const styles = StyleSheet.create({
   container: {
@@ -41,15 +44,18 @@ const styles = StyleSheet.create({
   },
   cardContainer: {
     flexDirection: 'row',
-    width: '100%',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    // alignItems: 'flex-end',
     marginBottom: hp(3),
   },
 });
 
 const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
-  const [active, setActive] = useState<number>(1);
+  const [active, setActive] = useState<any>({});
+  const [tab, setTab] = useState<string>('for_sale');
+  const [listingData, SetListingData] = useState<IListing[]>([]);
+  const [filterListing, setFilterListing] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const data = [
     {
@@ -57,33 +63,92 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       icon: (
         <Icon
           name="home"
-          color={active === 1 ? theme.colors.yellow : theme.colors.lightGrey}
+          color={active.id === 1 ? theme.colors.yellow : theme.colors.lightGrey}
           size={24}
         />
       ),
-      label: 'Homes',
-      info: '50+',
+      label: 'Live on a budget',
     },
     {
       id: 2,
       icon: (
         <Icon
-          name="user"
-          color={active === 2 ? theme.colors.yellow : theme.colors.lightGrey}
+          name="home"
+          color={active.id === 2 ? theme.colors.yellow : theme.colors.lightGrey}
           size={24}
         />
       ),
-      label: 'Agents',
-      info: '22',
+      label: 'Live in style',
+    },
+    {
+      id: 3,
+      icon: (
+        <Icon
+          name="home"
+          color={active.id === 3 ? theme.colors.yellow : theme.colors.lightGrey}
+          size={24}
+        />
+      ),
+      label: 'Live in luxury',
     },
   ];
 
-  const listingsQuery = useQuery('listings', listingsApi.getAllListings);
-  const agentsQuery = useQuery('agents', agentsApi.getAllAgents);
+  const handleFilter = (item: any) => {
+    setActive(item);
+    if (item.label === 'Live on a budget') {
+      const result = listingData.filter((l) => {
+        if (l.price < 4000 && l.type === tab) {
+          setFilterListing(result);
+        }
+      });
+    } else if (item.label === 'Live in style') {
+      const result = listingData.filter((l) => {
+        if (l.price > 4000 && l.price < 10000 && l.type === tab) {
+          setFilterListing(result);
+        }
+      });
+    } else return;
+  };
+
+  const loadData = async () => {
+    setIsLoading(true);
+    const listings = await listingsApi.getAllListings();
+
+    if (!active.label) {
+      const result = listings.filter((l) => {
+        if (l.type === tab) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Live on a budget') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.price < 4000) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Live in style') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.price > 4000 && l.price < 10000) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Live in luxury') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.price > 10000) return l;
+      });
+      SetListingData(result);
+    }
+
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    void loadData();
+    return () => {
+      loadData;
+    };
+  }, [tab, active]);
 
   return (
     <>
-      <ActivityIndicator visible={listingsQuery.isLoading} />
+      <ActivityIndicator visible={isLoading} />
       <Box style={styles.container}>
         <HomeHeader />
 
@@ -92,43 +157,46 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             Get your dream properties
           </Text>
 
-          {/* <SearchInput
-            placeholder="Find Listings"
-            onFocus={() =>
-              navigation.dispatch(
-                CommonActions.navigate({
-                  name: 'Categories',
-                }),
-              )
-            }
+          <FlatList
+            data={data}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                onPress={() => handleFilter(item)}
+                style={{ marginRight: 20 }}>
+                <HomeCard
+                  width={wp(35)}
+                  active={active.id === item.id ? true : false}
+                  icon={item.icon}
+                  label={item.label}
+                />
+              </TouchableOpacity>
+            )}
           />
 
           <Text variant="h2B" color="dark" style={styles.subHeadText}>
-            Might help you
-          </Text> */}
-
-          <Box style={styles.cardContainer}>
-            {data.map((d) => (
-              <TouchableOpacity key={d.id} onPress={() => setActive(d.id)}>
-                <HomeCard
-                  width={wp(42)}
-                  active={active === d.id ? true : false}
-                  icon={d.icon}
-                  label={d.label}
-                  info={d.info}
-                />
-              </TouchableOpacity>
-            ))}
-          </Box>
-
-          <Text variant="h2B" color="dark" style={styles.subHeadText}>
-            {active === 1 ? 'Featured Listings' : 'Featured Agents'}
+            {active.label ? active.label : 'Featured Listings'}
           </Text>
 
-          {active === 1 ? (
-            <Box style={{ paddingBottom: 100 }}>
+          <Tabs
+            text1="For sale"
+            value1="for_sale"
+            text2="For rent"
+            value2="for_rent"
+            setSelected={setTab}
+          />
+
+          <Box style={{ paddingBottom: 100, marginTop: hp(4) }}>
+            {listingData.length < 1 ? (
+              <Text variant="b1B" color="primary">
+                No Listings found matching your filter
+              </Text>
+            ) : (
               <FlatList
-                data={listingsQuery.data}
+                data={listingData}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
@@ -140,24 +208,8 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                   </Box>
                 )}
               />
-            </Box>
-          ) : (
-            <Box style={{ paddingBottom: 100 }}>
-              <FlatList
-                data={agentsQuery.data}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                  <AgentCard
-                    agent={item}
-                    onPress={() => navigation.navigate('AgentDetail', { agent: item })}
-                    onPressMessage={() => Linking.openURL(item.whatsapp_link)}
-                    onPressPhone={() => Linking.openURL(`tel:${item.phone}`)}
-                  />
-                )}
-              />
-            </Box>
-          )}
+            )}
+          </Box>
         </ScrollView>
       </Box>
     </>
