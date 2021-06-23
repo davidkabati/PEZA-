@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -10,22 +10,17 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
-import { useQuery } from 'react-query';
-import * as Linking from 'expo-linking';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
 import { HomeHeader } from '../../components/HomeHeader';
 import { Listing } from '../../components/ListingItem';
-import { AgentCard } from '../../components/AgentCard';
 import { HomeNavParamList } from '../../types/navigation.types';
 import listingsApi from '../../firebase/listing';
-import agentsApi from '../../firebase/agent';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Status from '../../components/Status';
 import { Tabs } from '../../components/Tabs';
 import IListing from '../../types/listing.type';
-import listing from '../../firebase/listing';
 
 const styles = StyleSheet.create({
   container: {
@@ -45,7 +40,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    // alignItems: 'flex-end',
     marginBottom: hp(3),
   },
 });
@@ -54,7 +48,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   const [active, setActive] = useState<any>({});
   const [tab, setTab] = useState<string>('for_sale');
   const [listingData, SetListingData] = useState<IListing[]>([]);
-  const [filterListing, setFilterListing] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const data = [
@@ -95,19 +88,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
   const handleFilter = (item: any) => {
     setActive(item);
-    if (item.label === 'Live on a budget') {
-      const result = listingData.filter((l) => {
-        if (l.price < 4000 && l.type === tab) {
-          setFilterListing(result);
-        }
-      });
-    } else if (item.label === 'Live in style') {
-      const result = listingData.filter((l) => {
-        if (l.price > 4000 && l.price < 10000 && l.type === tab) {
-          setFilterListing(result);
-        }
-      });
-    } else return;
   };
 
   const loadData = async () => {
@@ -142,7 +122,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   useEffect(() => {
     void loadData();
     return () => {
-      loadData;
+      void loadData();
     };
   }, [tab, active]);
 

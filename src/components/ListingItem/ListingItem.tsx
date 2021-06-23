@@ -192,7 +192,9 @@ const Listing = ({ listing, onPress }: Props) => {
           </Text>
         </Box>
         <Box style={styles.priceContainer}>
-          <Text variant="b1" color="white">{`ZK ${listing.price.toString()}`}</Text>
+          <Text variant="b1" color="white">{`ZK ${Intl.NumberFormat('en-US').format(
+            listing.price,
+          )}`}</Text>
         </Box>
       </TouchableOpacity>
       <Box style={styles.iconContainer}>

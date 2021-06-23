@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
@@ -13,7 +16,8 @@ import TextInput from '../../components/TextInput';
 import Multiselect from '../../components/Multiselect';
 import sortApi from '../../firebase/sort';
 import ActivityIndicator from '../../components/ActivityIndicator';
-import { AnyAction } from 'redux';
+import listingsApi from '../../firebase/listing';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -95,6 +99,8 @@ export const amenities = [
 
 // interface Props {}
 const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
+  const [listings, setListings] = useState<any[]>([]);
+  const [filterResult, setFilterResult] = useState<any[]>([]);
   const [rooms, setRooms] = useState<string>(roomOptions[0]);
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -113,22 +119,55 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
     { label: 'Lagos', value: 'lagos' },
   ]);
 
-  const handleSort = async () => {
+  // Sort params
+
+  const minValue = min ? min : 0;
+  const maxValue = max ? max : 1000000000000000000;
+  const locationValue = value !== 'Any' ? value : '';
+  const roomValue = rooms ? rooms : '';
+  const bathValue = bathrooms ? bathrooms : '';
+  const amenitiesValue = selectedAmenity.length > 0 ? selectedAmenity : [];
+
+  function filterArray(array: any[], filters: any) {
+    const filterKeys = Object.keys(filters);
+    return array.filter((item) => {
+      // validates all filter criteria
+      return filterKeys.every((key) => {
+        // ignores non-function predicates
+        if (typeof filters[key] !== 'function') return true;
+        return filters[key](item[key]);
+      });
+    });
+  }
+
+  const handleSort = () => {
     try {
       setLoading(true);
-      const data = await sortApi.filterListings({
-        type,
-        min,
-        max,
-        location: value,
+
+      const result = filterArray(listings, {
+        price: (price: number) => price > minValue && price < maxValue,
+        addressAres: (addressArea: string) => addressArea === locationValue,
       });
+
       setLoading(false);
-      navigation.navigate('SortResult', { listings: data });
+      navigation.navigate('SortResult', { listings: result });
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
+
+  const loadData = async () => {
+    const result = await listingsApi.getAllListings();
+    setListings(result);
+  };
+
+  useEffect(() => {
+    void loadData();
+    return () => {
+      void loadData();
+    };
+  }, []);
 
   return (
     <>
@@ -181,11 +220,11 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             The average price in this area is ZK 4000
           </Text>
 
-          {/* <Text variant="h2" color="dark" mt="xxl">
+          <Text variant="h2" color="dark" mt="xxl">
             Rooms
-          </Text> */}
+          </Text>
 
-          {/* <Box style={styles.roomsContainer}>
+          <Box style={styles.roomsContainer}>
             {roomOptions.map((r, index) => (
               <TouchableOpacity
                 onPress={() => setRooms(r)}
@@ -199,9 +238,9 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
                 </Text>
               </TouchableOpacity>
             ))}
-          </Box> */}
+          </Box>
 
-          {/* <Text variant="h2" color="dark" mt="xxl">
+          <Text variant="h2" color="dark" mt="xxl">
             Bathrooms
           </Text>
 
@@ -225,7 +264,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             Amenities
           </Text>
 
-          <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple /> */}
+          <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
 
           <Box marginVertical="xxl">
             <Button
