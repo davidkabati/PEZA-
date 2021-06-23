@@ -66,7 +66,7 @@ const HomeHeader = () => {
         </Text>
       )}
       <Box style={{ flex: 1 }} />
-      <HeaderIcon />
+      {/* <HeaderIcon /> */}
     </Box>
   );
 };

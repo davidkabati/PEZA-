@@ -146,7 +146,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
 
       const result = filterArray(listings, {
         price: (price: number) => price > minValue && price < maxValue,
-        addressAres: (addressArea: string) => addressArea === locationValue,
+        address_area: (address_area: string) => address_area === locationValue,
       });
 
       setLoading(false);

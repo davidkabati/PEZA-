@@ -32,7 +32,7 @@ const HomeCard = ({ width, icon, info, label, active, height }: Props) => {
         {
           width: width ? width : 144,
           height: height ? height : 147,
-          backgroundColor: active ? theme.colors.primary : theme.colors.white,
+          backgroundColor: active ? theme.colors.primary : theme.colors.veryLightPurple,
         },
       ]}>
       {active && <CardActiveDots />}
@@ -42,7 +42,7 @@ const HomeCard = ({ width, icon, info, label, active, height }: Props) => {
           {info}
         </Text>
       )}
-      <Text variant="b1" color="lightGrey">
+      <Text variant="b1" color={active ? 'lightGrey' : 'dark'}>
         {label}
       </Text>
     </Box>

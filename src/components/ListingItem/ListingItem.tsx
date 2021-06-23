@@ -154,12 +154,14 @@ const Listing = ({ listing, onPress }: Props) => {
   return (
     <Box style={styles.container}>
       <Box>
-        <Image
-          {...{ uri: listing.images[0] }}
-          style={styles.image}
-          tint="light"
-          transitionDuration={300}
-        />
+        <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
+          <Image
+            {...{ uri: listing.images[0] }}
+            style={styles.image}
+            tint="light"
+            transitionDuration={300}
+          />
+        </TouchableOpacity>
         {user && (
           <TouchableOpacity onPress={() => handleAddFavorite(listing)} style={styles.favButton}>
             {isFavorite ? (
@@ -173,8 +175,7 @@ const Listing = ({ listing, onPress }: Props) => {
           style={[
             styles.listingType,
             {
-              backgroundColor:
-                listing.type === 'for_sale' ? theme.colors.yellow : theme.colors.green,
+              backgroundColor: theme.colors.green,
             },
           ]}>
           <Text variant="b1" color="white">
@@ -182,7 +183,7 @@ const Listing = ({ listing, onPress }: Props) => {
           </Text>
         </Box>
       </Box>
-      <TouchableOpacity activeOpacity={0.85} onPress={onPress} style={styles.infoContainer}>
+      <Box style={styles.infoContainer}>
         <Box style={{ width: wp(65) }}>
           <Text numberOfLines={1} variant="h2" color="dark" mt="l">
             {listing.title}
@@ -196,7 +197,7 @@ const Listing = ({ listing, onPress }: Props) => {
             listing.price,
           )}`}</Text>
         </Box>
-      </TouchableOpacity>
+      </Box>
       <Box style={styles.iconContainer}>
         <Rooms />
         <Text variant="b1" color="text" mr="m" ml="s">

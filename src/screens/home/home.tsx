@@ -56,7 +56,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       icon: (
         <Icon
           name="home"
-          color={active.id === 1 ? theme.colors.yellow : theme.colors.lightGrey}
+          color={active.id === 1 ? theme.colors.yellow : theme.colors.dark}
           size={24}
         />
       ),
@@ -67,7 +67,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       icon: (
         <Icon
           name="home"
-          color={active.id === 2 ? theme.colors.yellow : theme.colors.lightGrey}
+          color={active.id === 2 ? theme.colors.yellow : theme.colors.dark}
           size={24}
         />
       ),
@@ -78,7 +78,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       icon: (
         <Icon
           name="home"
-          color={active.id === 3 ? theme.colors.yellow : theme.colors.lightGrey}
+          color={active.id === 3 ? theme.colors.yellow : theme.colors.dark}
           size={24}
         />
       ),
