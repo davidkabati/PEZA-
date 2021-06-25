@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-    marginVertical: hp(1),
+    marginVertical: hp(1.5),
     alignItems: 'center',
   },
   listingType: {
@@ -204,16 +204,22 @@ const Listing = ({ listing, onPress }: Props) => {
         </Box>
       </Box>
       <Box style={styles.iconContainer}>
-        <Rooms />
-        <Text variant="b1" color="text" mr="m" ml="s">
+        <Text variant="b1" color="text" mr="s">
           {listing.rooms}
         </Text>
-        <Baths />
-        <Text variant="b1" color="text" mr="m" ml="s">
+        <Text variant="b1" color="text">
+          {`room${listing.rooms === '1' ? '' : 's'}`}
+        </Text>
+        <Text variant="b1" color="text" mr="s" ml="l">
           {listing.baths}
         </Text>
+        <Text variant="b1" color="text" mr="l">
+          {`bath${listing.rooms === '1' ? '' : 's'}`}
+        </Text>
         <Area />
-        <Text variant="b1" color="text" mr="m" ml="s">{`${listing.area} m2`}</Text>
+        <Text variant="b1" color="text" mr="m" ml="s">
+          {listing.area !== '' ? `${listing.area} m2` : 'n/a'}
+        </Text>
       </Box>
     </Box>
   );
