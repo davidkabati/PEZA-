@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     flexDirection: 'row',
-    marginVertical: hp(1.5),
+    marginVertical: hp(1),
     alignItems: 'center',
   },
   listingType: {
