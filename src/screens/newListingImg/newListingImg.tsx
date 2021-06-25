@@ -186,7 +186,7 @@ const NewListingImg = ({
           type="purple"
           width={theme.constants.screenWidth}
           onPress={handleNext}
-          label={loading ? 'Uploading Images' : 'Next Step'}
+          label={loading ? 'Uploading Images...' : 'Next Step'}
         />
       </Box>
     </Box>
