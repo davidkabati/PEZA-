@@ -18,7 +18,7 @@ import { Listing } from '../../components/ListingItem';
 import { HomeNavParamList } from '../../types/navigation.types';
 import listingsApi from '../../firebase/listing';
 import ActivityIndicator from '../../components/ActivityIndicator';
-import Status from '../../components/Status';
+// import Status from '../../components/Status';
 import { Tabs } from '../../components/Tabs';
 import IListing from '../../types/listing.type';
 
@@ -44,47 +44,36 @@ const styles = StyleSheet.create({
   },
 });
 
-const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
-  const [active, setActive] = useState<any>({});
-  const [tab, setTab] = useState<string>('for_sale');
-  const [listingData, SetListingData] = useState<IListing[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const ICON_COLOR = theme.colors.yellow;
 
+const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   const data = [
     {
       id: 1,
-      icon: (
-        <Icon
-          name="home"
-          color={active.id === 1 ? theme.colors.yellow : theme.colors.dark}
-          size={24}
-        />
-      ),
-      label: 'Live on a budget',
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'All Listings',
     },
     {
       id: 2,
-      icon: (
-        <Icon
-          name="home"
-          color={active.id === 2 ? theme.colors.yellow : theme.colors.dark}
-          size={24}
-        />
-      ),
-      label: 'Live in style',
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Live on a budget',
     },
     {
       id: 3,
-      icon: (
-        <Icon
-          name="home"
-          color={active.id === 3 ? theme.colors.yellow : theme.colors.dark}
-          size={24}
-        />
-      ),
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Live in style',
+    },
+    {
+      id: 4,
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
       label: 'Live in luxury',
     },
   ];
+
+  const [active, setActive] = useState<any>(data[0]);
+  const [tab, setTab] = useState<string>('for_sale');
+  const [listingData, SetListingData] = useState<IListing[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleFilter = (item: any) => {
     setActive(item);
@@ -113,6 +102,11 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     } else if (active.label === 'Live in luxury') {
       const result = listings.filter((l) => {
         if (l.type === tab && l.price > 10000) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'All Listings') {
+      const result = listings.filter((l) => {
+        if (l.type === tab) return l;
       });
       SetListingData(result);
     }
