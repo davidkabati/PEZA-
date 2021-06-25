@@ -192,7 +192,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           />
           <Box style={styles.dash} />
           <Text variant="b1B" color="dark" mb="m">
-            Minimum Asking
+            Minimum Price
           </Text>
 
           <TextInput
@@ -202,7 +202,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
-            Maximum Asking
+            Maximum Price
           </Text>
 
           <TextInput
@@ -229,7 +229,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           </Text> */}
 
           <Text variant="h2" color="dark" mt="xxl">
-            Rooms
+            Bedrooms
           </Text>
 
           <Box style={styles.roomsContainer}>

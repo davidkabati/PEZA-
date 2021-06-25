@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
   pagination: {
     position: 'absolute',
-    top: hp(40),
+    top: hp(45),
     width: '100%',
     height: hp(2),
     flexDirection: 'row',

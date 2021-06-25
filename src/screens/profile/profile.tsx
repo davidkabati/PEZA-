@@ -144,13 +144,11 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           onPress={() => navigation.navigate('EditAccount')}
         />
 
-        {userDetails.is_admin && (
-          <ProfileItem
-            icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
-            label="My Listings"
-            onPress={() => navigation.navigate('MyListings')}
-          />
-        )}
+        <ProfileItem
+          icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
+          label="My Listings"
+          onPress={() => navigation.navigate('MyListings')}
+        />
 
         <ProfileItem
           icon={<Icon name="info" color={theme.colors.veryLightPurple} size={24} />}

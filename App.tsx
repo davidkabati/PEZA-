@@ -4,9 +4,10 @@ import { ThemeProvider } from '@shopify/restyle';
 import Toast from 'react-native-toast-message';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
+import NavigationContainer from 'react-native-navigation-container';
 
 import AppNav from './src/navigation/AppNav/AppNav';
-import LoadAssets from './src/utils/LoadAssets';
+// import LoadAssets from './src/utils/LoadAssets';
 import fonts from './src/utils/fonts';
 import { theme } from './src/components';
 import firebaseInit from './src/firebase';
@@ -19,11 +20,12 @@ export default function App() {
     require('./assets/images/noContent.png'),
     require('./assets/images/forgotPassword.png'),
     require('./assets/images/underConstruction.png'),
+    require('./assets/icon.png'),
   ];
 
   firebaseInit();
   return (
-    <LoadAssets fonts={fonts} assets={assets}>
+    <NavigationContainer fonts={fonts} assets={assets} stickyNav={true}>
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <QueryClientProvider client={queryClient}>
@@ -33,6 +35,6 @@ export default function App() {
           </QueryClientProvider>
         </Provider>
       </ThemeProvider>
-    </LoadAssets>
+    </NavigationContainer>
   );
 }

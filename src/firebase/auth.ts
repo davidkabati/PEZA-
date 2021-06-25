@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import firebase from 'firebase';
 import firebaseInit from '../firebase';
 
@@ -48,6 +49,18 @@ const getUsersFullDetails = async (user_id: string) => {
   return user.data();
 };
 
+const getAdminUsers = async () => {
+  const data: any[] = [];
+  const querySnapshot = await db.collection('user').where('is_admin', '==', true).get();
+  querySnapshot.forEach((doc) => {
+    data.push({
+      id: doc.id,
+      ...doc.data(),
+    });
+  });
+  return data;
+};
+
 const logOutUser = async () => {
   await firebase.auth().signOut();
 };
@@ -63,4 +76,5 @@ export default {
   getUserDetails,
   getUsersFullDetails,
   sendResetPasswordEmail,
+  getAdminUsers,
 };
