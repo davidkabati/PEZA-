@@ -114,9 +114,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
   useEffect(() => {
     void loadData();
-    return () => {
-      void loadData();
-    };
   }, [tab, active]);
 
   return (

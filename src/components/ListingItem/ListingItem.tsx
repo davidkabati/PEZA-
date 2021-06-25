@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   priceContainer: {
-    backgroundColor: theme.colors.yellow,
+    backgroundColor: theme.colors.green,
     borderRadius: wp(3),
     height: hp(4.5),
     padding: wp(2),
