@@ -21,6 +21,9 @@ export default interface IListing {
   furnish: boolean;
   floors: string;
   build_year: string;
+  daily_lease: boolean;
+  party_allowed: boolean;
+  building_type: string;
 }
 
 export type IAddListing = Omit<IListing, 'id'>;

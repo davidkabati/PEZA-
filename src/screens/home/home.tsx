@@ -68,6 +68,26 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
       label: 'Live in luxury',
     },
+    {
+      id: 5,
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Throw a party',
+    },
+    {
+      id: 6,
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Spend a night',
+    },
+    {
+      id: 7,
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Stand Alone',
+    },
+    {
+      id: 8,
+      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
+      label: 'Semi-Detached',
+    },
   ];
 
   const [active, setActive] = useState<any>(data[0]);
@@ -107,6 +127,26 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     } else if (active.label === 'All Listings') {
       const result = listings.filter((l) => {
         if (l.type === tab) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Throw a party') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.party_allowed === true) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Spend a night') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.daily_lease === true) return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Stand Alone') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.building_type === 'standalone') return l;
+      });
+      SetListingData(result);
+    } else if (active.label === 'Semi-Detached') {
+      const result = listings.filter((l) => {
+        if (l.type === tab && l.building_type === 'semi-detached') return l;
       });
       SetListingData(result);
     }

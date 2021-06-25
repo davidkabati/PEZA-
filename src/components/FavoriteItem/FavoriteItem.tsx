@@ -56,7 +56,9 @@ const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
         <Text numberOfLines={1} variant="b2" color="lightGrey">
           {listing.address}
         </Text>
-        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${listing.price.toString()}`}</Text>
+        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${Intl.NumberFormat('en-US').format(
+          listing.price,
+        )}`}</Text>
       </TouchableOpacity>
 
       <Box style={{ flex: 1 }} />

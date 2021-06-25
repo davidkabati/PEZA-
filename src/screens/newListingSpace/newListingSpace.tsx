@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -56,6 +62,9 @@ const NewListingSpace = ({
   const [bathrooms, setBathrooms] = useState<string>(bathroomOptions[0]);
   const [area, setArea] = useState<string>('');
   const [furnish, setFurnish] = useState<string>('furnished');
+  const [party, setParty] = useState<string>('not_allowed');
+  const [dailyLease, setDailyLease] = useState<string>('not_allowed');
+  const [buildingType, setBuildingType] = useState<string>('standalone');
   const [floors, setFloors] = useState<string>('');
   const [buildYear, setBuildYear] = useState<string>('');
 
@@ -69,6 +78,9 @@ const NewListingSpace = ({
     baths: bathrooms,
     rooms,
     area,
+    party_allowed: party === 'allowed' ? true : false,
+    daily_lease: dailyLease === 'allowed' ? true : false,
+    building_type: buildingType,
   };
 
   const handleNext = () => {
@@ -87,105 +99,143 @@ const NewListingSpace = ({
 
   return (
     <Box style={styles.container}>
-      <StackHeader onPressBack={() => navigation.goBack()} title="Step 2 of 4" />
-      <ScrollView
-        contentContainerStyle={{ alignItems: 'center' }}
-        showsVerticalScrollIndicator={false}>
-        <Text variant="h1Max" color="dark" style={styles.headerText}>
-          How many guests can stay?
-        </Text>
+      <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'position' : 'height'}>
+        <StackHeader onPressBack={() => navigation.goBack()} title="Step 2 of 4" />
+        <ScrollView
+          contentContainerStyle={{ alignItems: 'center' }}
+          showsVerticalScrollIndicator={false}>
+          <Text variant="h1Max" color="dark" style={styles.headerText}>
+            How many guests can stay?
+          </Text>
 
-        <Text mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Number of bedrooms
-        </Text>
+          <Text mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Number of bedrooms
+          </Text>
 
-        <Box style={styles.roomsContainer}>
-          {roomOptions.map((r, index) => (
-            <TouchableOpacity
-              onPress={() => setRooms(r)}
-              key={index}
-              style={[
-                styles.roomOption,
-                { backgroundColor: rooms === r ? theme.colors.primary : theme.colors.white },
-              ]}>
-              <Text variant="b1" color={rooms === r ? 'white' : 'dark'}>
-                {r}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
+          <Box style={styles.roomsContainer}>
+            {roomOptions.map((r, index) => (
+              <TouchableOpacity
+                onPress={() => setRooms(r)}
+                key={index}
+                style={[
+                  styles.roomOption,
+                  { backgroundColor: rooms === r ? theme.colors.primary : theme.colors.white },
+                ]}>
+                <Text variant="b1" color={rooms === r ? 'white' : 'dark'}>
+                  {r}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </Box>
 
-        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Number of bathrooms
-        </Text>
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Number of bathrooms
+          </Text>
 
-        <Box style={styles.roomsContainer}>
-          {bathroomOptions.map((r, index) => (
-            <TouchableOpacity
-              onPress={() => setBathrooms(r)}
-              key={index}
-              style={[
-                styles.roomOption,
-                { backgroundColor: bathrooms === r ? theme.colors.primary : theme.colors.white },
-              ]}>
-              <Text variant="b1" color={bathrooms === r ? 'white' : 'dark'}>
-                {r}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </Box>
+          <Box style={styles.roomsContainer}>
+            {bathroomOptions.map((r, index) => (
+              <TouchableOpacity
+                onPress={() => setBathrooms(r)}
+                key={index}
+                style={[
+                  styles.roomOption,
+                  { backgroundColor: bathrooms === r ? theme.colors.primary : theme.colors.white },
+                ]}>
+                <Text variant="b1" color={bathrooms === r ? 'white' : 'dark'}>
+                  {r}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </Box>
 
-        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Area (m2)
-        </Text>
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Area (m2)
+          </Text>
 
-        <TextInput
-          placeholder="Add building area"
-          onChange={(e) => setArea(e.nativeEvent.text)}
-          keyboardType="number-pad"
-        />
-
-        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Floors
-        </Text>
-
-        <TextInput
-          keyboardType="number-pad"
-          placeholder="Number of floors"
-          onChange={(e) => setFloors(e.nativeEvent.text)}
-        />
-
-        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Build Year
-        </Text>
-
-        <TextInput
-          placeholder="Year property was completed"
-          onChange={(e) => setBuildYear(e.nativeEvent.text)}
-          keyboardType="number-pad"
-        />
-
-        <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Furnishing
-        </Text>
-
-        <Tabs
-          text1="Furnished"
-          text2="Not Furnished"
-          value1="furnished"
-          value2="not_furnished"
-          setSelected={setFurnish}
-        />
-
-        <Box marginVertical="xxl">
-          <Button
-            type="purple"
-            width={theme.constants.screenWidth}
-            onPress={handleNext}
-            label="Next Step"
+          <TextInput
+            placeholder="Add building area"
+            onChange={(e) => setArea(e.nativeEvent.text)}
+            keyboardType="number-pad"
           />
-        </Box>
-      </ScrollView>
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Floors
+          </Text>
+
+          <TextInput
+            keyboardType="number-pad"
+            placeholder="Number of floors"
+            onChange={(e) => setFloors(e.nativeEvent.text)}
+          />
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Build Year
+          </Text>
+
+          <TextInput
+            placeholder="Year property was completed"
+            onChange={(e) => setBuildYear(e.nativeEvent.text)}
+            keyboardType="number-pad"
+          />
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Furnishing
+          </Text>
+
+          <Tabs
+            text1="Furnished"
+            text2="Not Furnished"
+            value1="furnished"
+            value2="not_furnished"
+            setSelected={setFurnish}
+          />
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Partying
+          </Text>
+
+          <Tabs
+            text1="Not Allowed"
+            text2="Allowed"
+            value1="not_allowed"
+            value2="allowed"
+            setSelected={setParty}
+          />
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Daily Lease
+          </Text>
+
+          <Tabs
+            text1="Not Allowed"
+            text2="Allowed"
+            value1="not_allowed"
+            value2="allowed"
+            setSelected={setDailyLease}
+          />
+
+          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+            Building Type
+          </Text>
+
+          <Tabs
+            text1="Standalone"
+            text2="Semi-Detached"
+            value1="standalone"
+            value2="semi-detached"
+            setSelected={setBuildingType}
+          />
+
+          <Box marginVertical="xxl" pb="xxxl">
+            <Button
+              type="purple"
+              width={theme.constants.screenWidth}
+              onPress={handleNext}
+              label="Next Step"
+            />
+          </Box>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Box>
   );
 };

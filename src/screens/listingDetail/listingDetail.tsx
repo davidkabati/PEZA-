@@ -131,6 +131,9 @@ const listingDetail = ({
     property_type,
     description,
     build_year,
+    party_allowed,
+    daily_lease,
+    building_type,
   } = route.params.listing;
 
   const WHATSAPP_MESSAGE = encodeURI(
@@ -351,7 +354,7 @@ const listingDetail = ({
                 Area
               </Text>
               <Text variant="b1B" color="dark" mt="s">
-                {`${area} m2`}
+                {area !== '' ? `${area} m2` : 'n/a'}
               </Text>
             </Box>
           </Box>
@@ -445,8 +448,7 @@ const listingDetail = ({
                 width: theme.constants.screenWidth,
                 justifyContent: 'space-between',
               }}
-              mt="xxl"
-              pb="xxxl">
+              mt="xxl">
               <Box>
                 <Text variant="b1" color="lightGrey">
                   Build Year
@@ -456,14 +458,41 @@ const listingDetail = ({
                 </Text>
               </Box>
 
-              {/* <Box>
-              <Text variant="b1" color="lightGrey">
-                Furnishing
-              </Text>
-              <Text variant="h3" color="dark" mt="m">
-                {listing.furnish ? 'Furnished' : 'Not Furnished'}
-              </Text>
-            </Box> */}
+              <Box>
+                <Text variant="b1" color="lightGrey" textAlign="right">
+                  Partying
+                </Text>
+                <Text variant="h3" color="dark" mt="m" textAlign="right">
+                  {party_allowed ? 'Allowed' : 'Not Allowed'}
+                </Text>
+              </Box>
+            </Box>
+
+            <Box
+              style={{
+                flexDirection: 'row',
+                width: theme.constants.screenWidth,
+                justifyContent: 'space-between',
+              }}
+              mt="xxl"
+              pb="xxxl">
+              <Box>
+                <Text variant="b1" color="lightGrey">
+                  Building Type
+                </Text>
+                <Text variant="h3" color="dark" mt="m">
+                  {building_type === 'standalone' ? 'Stand Alone' : 'Semi-Detached'}
+                </Text>
+              </Box>
+
+              <Box>
+                <Text variant="b1" color="lightGrey" textAlign="right">
+                  Daily Lease
+                </Text>
+                <Text variant="h3" color="dark" mt="m" textAlign="right">
+                  {daily_lease ? 'Allowed' : 'Not Allowed'}
+                </Text>
+              </Box>
             </Box>
           </Box>
         </Box>

@@ -56,24 +56,24 @@ const propertyType = [
 
   {
     id: 3,
-    value: 'Cabin',
+    value: 'Appartment',
   },
   {
     id: 4,
-    value: 'Chalet',
+    value: 'Lots/Land',
   },
 
   {
     id: 6,
-    value: 'Hut',
+    value: 'Condos',
   },
   {
     id: 7,
-    value: 'Villa',
+    value: 'Office Space',
   },
   {
     id: 8,
-    value: 'Cottage',
+    value: 'Event Space',
   },
 ];
 

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, ScrollView } from 'react-native';
+import { StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Toast from 'react-native-toast-message';
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
     paddingHorizontal: theme.constants.screenPadding / 2,
-    paddingTop: theme.constants.screenPadding,
+    paddingTop: theme.constants.screenPadding + 20,
     flex: 1,
   },
   headerText: {
@@ -90,6 +90,7 @@ const NewListingFinal = ({
           sale_price: '',
           on_sale: false,
           agent_id: user?.uid as string,
+          verified: false,
         };
 
         await listingApi.addListing(finalListing);
@@ -115,81 +116,84 @@ const NewListingFinal = ({
     <>
       <ActivityIndicator visible={loading} />
       <Box style={styles.container}>
-        <StackHeader onPressBack={() => navigation.goBack()} title="Step 4 of 4" />
+        <KeyboardAvoidingView behavior={Platform.OS == 'ios' ? 'position' : 'height'}>
+          <StackHeader onPressBack={() => navigation.goBack()} title="Step 4 of 4" />
 
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ alignItems: 'center' }}>
-          <Text variant="h1Max" color="dark" style={styles.headerText}>
-            Complete your listing
-          </Text>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ alignItems: 'center' }}>
+            <Text variant="h1Max" color="dark" style={styles.headerText}>
+              Complete your listing
+            </Text>
 
-          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Title of your listing
-          </Text>
+            <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+              Title of your listing
+            </Text>
 
-          <TextInput
-            placeholder="Type listing title here"
-            onChange={(e) => setTitle(e.nativeEvent.text)}
-          />
-
-          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Set the price
-          </Text>
-
-          <TextInput
-            placeholder="Enter Price"
-            onChange={(e) => setPrice(Number(e.nativeEvent.text))}
-          />
-
-          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Description
-          </Text>
-
-          <TextInput
-            placeholder="Enter description"
-            height={hp(15)}
-            onChange={(e) => setDescription(e.nativeEvent.text)}
-            multiline
-          />
-
-          <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Address
-          </Text>
-
-          <TextInput
-            placeholder="Enter listing address"
-            height={hp(15)}
-            onChange={(e) => setAddress(e.nativeEvent.text)}
-            multiline
-          />
-
-          <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Select location
-          </Text>
-
-          <Box style={{ marginVertical: 20 }}>
-            <DropDownPicker
-              min={0}
-              max={5}
-              open={open}
-              items={items}
-              value={location}
-              setOpen={setOpen}
-              setValue={setLocation}
-              setItems={setItems}
+            <TextInput
+              placeholder="Type listing title here"
+              onChange={(e) => setTitle(e.nativeEvent.text)}
             />
-          </Box>
 
-          <Box marginVertical="xxl">
-            <Button
-              type="purple"
-              width={theme.constants.screenWidth}
-              onPress={handleSubmit}
-              label="Submit for review"
+            <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+              Set the price
+            </Text>
+
+            <TextInput
+              placeholder="Enter Price"
+              onChange={(e) => setPrice(Number(e.nativeEvent.text))}
+              keyboardType="number-pad"
             />
-          </Box>
-        </ScrollView>
+
+            <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+              Description
+            </Text>
+
+            <TextInput
+              placeholder="Enter description"
+              height={hp(15)}
+              onChange={(e) => setDescription(e.nativeEvent.text)}
+              multiline
+            />
+
+            <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+              Address
+            </Text>
+
+            <TextInput
+              placeholder="Enter listing address"
+              height={hp(15)}
+              onChange={(e) => setAddress(e.nativeEvent.text)}
+              multiline
+            />
+
+            <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+              Select location
+            </Text>
+
+            <Box style={{ marginVertical: 20 }}>
+              <DropDownPicker
+                min={0}
+                max={5}
+                open={open}
+                items={items}
+                value={location}
+                setOpen={setOpen}
+                setValue={setLocation}
+                setItems={setItems}
+              />
+            </Box>
+
+            <Box marginVertical="xxl" pb="xxl">
+              <Button
+                type="purple"
+                width={theme.constants.screenWidth}
+                onPress={handleSubmit}
+                label="Submit for review"
+              />
+            </Box>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Box>
     </>
   );
