@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, Image as RNImage, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
 import { Feather as Icon } from '@expo/vector-icons';
+import { AntDesign as AIcon } from '@expo/vector-icons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -23,6 +24,7 @@ import agentsApi from '../../firebase/agent';
 import { IListingFavorite } from '../../types/listing.type';
 import { removeFavorite, addFavorite } from '../../redux/actions';
 import authApi from '../../firebase/auth';
+import favoritesApi from '../../firebase/favorite';
 
 const styles = StyleSheet.create({
   container: {
@@ -145,11 +147,11 @@ const listingDetail = ({
   const [data, setData] = useState<any[]>([]);
   const [adminUser, setAdminUser] = useState();
 
+  const [favorites, setFavorites] = useState<any[]>([]);
+
   const user = firebase.auth().currentUser;
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
-
-  const { favorites } = useSelector((state: any) => state.favoriteReducer);
 
   const dispatch = useDispatch();
 
@@ -220,6 +222,8 @@ const listingDetail = ({
   const loadData = async () => {
     const data = await agentsApi.getAgent(agent_id);
     const adminUsers = await authApi.getAdminUsers();
+    const favs = await favoritesApi.getUserFavorites(user ? user?.uid : '');
+    setFavorites(favs);
     setAdminUser(adminUsers[0]);
     isFav();
     setData(data);
@@ -240,9 +244,9 @@ const listingDetail = ({
           user && (
             <TouchableOpacity onPress={() => handleFavorite(route.params.listing)}>
               {isFavorite ? (
-                <Icon name="minus-circle" color={theme.colors.white} size={24} />
+                <AIcon name="heart" color={theme.colors.red} size={24} />
               ) : (
-                <Icon name="plus-circle" color={theme.colors.white} size={24} />
+                <AIcon name="hearto" color={theme.colors.white} size={24} />
               )}
             </TouchableOpacity>
           )

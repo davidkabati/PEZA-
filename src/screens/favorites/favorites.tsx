@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FlatList, StyleSheet } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
@@ -18,6 +18,8 @@ import Status from '../../components/Status';
 import { removeFavorite } from '../../redux/actions';
 import { IListingFavorite } from '../../types/listing.type';
 import { FavoritesNavParamList } from '../../types/navigation.types';
+import favoritesApi from '../../firebase/favorite';
+import ActivityIndicator from '../../components/ActivityIndicator';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +32,15 @@ const styles = StyleSheet.create({
 
 // interface favoritesProps {}
 const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favorite'>) => {
-  const { favorites } = useSelector((state: any) => state.favoriteReducer);
+  const [favorites, setFavorites] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const loadFavorites = async () => {
+    setIsLoading(true);
+    const favs = await favoritesApi.getUserFavorites(user ? user.uid : '');
+    setFavorites(favs);
+    setIsLoading(false);
+  };
 
   const user = firebase.auth().currentUser;
 
@@ -52,8 +62,13 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
     });
   };
 
+  useEffect(() => {
+    void loadFavorites();
+  }, []);
+
   return (
     <Box style={styles.container}>
+      <ActivityIndicator visible={isLoading} />
       <Text variant="h1" mb="xl" ml="xl" style={{ alignSelf: 'flex-start' }}>
         Favorites
       </Text>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -7,11 +8,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { Feather as Icon } from '@expo/vector-icons';
+import { AntDesign as AIcon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import firebase from 'firebase';
 import Toast from 'react-native-toast-message';
+import favoritesApi from '../../firebase/favorite';
 
 import { Box, theme, Text } from '..';
 import IListing, { IListingFavorite } from '../../types/listing.type';
@@ -76,7 +78,7 @@ const Listing = ({ listing, onPress }: Props) => {
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
 
-  const { favorites } = useSelector((state: any) => state.favoriteReducer);
+  const [favorites, setFavorites] = useState<any[]>([]);
 
   const dispatch = useDispatch();
 
@@ -139,16 +141,19 @@ const Listing = ({ listing, onPress }: Props) => {
     }
   };
 
+  const loadFavs = async () => {
+    const favs = await favoritesApi.getUserFavorites(user ? user?.uid : '');
+    setFavorites(favs);
+  };
+
   const isFav = () => {
     const isFav = favorites.some((f: IListingFavorite) => f.product_id === listing.id);
     isFav && setIsFavorite(true);
   };
 
   useEffect(() => {
+    void loadFavs();
     isFav();
-    return () => {
-      isFav();
-    };
   }, [favorites]);
 
   return (
@@ -165,9 +170,9 @@ const Listing = ({ listing, onPress }: Props) => {
         {user && (
           <TouchableOpacity onPress={() => handleAddFavorite(listing)} style={styles.favButton}>
             {isFavorite ? (
-              <Icon name="minus-circle" color={theme.colors.white} size={24} />
+              <AIcon name="heart" color={theme.colors.red} size={24} />
             ) : (
-              <Icon name="plus-circle" color={theme.colors.white} size={24} />
+              <AIcon name="hearto" color={theme.colors.white} size={24} />
             )}
           </TouchableOpacity>
         )}
