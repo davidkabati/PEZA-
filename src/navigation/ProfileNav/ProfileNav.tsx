@@ -15,6 +15,7 @@ import {
   Login,
   Register,
   ForgotPassword,
+  About,
 } from '../../screens';
 
 const ProfileStack = createStackNavigator<ProfileNavParamList>();
@@ -34,6 +35,7 @@ const ProfileNav = () => {
       <ProfileStack.Screen name="Login" component={Login} />
       <ProfileStack.Screen name="Register" component={Register} />
       <ProfileStack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <ProfileStack.Screen name="About" component={About} />
     </ProfileStack.Navigator>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { onChange } from 'react-native-reanimated';
 
 import { Box, theme, Text } from '..';
 
@@ -32,9 +33,10 @@ interface Props {
   value1: string;
   value2: string;
   setSelected: (value: string) => void;
+  onChange?: () => void;
 }
 
-const Tabs = ({ text1, text2, setSelected, value1, value2 }: Props) => {
+const Tabs = ({ text1, text2, setSelected, value1, value2, onChange }: Props) => {
   const [active, setActive] = useState<string>(value1);
 
   return (
@@ -43,6 +45,7 @@ const Tabs = ({ text1, text2, setSelected, value1, value2 }: Props) => {
         onPress={() => {
           setActive(value1);
           setSelected(value1);
+          onChange && onChange();
         }}
         activeOpacity={1}
         style={styles.tab}>
@@ -56,6 +59,7 @@ const Tabs = ({ text1, text2, setSelected, value1, value2 }: Props) => {
         onPress={() => {
           setActive(value2);
           setSelected(value2);
+          onChange && onChange();
         }}
         activeOpacity={1}
         style={styles.tab}>

@@ -12,19 +12,18 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import * as Linking from 'expo-linking';
-import { useSelector, useDispatch } from 'react-redux';
-import firebase from 'firebase';
+import { useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { ListingImgSlider } from '../../components/ListingImgSlider';
 import { StackHeader } from '../../components/StackHeader';
 import { HomeNavParamList } from '../../types/navigation.types';
-import agentsApi from '../../firebase/agent';
 import { IListingFavorite } from '../../types/listing.type';
-import { removeFavorite, addFavorite } from '../../redux/actions';
-import authApi from '../../firebase/auth';
+import { addFavorite } from '../../redux/actions';
 import favoritesApi from '../../firebase/favorite';
+import { useQuery } from 'react-query';
+import store from '../../utils/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -126,7 +125,6 @@ const listingDetail = ({
     rooms,
     baths,
     area,
-    agent_id,
     type,
     furnish,
     address_area,
@@ -139,31 +137,37 @@ const listingDetail = ({
   } = route.params.listing;
 
   const WHATSAPP_MESSAGE = encodeURI(
-    `Hello from Peza, I would like to know more about your property ${
+    `Hello from Peza, I would like to know more about your listing ${
       type === 'for_rent' ? 'for rent' : 'for sale'
     } at ${address} going for ZK ${Intl.NumberFormat('en-US').format(price)}.`,
   );
 
-  const [data, setData] = useState<any[]>([]);
-  const [adminUser, setAdminUser] = useState();
-
-  const [favorites, setFavorites] = useState<any[]>([]);
-
-  const user = firebase.auth().currentUser;
+  const [user, setUser] = useState<any>({});
 
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
+  const [reRun, setRerun] = useState<string>(Math.random().toString());
 
   const dispatch = useDispatch();
 
-  const removeFromFavorite = (favorite: IListingFavorite) => {
-    dispatch(removeFavorite(favorite));
-  };
+  // const removeFromFavorite = (favorite: IListingFavorite) => {
+  //   dispatch(removeFavorite(favorite));
+  // };
 
   const addToFavorite = (favorite: IListingFavorite) => {
     dispatch(addFavorite(favorite));
   };
 
   const handleFavorite = (listingToAdd: any) => {
+    if (!user.id)
+      return Toast.show({
+        text1: 'Login Required',
+        text2: 'Sign up or login to add favorites',
+        position: 'top',
+        visibilityTime: 3000,
+        autoHide: true,
+        type: 'info',
+      });
+    setRerun(Math.random().toString());
     try {
       const newFav = {
         ...listingToAdd,
@@ -173,22 +177,22 @@ const listingDetail = ({
 
       const fav: IListingFavorite = {
         ...newFav,
-        user_id: user ? user.uid : '',
+        user_id: user.id,
         product_id: route.params.listing.id,
       };
 
       if (isFavorite) {
-        const fav = favorites.filter(
-          (f: IListingFavorite) => f.product_id == route.params.listing.id,
-        );
-        // removeFromFavorite(fav[0]);
+        // const fav =
+        //   favorites &&
+        //   favorites.filter((f: IListingFavorite) => f.product_id == route.params.listing.id);
+        // removeFromFavorite(fav && fav[0]);
         Toast.show({
           type: 'info',
           position: 'top',
           visibilityTime: 2000,
           autoHide: true,
           text1: 'Favorites',
-          text2: 'Product already in favorites',
+          text2: 'Listing already in favorites.',
         });
       } else {
         addToFavorite(fav);
@@ -214,27 +218,35 @@ const listingDetail = ({
     }
   };
 
-  const isFav = () => {
-    const isFav = favorites.some((f: IListingFavorite) => f.product_id === route.params.listing.id);
-    isFav && setIsFavorite(true);
+  const { data: favorites } = useQuery(
+    [reRun, user.id],
+    () => favoritesApi.getUserFavorites(user.id),
+    {
+      enabled: !!user.id,
+    },
+  );
+
+  const getUser = async () => {
+    const user = await store.getData('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
   };
 
-  const loadData = async () => {
-    const data = await agentsApi.getAgent(agent_id);
-    const adminUsers = await authApi.getAdminUsers();
-    const favs = await favoritesApi.getUserFavorites(user ? user?.uid : '');
-    setFavorites(favs);
-    setAdminUser(adminUsers[0]);
-    isFav();
-    setData(data);
+  const isFav = () => {
+    const isFav = favorites && favorites.some((f: any) => f.product_id === route.params.listing.id);
+    if (isFav) {
+      setIsFavorite(true);
+    }
   };
 
   useEffect(() => {
-    void loadData();
+    void getUser();
+    isFav();
   }, [favorites]);
 
   return (
-    <ScrollView bounces={false} style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView bounces style={styles.container} showsVerticalScrollIndicator={false}>
       <StackHeader
         padding
         onPressBack={() => navigation.goBack()}

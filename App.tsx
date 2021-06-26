@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import NavigationContainer from 'react-native-navigation-container';
 
 import AppNav from './src/navigation/AppNav/AppNav';
-// import LoadAssets from './src/utils/LoadAssets';
 import fonts from './src/utils/fonts';
 import { theme } from './src/components';
 import firebaseInit from './src/firebase';

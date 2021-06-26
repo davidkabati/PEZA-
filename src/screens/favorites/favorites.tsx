@@ -4,11 +4,8 @@
 import React, { useEffect, useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
 import { FlatList, StyleSheet } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from 'react-native-responsive-screen';
+import { useDispatch } from 'react-redux';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Toast from 'react-native-toast-message';
 import firebase from 'firebase';
 
@@ -51,7 +48,7 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
     dispatch(removeFavorite(favorite));
   };
 
-  const handleRemoveFavorite = (favorite: IListingFavorite) => {
+  const handleRemoveFavorite = async (favorite: IListingFavorite) => {
     removeFromFavorite(favorite);
     Toast.show({
       type: 'success',
@@ -61,6 +58,7 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
       text1: 'Favorites',
       text2: 'Successfully removed from favorites.',
     });
+    await loadFavorites();
   };
 
   useEffect(() => {

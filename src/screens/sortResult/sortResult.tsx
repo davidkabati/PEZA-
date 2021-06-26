@@ -15,10 +15,9 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondary,
     flex: 1,
     alignItems: 'center',
+    paddingBottom: 50,
   },
 });
-
-// interface SortResultProps {}
 
 const SortResult = ({ navigation, route }: StackScreenProps<SortNavParamList, 'SortResult'>) => {
   return (

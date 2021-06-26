@@ -151,10 +151,10 @@ const Listing = ({ listing, onPress }: Props) => {
     isFav && setIsFavorite(true);
   };
 
-  useEffect(() => {
-    void loadFavs();
-    isFav();
-  }, [favorites]);
+  // useEffect(() => {
+  //   void loadFavs();
+  //   isFav();
+  // }, [favorites]);
 
   return (
     <Box style={styles.container}>

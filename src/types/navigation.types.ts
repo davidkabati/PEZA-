@@ -1,5 +1,5 @@
 import IAgent from './agent.type';
-import IListing from './listing.type';
+import IListing, { IListingFavorite } from './listing.type';
 
 export type AppNavParamList = {
   Home: undefined;
@@ -37,6 +37,7 @@ export type ProfileNavParamList = {
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
+  About: undefined;
 };
 
 export type FavoritesNavParamList = {

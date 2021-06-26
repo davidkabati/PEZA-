@@ -10,10 +10,10 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
+import { useQuery } from 'react-query';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
-import { HomeHeader } from '../../components/HomeHeader';
 import { Listing } from '../../components/ListingItem';
 import { HomeNavParamList } from '../../types/navigation.types';
 import listingsApi from '../../firebase/listing';
@@ -22,6 +22,8 @@ import ActivityIndicator from '../../components/ActivityIndicator';
 import { Tabs } from '../../components/Tabs';
 import IListing from '../../types/listing.type';
 import Logo from '../../svg/logo';
+import store from '../../utils/storage';
+import storage from '../../utils/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -83,67 +85,86 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
   const [active, setActive] = useState<any>(data[0]);
   const [tab, setTab] = useState<string>('for_sale');
-  const [listingData, SetListingData] = useState<IListing[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [sortData, setSortData] = useState<any[]>([]);
+
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const handleFilter = (item: any) => {
     setActive(item);
   };
 
-  const loadData = async () => {
-    setIsLoading(true);
-    const listings = await listingsApi.getAllListings();
-    setIsLoading(false);
+  const {
+    data: listingData,
+    error,
+    isLoading,
+  } = useQuery('listings', () => listingsApi.getAllListings());
 
+  const loadData = () => {
     if (!active.label) {
-      const result = listings.filter((l) => {
-        if (l.type === tab) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab) return l;
+        });
+
+      setSortData(result ? result : []);
     } else if (active.label === 'Live on a budget') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.price < 4000) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab && l.price < 4000) return l;
+        });
+
+      setSortData(result ? result : []);
     } else if (active.label === 'Live in style') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.price > 4000 && l.price < 10000) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab && l.price > 4000 && l.price < 10000) return l;
+        });
+      setSortData(result ? result : []);
     } else if (active.label === 'Live in luxury') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.price > 10000) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab && l.price > 10000) return l;
+        });
+      setSortData(result ? result : []);
     } else if (active.label === 'All Listings') {
-      const result = listings.filter((l) => {
-        if (l.type === tab) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab) return l;
+        });
+      setSortData(result ? result : []);
     } else if (active.label === 'Throw an event') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.party_allowed === true) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab && l.party_allowed === true) return l;
+        });
+      setSortData(result ? result : []);
     } else if (active.label === 'Spend a night') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.daily_lease === true) return l;
-      });
-      SetListingData(result);
+      const result =
+        listingData &&
+        listingData.filter((l) => {
+          if (l.type === tab && l.daily_lease === true) return l;
+        });
+      setSortData(result ? result : []);
     }
   };
 
   useEffect(() => {
-    void loadData();
-  }, [tab, active]);
+    setIsMounted(true);
+    isMounted && loadData();
+    return () => setIsMounted(false);
+  }, [active, tab]);
 
   return (
     <>
       <ActivityIndicator visible={isLoading} />
       <Box style={styles.container}>
         <Logo width={87.2} height={34} />
-        {/* <Box style={{ height: 20 }} />
-        <HomeHeader /> */}
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text variant="h1" color="primary" style={styles.headText}>
@@ -158,7 +179,9 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             renderItem={({ item }) => (
               <TouchableOpacity
                 activeOpacity={0.8}
-                onPress={() => handleFilter(item)}
+                onPress={() => {
+                  handleFilter(item);
+                }}
                 style={{ marginRight: 20 }}>
                 <HomeCard
                   width={wp(35)}
@@ -183,20 +206,24 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
           />
 
           <Box style={{ paddingBottom: 100, marginTop: hp(4) }}>
-            {listingData.length < 1 ? (
+            {error ? (
               <Text variant="b1B" color="primary">
                 No Listings found matching your filter
               </Text>
             ) : (
               <FlatList
-                data={listingData}
+                data={sortData.length < 1 ? listingData : sortData}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                   <Box mb="xl">
                     <Listing
                       listing={item}
-                      onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+                      onPress={() =>
+                        navigation.navigate('ListingDetail', {
+                          listing: item,
+                        })
+                      }
                     />
                   </Box>
                 )}

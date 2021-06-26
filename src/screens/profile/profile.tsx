@@ -19,6 +19,7 @@ import firebaseAuthApi from '../../firebase/auth';
 import { CommonActions } from '@react-navigation/routers';
 import authApi from '../../firebase/auth';
 import Logo from '../../svg/logo';
+import store from '../../utils/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -54,22 +55,24 @@ const styles = StyleSheet.create({
 });
 
 const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'>) => {
-  const user = firebase.auth().currentUser;
   const [userDetails, setUserDetails] = useState<any>({});
 
   const fetchUserDetails = async () => {
-    const details = await authApi.getUsersFullDetails(user ? user.uid : '');
-    setUserDetails(details);
+    const user = await store.getData('user');
+    if (user) {
+      setUserDetails(JSON.parse(user));
+    }
   };
 
   useEffect(() => {
     void fetchUserDetails();
-  }, [user]);
+  }, []);
 
   const handleAuth = async () => {
     try {
-      if (user) {
+      if (userDetails.id) {
         await firebaseAuthApi.logOutUser();
+        await store.storeData('user', JSON.stringify({}));
         navigation.dispatch(
           CommonActions.navigate({
             name: 'Home',
@@ -99,7 +102,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
 
   return (
     <Box style={styles.container}>
-      {user ? (
+      {userDetails.id ? (
         <>
           <Logo width={127.2} height={74} />
           {/* <Box
@@ -121,18 +124,16 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           </Box> */}
 
           <Text variant="h1M" color="dark" mt="xl">
-            {user.displayName}
+            {userDetails.full_name}
           </Text>
 
           <Text variant="b2" color="lightGrey" mt="m">
-            {user.email}
+            {userDetails.email}
           </Text>
         </>
       ) : (
         <Box style={styles.noLoginContainer}>
-          <Text style={{ textAlign: 'center', lineHeight: 25 }} variant="h3" color="dark">
-            Login/sign up to save details and do more
-          </Text>
+          <Logo width={147.2} height={94} />
         </Box>
       )}
 
@@ -147,7 +148,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
           label="My Listings"
           onPress={() => {
-            if (user) {
+            if (userDetails.id) {
               navigation.navigate('MyListings');
             } else {
               Toast.show({
@@ -165,18 +166,18 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
         <ProfileItem
           icon={<Icon name="info" color={theme.colors.veryLightPurple} size={24} />}
           label="About"
-          onPress={() => true}
+          onPress={() => navigation.navigate('About')}
         />
 
         <ProfileItem
           icon={
             <Icon
-              name={user ? 'log-out' : 'log-in'}
-              color={user ? theme.colors.red : theme.colors.green}
+              name={userDetails.id ? 'log-out' : 'log-in'}
+              color={userDetails.id ? theme.colors.red : theme.colors.green}
               size={24}
             />
           }
-          label={user ? 'Logout' : 'Login/Register'}
+          label={userDetails.id ? 'Logout' : 'Login/Register'}
           onPress={handleAuth}
         />
       </Box>

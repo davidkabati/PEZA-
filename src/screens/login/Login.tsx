@@ -15,6 +15,8 @@ import { ProfileNavParamList } from '../../types/navigation.types';
 import { StackHeader } from '../../components/StackHeader';
 import firebaseAuthApi from '../../firebase/auth';
 import ActivityIndicator from '../../components/ActivityIndicator';
+import firebase from 'firebase';
+import store from '../../utils/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,11 +66,21 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
     try {
       setLoading(true);
       await firebaseAuthApi.signInUser(values.email, values.password);
-      navigation.dispatch(
-        CommonActions.navigate({
-          name: 'Home',
-        }),
-      );
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const data = {
+          id: user.uid,
+          full_name: user.displayName,
+          email: user.email,
+        };
+        await store.storeData('user', JSON.stringify(data));
+      }
+      // navigation.dispatch(
+      //   CommonActions.navigate({
+      //     name: 'Home',
+      //   }),
+      // );
+      navigation.navigate('Profile');
       setLoading(false);
       Toast.show({
         type: 'success',
