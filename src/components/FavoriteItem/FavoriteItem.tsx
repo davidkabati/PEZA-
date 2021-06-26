@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
@@ -9,6 +12,7 @@ import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '..';
 import IListing from '../../types/listing.type';
+import { numberWithCommas } from '../../utils/numberWithComma';
 
 const styles = StyleSheet.create({
   container: {
@@ -56,8 +60,8 @@ const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
         <Text numberOfLines={1} variant="b2" color="lightGrey">
           {listing.address}
         </Text>
-        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${Intl.NumberFormat('en-US').format(
-          listing.price,
+        <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${numberWithCommas(
+          listing.price.toString(),
         )}`}</Text>
       </TouchableOpacity>
 

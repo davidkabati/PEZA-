@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Toast from 'react-native-toast-message';
 import firebase from 'firebase';
+import { View } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { FavoriteItem } from '../../components/FavoriteItem';
@@ -91,12 +92,17 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <FavoriteItem
-                listing={item}
-                bgColor="secondary"
-                onPressButton={() => handleRemoveFavorite(item)}
-                onPress={() => navigation.navigate('ListingDetail', { listing: item })}
-              />
+              <View
+                from={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'timing', duration: 750 }}>
+                <FavoriteItem
+                  listing={item}
+                  bgColor="secondary"
+                  onPressButton={() => handleRemoveFavorite(item)}
+                  onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+                />
+              </View>
             )}
           />
         </Box>

@@ -75,12 +75,12 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
         };
         await store.storeData('user', JSON.stringify(data));
       }
-      // navigation.dispatch(
-      //   CommonActions.navigate({
-      //     name: 'Home',
-      //   }),
-      // );
-      navigation.navigate('Profile');
+      navigation.dispatch(
+        CommonActions.navigate({
+          name: 'Home',
+        }),
+      );
+      //navigation.navigate('Profile');
       setLoading(false);
       Toast.show({
         type: 'success',

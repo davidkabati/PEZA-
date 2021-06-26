@@ -136,7 +136,7 @@ const NewListingImg = ({
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 0.5,
+        quality: 0.8,
       });
       if (!result.cancelled) {
         // await imageUpload(result.uri);
@@ -186,7 +186,8 @@ const NewListingImg = ({
           type="purple"
           width={theme.constants.screenWidth}
           onPress={handleNext}
-          label={loading ? 'Uploading Images...' : 'Next Step'}
+          label={'Next Step'}
+          loading={loading}
         />
       </Box>
     </Box>

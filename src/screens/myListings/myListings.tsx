@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React from 'react';
+import React, { useState } from 'react';
 import { StackScreenProps } from '@react-navigation/stack';
-import { StyleSheet, Image as RNImage, FlatList, Alert } from 'react-native';
+import { StyleSheet, Image as RNImage, FlatList, Alert, ActivityIndicator } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import firebase from 'firebase';
-import { Image } from 'react-native-expo-image-cache';
 import { useQuery } from 'react-query';
 import { Feather as Icon } from '@expo/vector-icons';
 import Toast from 'react-native-toast-message';
+import { View } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { ProfileNavParamList } from '../../types/navigation.types';
@@ -21,6 +20,8 @@ import { Button } from '../../components/Button';
 import listingsApi from '../../firebase/listing';
 import { FavoriteItem } from '../../components/FavoriteItem';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import store from '../../utils/storage';
+import { useEffect } from 'react';
 
 const styles = StyleSheet.create({
   container: {
@@ -60,9 +61,22 @@ const styles = StyleSheet.create({
 // interface MyListingsProps {}
 
 const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyListings'>) => {
-  const user = firebase.auth().currentUser;
+  const [user, setUser] = useState<any>({});
 
-  const { data } = useQuery('my-listing', () => listingsApi.getUserListings(user ? user.uid : ''));
+  const getUser = async () => {
+    const user = await store.getData('user');
+    if (user) {
+      setUser(JSON.parse(user));
+    }
+  };
+
+  const { data, isLoading } = useQuery(
+    ['my-listing', user.id],
+    () => listingsApi.getUserListings(user.id),
+    {
+      enabled: !!user.id,
+    },
+  );
 
   const handleRemoveListing = (listing_id: string) => {
     Alert.alert('Delete Listing', 'Are you sure you want to delete this listing?', [
@@ -89,6 +103,10 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
     ]);
   };
 
+  useEffect(() => {
+    void getUser();
+  }, []);
+
   return (
     <Box style={styles.container}>
       <StackHeader
@@ -99,26 +117,12 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
       <Box style={styles.lowerContainer}>
         <Box style={styles.userProfile}>
-          {/* <Box style={styles.displayImg}>
-            {user?.photoURL && (
-              <Image
-                {...{ uri: user.photoURL ? user.photoURL : '' }}
-                style={{
-                  width: wp(12),
-                  height: wp(12),
-                  borderRadius: wp(6),
-                }}
-                tint="light"
-                transitionDuration={300}
-              />
-            )}
-          </Box> */}
           <Box>
             <Text variant="b1" color="text" mb="m">
               Welcome,
             </Text>
             <Text variant="h2" color="dark">
-              {user?.displayName}
+              {user.full_name}
             </Text>
           </Box>
           {data && data.length > 0 && (
@@ -131,27 +135,9 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
           )}
         </Box>
 
-        {data && data.length < 1 ? (
-          <Box style={styles.image}>
-            <RNImage
-              source={require('../../../assets/images/underConstruction.png')}
-              style={{ width: 323.6, height: 216.5 }}
-            />
-
-            <Text mt="l" variant="h1" color="dark">
-              Lets set up your listing
-            </Text>
-
-            <Text mt="l" mb="xxl" variant="h3" color="text">
-              List your home in a few steps
-            </Text>
-
-            <Button
-              type="purple"
-              onPress={() => navigation.navigate('NewListingInfo')}
-              label="Add New Listing"
-              width={theme.constants.screenWidth}
-            />
+        {isLoading ? (
+          <Box style={{ marginTop: hp(30) }}>
+            <ActivityIndicator />
           </Box>
         ) : (
           <Box
@@ -165,12 +151,42 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
               data={data}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id.toString()}
+              ListEmptyComponent={() => (
+                <>
+                  <Box style={styles.image}>
+                    <RNImage
+                      source={require('../../../assets/images/underConstruction.png')}
+                      style={{ width: 323.6, height: 216.5 }}
+                    />
+
+                    <Text mt="l" variant="h1" color="dark">
+                      Lets set up your listing
+                    </Text>
+
+                    <Text mt="l" mb="xxl" variant="h3" color="text">
+                      List your home in a few steps
+                    </Text>
+
+                    <Button
+                      type="purple"
+                      onPress={() => navigation.navigate('NewListingInfo')}
+                      label="Add New Listing"
+                      width={theme.constants.screenWidth}
+                    />
+                  </Box>
+                </>
+              )}
               renderItem={({ item }) => (
-                <FavoriteItem
-                  listing={item}
-                  bgColor="secondary"
-                  onPressButton={() => handleRemoveListing(item.id)}
-                />
+                <View
+                  from={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: 'timing', duration: 750 }}>
+                  <FavoriteItem
+                    listing={item}
+                    bgColor="secondary"
+                    onPressButton={() => handleRemoveListing(item.id)}
+                  />
+                </View>
               )}
             />
           </Box>

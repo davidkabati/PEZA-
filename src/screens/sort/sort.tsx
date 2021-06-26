@@ -216,6 +216,8 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             setOpen={setOpenBT}
             setValue={setValueBT}
             setItems={setItemsBT}
+            style={{ borderColor: theme.colors.white }}
+            textStyle={{ color: theme.colors.text }}
           />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
@@ -249,6 +251,8 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
+            style={{ borderColor: theme.colors.white }}
+            textStyle={{ color: theme.colors.text }}
           />
 
           {/* <Text variant="b1" color="text" mt="xxl" textAlign="center">

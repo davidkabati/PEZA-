@@ -4,6 +4,7 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import React from 'react';
 import { StyleSheet, FlatList } from 'react-native';
+import { View } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { SortNavParamList } from '../../types/navigation.types';
@@ -24,26 +25,32 @@ const SortResult = ({ navigation, route }: StackScreenProps<SortNavParamList, 'S
     <Box style={styles.container}>
       <StackHeader onPressBack={() => navigation.goBack()} padding title="Search Result" />
 
-      <Box style={{ width: theme.constants.screenWidth }}>
-        {route.params.listings.length < 1 ? (
-          <Text mt="xxxl" variant="b1B" color="dark">
-            No listing found matching your search
-          </Text>
-        ) : (
-          <FlatList
-            data={route.params.listings}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <Box mt="xl">
-                <Listing
-                  listing={item}
-                  onPress={() => navigation.navigate('ListingDetail', { listing: item })}
-                />
-              </Box>
-            )}
-          />
-        )}
+      <Box style={{ width: '100%', marginTop: 20, alignItems: 'center' }}>
+        <FlatList
+          data={route.params.listings}
+          showsVerticalScrollIndicator={false}
+          keyExtractor={(item) => item.id.toString()}
+          ListEmptyComponent={() => (
+            <Text mt="xxxl" variant="b1B" color="dark">
+              No listing found matching your search
+            </Text>
+          )}
+          renderItem={({ item }) => (
+            <View
+              from={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                type: 'timing',
+                duration: 750,
+              }}>
+              <Listing
+                width={theme.constants.screenWidth}
+                listing={item}
+                onPress={() => navigation.navigate('ListingDetail', { listing: item })}
+              />
+            </View>
+          )}
+        />
       </Box>
     </Box>
   );

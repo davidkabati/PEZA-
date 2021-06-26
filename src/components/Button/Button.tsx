@@ -59,7 +59,7 @@ const Button = ({ width, height, label, onPress, type, loading, borderRad, icon 
       {icon ? (
         icon
       ) : loading ? (
-        <ActivityIndicator />
+        <ActivityIndicator color="white" />
       ) : (
         <Text
           style={[

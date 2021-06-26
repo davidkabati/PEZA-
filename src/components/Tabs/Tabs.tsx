@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { onChange } from 'react-native-reanimated';
 
 import { Box, theme, Text } from '..';
 

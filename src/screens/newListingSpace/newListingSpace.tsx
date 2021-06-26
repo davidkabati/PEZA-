@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     alignSelf: 'flex-start',
-    width: '70%',
+    width: '80%',
     lineHeight: 35,
     marginBottom: hp(4),
     paddingTop: theme.constants.screenPadding,
@@ -153,7 +153,7 @@ const NewListingSpace = ({
           </Text>
 
           <TextInput
-            placeholder="Add building area"
+            placeholder="Add building area (optional)"
             onChange={(e) => setArea(e.nativeEvent.text)}
             keyboardType="number-pad"
           />
@@ -164,7 +164,7 @@ const NewListingSpace = ({
 
           <TextInput
             keyboardType="number-pad"
-            placeholder="Number of floors"
+            placeholder="Number of floors (optional)"
             onChange={(e) => setFloors(e.nativeEvent.text)}
           />
 
@@ -173,7 +173,7 @@ const NewListingSpace = ({
           </Text>
 
           <TextInput
-            placeholder="Year property was completed"
+            placeholder="Year property was completed (optional)"
             onChange={(e) => setBuildYear(e.nativeEvent.text)}
             keyboardType="number-pad"
           />

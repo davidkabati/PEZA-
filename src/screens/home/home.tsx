@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -11,6 +12,7 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useQuery } from 'react-query';
+import { View, AnimatePresence } from 'moti';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -20,10 +22,7 @@ import listingsApi from '../../firebase/listing';
 import ActivityIndicator from '../../components/ActivityIndicator';
 // import Status from '../../components/Status';
 import { Tabs } from '../../components/Tabs';
-import IListing from '../../types/listing.type';
 import Logo from '../../svg/logo';
-import store from '../../utils/storage';
-import storage from '../../utils/storage';
 
 const styles = StyleSheet.create({
   container: {
@@ -193,9 +192,19 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             )}
           />
 
-          <Text variant="h2B" color="dark" style={styles.subHeadText}>
-            {active.label ? active.label : 'Featured Listings'}
-          </Text>
+          <AnimatePresence>
+            <View
+              from={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ type: 'timing', duration: 750 }}
+              exit={{
+                opacity: 0,
+              }}>
+              <Text variant="h2B" color="dark" style={styles.subHeadText}>
+                {active.label ? active.label : 'Featured Listings'}
+              </Text>
+            </View>
+          </AnimatePresence>
 
           <Tabs
             text1="For sale"
@@ -216,16 +225,24 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
-                  <Box mb="xl">
-                    <Listing
-                      listing={item}
-                      onPress={() =>
-                        navigation.navigate('ListingDetail', {
-                          listing: item,
-                        })
-                      }
-                    />
-                  </Box>
+                  <AnimatePresence>
+                    <View
+                      from={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ type: 'timing', duration: 750 }}
+                      exit={{
+                        opacity: 0,
+                      }}>
+                      <Listing
+                        listing={item}
+                        onPress={() =>
+                          navigation.navigate('ListingDetail', {
+                            listing: item,
+                          })
+                        }
+                      />
+                    </View>
+                  </AnimatePresence>
                 )}
               />
             )}

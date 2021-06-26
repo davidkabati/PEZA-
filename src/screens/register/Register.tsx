@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { useState } from 'react';
 import { StyleSheet, SafeAreaView, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack';
@@ -18,6 +20,8 @@ import { CommonActions } from '@react-navigation/native';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import firebaseAuthApi from '../../firebase/auth';
+import store from '../../utils/storage';
+import firebase from 'firebase';
 
 const styles = StyleSheet.create({
   container: {
@@ -73,11 +77,21 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
         values.fullName,
         values.phone,
       );
+      const user = firebase.auth().currentUser;
+      if (user) {
+        const data = {
+          id: user.uid,
+          full_name: user.displayName,
+          email: user.email,
+        };
+        await store.storeData('user', JSON.stringify(data));
+      }
       navigation.dispatch(
         CommonActions.navigate({
           name: 'Home',
         }),
       );
+      // navigation.navigate('Profile');
       setLoading(false);
       Toast.show({
         type: 'success',

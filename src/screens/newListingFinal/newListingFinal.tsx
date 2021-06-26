@@ -178,6 +178,8 @@ const NewListingFinal = ({
                 setOpen={setOpen}
                 setValue={setLocation}
                 setItems={setItems}
+                style={{ borderColor: theme.colors.white }}
+                textStyle={{ color: theme.colors.text }}
               />
             </Box>
 

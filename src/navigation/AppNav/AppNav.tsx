@@ -1,6 +1,5 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import * as Haptics from 'expo-haptics';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '../../components';
@@ -32,13 +31,7 @@ const AppNav = () => {
             tabBarIcon: ({ color }) => {
               return <HomeIcon color={color} />;
             },
-            // unmountOnBlur: true,
           }}
-          // listeners={() => ({
-          //   tabPress: () => {
-          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          //   },
-          // })}
         />
         <AppStack.Screen
           name="Categories"
@@ -48,11 +41,6 @@ const AppNav = () => {
               return <CategoryIcon color={color} />;
             },
           }}
-          // listeners={() => ({
-          //   tabPress: () => {
-          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          //   },
-          // })}
         />
         <AppStack.Screen
           name="Favorites"
@@ -63,11 +51,6 @@ const AppNav = () => {
             },
             unmountOnBlur: true,
           }}
-          // listeners={() => ({
-          //   tabPress: () => {
-          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          //   },
-          // })}
         />
         <AppStack.Screen
           name="Profile"
@@ -78,11 +61,6 @@ const AppNav = () => {
             },
             unmountOnBlur: true,
           }}
-          // listeners={() => ({
-          //   tabPress: () => {
-          //     void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-          //   },
-          // })}
         />
       </AppStack.Navigator>
     </SafeAreaView>

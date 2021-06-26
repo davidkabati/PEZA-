@@ -7,19 +7,16 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
-import firebase from 'firebase';
 import Toast from 'react-native-toast-message';
-// import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '../../components';
 import ProfileItem from '../../components/ProfileItem';
 import { ProfileNavParamList } from '../../types/navigation.types';
-// import ProfileSvg from '../agentDetail/profileSvg';
 import firebaseAuthApi from '../../firebase/auth';
 import { CommonActions } from '@react-navigation/routers';
-import authApi from '../../firebase/auth';
 import Logo from '../../svg/logo';
 import store from '../../utils/storage';
+import firebase from 'firebase';
 
 const styles = StyleSheet.create({
   container: {
@@ -104,24 +101,11 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
     <Box style={styles.container}>
       {userDetails.id ? (
         <>
-          <Logo width={127.2} height={74} />
-          {/* <Box
-            style={[
-              styles.profileImg,
-              { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
-            ]}>
-            {user.photoURL && (
-              <Image
-                {...{ uri: user.photoURL }}
-                tint="light"
-                transitionDuration={300}
-                style={{ width: wp(30), height: wp(30), borderRadius: wp(15) }}
-              />
-            )}
-          </Box>
-          <Box style={styles.svg}>
-            <ProfileSvg />
-          </Box> */}
+          {/* <Logo width={127.2} height={74} /> */}
+
+          <Text variant="b1" color="dark" mt="xl">
+            Logged in as:
+          </Text>
 
           <Text variant="h1M" color="dark" mt="xl">
             {userDetails.full_name}

@@ -24,6 +24,7 @@ import { addFavorite } from '../../redux/actions';
 import favoritesApi from '../../firebase/favorite';
 import { useQuery } from 'react-query';
 import store from '../../utils/storage';
+import { numberWithCommas } from '../../utils/numberWithComma';
 
 const styles = StyleSheet.create({
   container: {
@@ -139,7 +140,7 @@ const listingDetail = ({
   const WHATSAPP_MESSAGE = encodeURI(
     `Hello from Peza, I would like to know more about your listing ${
       type === 'for_rent' ? 'for rent' : 'for sale'
-    } at ${address} going for ZK ${Intl.NumberFormat('en-US').format(price)}.`,
+    } at ${address} going for ${`ZK ${numberWithCommas(price.toString())}`}.`,
   );
 
   const [user, setUser] = useState<any>({});
@@ -340,7 +341,7 @@ const listingDetail = ({
               Asking
             </Text>
             <Text variant="h2B" color="primary" mt="l">
-              {`ZK ${Intl.NumberFormat('en-US').format(price)}`}
+              {`ZK ${numberWithCommas(price.toString())}`}
             </Text>
           </Box>
 

@@ -133,7 +133,7 @@ const Multiselect = ({ items, setSelection, multiple }: Props) => {
               backgroundColor: returnBgColor(a.value),
             },
           ]}>
-          <Text variant="b1" style={{ color: returnTextColor(a.value) }}>
+          <Text variant="b1" textAlign="center" style={{ color: returnTextColor(a.value) }}>
             {a.value}
           </Text>
         </TouchableOpacity>

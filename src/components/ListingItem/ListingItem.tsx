@@ -2,27 +2,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { AntDesign as AIcon } from '@expo/vector-icons';
 import { Image } from 'react-native-expo-image-cache';
-import { useDispatch } from 'react-redux';
-import firebase from 'firebase';
-import Toast from 'react-native-toast-message';
-import favoritesApi from '../../firebase/favorite';
+import { numberWithCommas } from '../../utils/numberWithComma';
 
 import { Box, theme, Text } from '..';
-import IListing, { IListingFavorite } from '../../types/listing.type';
-import { Area, Baths, Rooms } from '../../svg/listingsIcon';
-import { removeFavorite, addFavorite } from '../../redux/actions';
+import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
     height: hp(35),
     marginBottom: hp(5),
   },
@@ -71,93 +64,12 @@ const styles = StyleSheet.create({
 
 interface Props {
   listing: IListing;
+  width?: number;
   onPress: () => void;
 }
-const Listing = ({ listing, onPress }: Props) => {
-  const user = firebase.auth().currentUser;
-
-  const [isFavorite, setIsFavorite] = useState<boolean>(false);
-
-  const [favorites, setFavorites] = useState<any[]>([]);
-
-  const dispatch = useDispatch();
-
-  const removeFromFavorite = (favorite: IListingFavorite) => {
-    dispatch(removeFavorite(favorite));
-  };
-
-  const addToFavorite = (favorite: IListingFavorite) => {
-    dispatch(addFavorite(favorite));
-  };
-
-  const handleAddFavorite = (listingToAdd: any) => {
-    try {
-      const newFav = {
-        ...listingToAdd,
-      };
-
-      delete newFav.id;
-
-      const fav: IListingFavorite = {
-        ...newFav,
-        user_id: user ? user.uid : '',
-        product_id: listing.id,
-      };
-
-      console.log(fav);
-
-      if (isFavorite) {
-        const fav = favorites.filter((f: IListingFavorite) => f.product_id == listing.id);
-        removeFromFavorite(fav[0]);
-        Toast.show({
-          type: 'success',
-          position: 'top',
-          visibilityTime: 2000,
-          autoHide: true,
-          text1: 'Favorites',
-          text2: 'Successfully removed from favorites.',
-        });
-      } else {
-        addToFavorite(fav);
-        Toast.show({
-          type: 'success',
-          position: 'top',
-          visibilityTime: 2000,
-          autoHide: true,
-          text1: 'Favorites',
-          text2: 'Successfully added to favorites.',
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      Toast.show({
-        type: 'error',
-        position: 'top',
-        visibilityTime: 2000,
-        autoHide: true,
-        text1: 'Favorites',
-        text2: 'Error handling favorite.',
-      });
-    }
-  };
-
-  const loadFavs = async () => {
-    const favs = await favoritesApi.getUserFavorites(user ? user?.uid : '');
-    setFavorites(favs);
-  };
-
-  const isFav = () => {
-    const isFav = favorites.some((f: IListingFavorite) => f.product_id === listing.id);
-    isFav && setIsFavorite(true);
-  };
-
-  // useEffect(() => {
-  //   void loadFavs();
-  //   isFav();
-  // }, [favorites]);
-
+const Listing = ({ listing, onPress, width }: Props) => {
   return (
-    <Box style={styles.container}>
+    <Box style={[styles.container, { width: width ? width : '100%' }]}>
       <Box>
         <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
           <Image
@@ -167,15 +79,6 @@ const Listing = ({ listing, onPress }: Props) => {
             transitionDuration={300}
           />
         </TouchableOpacity>
-        {/* {user && (
-          <TouchableOpacity onPress={() => handleAddFavorite(listing)} style={styles.favButton}>
-            {isFavorite ? (
-              <AIcon name="heart" color={theme.colors.red} size={24} />
-            ) : (
-              <AIcon name="hearto" color={theme.colors.white} size={24} />
-            )}
-          </TouchableOpacity>
-        )} */}
         <Box
           style={[
             styles.listingType,
@@ -198,8 +101,8 @@ const Listing = ({ listing, onPress }: Props) => {
           </Text>
         </Box>
         <Box style={styles.priceContainer}>
-          <Text variant="b1" color="white">{`ZK ${Intl.NumberFormat('en-US').format(
-            listing.price,
+          <Text variant="b1" color="white">{`ZK ${numberWithCommas(
+            listing.price.toString(),
           )}`}</Text>
         </Box>
       </Box>
@@ -216,10 +119,6 @@ const Listing = ({ listing, onPress }: Props) => {
         <Text variant="b1" color="text" mr="l">
           {`bathroom${listing.rooms === '1' ? '' : 's'}`}
         </Text>
-        {/* <Area />
-        <Text variant="b1" color="text" mr="m" ml="s">
-          {listing.area !== '' ? `${listing.area} m2` : 'n/a'}
-        </Text> */}
       </Box>
     </Box>
   );

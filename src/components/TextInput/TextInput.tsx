@@ -87,7 +87,6 @@ const TextInput = ({
           styles.input,
           {
             backgroundColor: bgColor ? bgColor : theme.colors.white,
-            paddingTop: multiline ? 20 : 0,
           },
         ]}
         underlineColorAndroid="transparent"
