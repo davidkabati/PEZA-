@@ -224,6 +224,11 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                 data={sortData.length < 1 ? listingData : sortData}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item) => item.id.toString()}
+                ListEmptyComponent={() => (
+                  <Text variant="b1B" color="primary">
+                    Sorry, error from server, reload app.
+                  </Text>
+                )}
                 renderItem={({ item }) => (
                   <AnimatePresence>
                     <View
