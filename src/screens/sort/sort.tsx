@@ -104,17 +104,26 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
   const [typeValue, setType] = useState<string>('for_sale');
+  // const [buildingType, setBuildingType] = useState<string>('Any');
 
   const [min, setMinValue] = useState<number>(0);
   const [max, setMaxValue] = useState<number>(0);
 
-  // Dropdown
+  // Dropdown Location
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<any>('Any');
   const [items, setItems] = useState([
     { label: 'All Areas', value: 'Any' },
     { label: 'Lusaka', value: 'lusaka' },
-    { label: 'Lagos', value: 'lagos' },
+  ]);
+
+  // Dropdown Building type
+  const [openBT, setOpenBT] = useState<boolean>(false);
+  const [valueBT, setValueBT] = useState<any>('Any');
+  const [itemsBT, setItemsBT] = useState([
+    { label: 'All', value: 'Any' },
+    { label: 'Stand Alone', value: 'standalone' },
+    { label: 'Semi Detached', value: 'semi-detached' },
   ]);
 
   // Sort params
@@ -124,6 +133,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
   const roomValue = rooms !== 'Any' ? rooms : '';
   const bathValue = bathrooms !== 'Any' ? bathrooms : '';
   const amenitiesValue = selectedAmenity.length > 0 ? selectedAmenity : [];
+  const buildingTypeValue = valueBT !== 'Any' ? valueBT : '';
 
   function filterArray(array: any[], filters: any) {
     const filterKeys = Object.keys(filters);
@@ -146,6 +156,9 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
     ...(amenitiesValue.length > 0 && {
       amenities: (amenities: string[]) =>
         JSON.stringify(amenities) === JSON.stringify(amenitiesValue),
+    }),
+    ...(buildingTypeValue !== '' && {
+      building_type: (building_type: string) => building_type === valueBT,
     }),
   };
 
@@ -191,7 +204,21 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             setSelected={setType}
           />
           <Box style={styles.dash} />
-          <Text variant="b1B" color="dark" mb="m">
+
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
+            Building Type
+          </Text>
+
+          <DropDownPicker
+            open={openBT}
+            items={itemsBT}
+            value={valueBT}
+            setOpen={setOpenBT}
+            setValue={setValueBT}
+            setItems={setItemsBT}
+          />
+
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
             Minimum Price
           </Text>
 
@@ -279,7 +306,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
               type="primary"
               width={theme.constants.screenWidth}
               onPress={handleSort}
-              label="Filter properties"
+              label="Search"
             />
           </Box>
         </ScrollView>

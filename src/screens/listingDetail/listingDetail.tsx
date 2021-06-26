@@ -181,14 +181,14 @@ const listingDetail = ({
         const fav = favorites.filter(
           (f: IListingFavorite) => f.product_id == route.params.listing.id,
         );
-        removeFromFavorite(fav[0]);
+        // removeFromFavorite(fav[0]);
         Toast.show({
-          type: 'success',
+          type: 'info',
           position: 'top',
           visibilityTime: 2000,
           autoHide: true,
           text1: 'Favorites',
-          text2: 'Successfully removed from favorites.',
+          text2: 'Product already in favorites',
         });
       } else {
         addToFavorite(fav);
@@ -286,7 +286,7 @@ const listingDetail = ({
           </Box>
           <Box>
             <Text variant="h3" color="dark" mb="m">
-              David Kabati
+              PEZA Sarl
             </Text>
 
             <Box style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -464,7 +464,7 @@ const listingDetail = ({
 
               <Box>
                 <Text variant="b1" color="lightGrey" textAlign="right">
-                  Partying
+                  Events
                 </Text>
                 <Text variant="h3" color="dark" mt="m" textAlign="right">
                   {party_allowed ? 'Allowed' : 'Not Allowed'}

@@ -99,7 +99,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
       <Box style={styles.lowerContainer}>
         <Box style={styles.userProfile}>
-          <Box style={styles.displayImg}>
+          {/* <Box style={styles.displayImg}>
             {user?.photoURL && (
               <Image
                 {...{ uri: user.photoURL ? user.photoURL : '' }}
@@ -112,7 +112,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
                 transitionDuration={300}
               />
             )}
-          </Box>
+          </Box> */}
           <Box>
             <Text variant="b1" color="text" mb="m">
               Welcome,
@@ -159,7 +159,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
             style={{
               paddingBottom: 100,
               width: theme.constants.screenWidth,
-              height: hp(68),
+              height: hp(75),
             }}>
             <FlatList
               data={data}

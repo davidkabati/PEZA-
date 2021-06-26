@@ -21,6 +21,7 @@ import ActivityIndicator from '../../components/ActivityIndicator';
 // import Status from '../../components/Status';
 import { Tabs } from '../../components/Tabs';
 import IListing from '../../types/listing.type';
+import Logo from '../../svg/logo';
 
 const styles = StyleSheet.create({
   container: {
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   headText: {
-    marginTop: hp(4),
+    marginTop: hp(3),
     marginBottom: hp(4),
   },
   subHeadText: {
@@ -71,22 +72,12 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     {
       id: 5,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Throw a party',
+      label: 'Throw an event',
     },
     {
       id: 6,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
       label: 'Spend a night',
-    },
-    {
-      id: 7,
-      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Stand Alone',
-    },
-    {
-      id: 8,
-      icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Semi-Detached',
     },
   ];
 
@@ -129,7 +120,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
         if (l.type === tab) return l;
       });
       SetListingData(result);
-    } else if (active.label === 'Throw a party') {
+    } else if (active.label === 'Throw an event') {
       const result = listings.filter((l) => {
         if (l.type === tab && l.party_allowed === true) return l;
       });
@@ -137,16 +128,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     } else if (active.label === 'Spend a night') {
       const result = listings.filter((l) => {
         if (l.type === tab && l.daily_lease === true) return l;
-      });
-      SetListingData(result);
-    } else if (active.label === 'Stand Alone') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.building_type === 'standalone') return l;
-      });
-      SetListingData(result);
-    } else if (active.label === 'Semi-Detached') {
-      const result = listings.filter((l) => {
-        if (l.type === tab && l.building_type === 'semi-detached') return l;
       });
       SetListingData(result);
     }
@@ -160,10 +141,12 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     <>
       <ActivityIndicator visible={isLoading} />
       <Box style={styles.container}>
-        <HomeHeader />
+        <Logo width={87.2} height={34} />
+        {/* <Box style={{ height: 20 }} />
+        <HomeHeader /> */}
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text variant="h1" color="dark" style={styles.headText}>
+          <Text variant="h1" color="primary" style={styles.headText}>
             Get your dream properties
           </Text>
 

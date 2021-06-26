@@ -167,7 +167,7 @@ const Listing = ({ listing, onPress }: Props) => {
             transitionDuration={300}
           />
         </TouchableOpacity>
-        {user && (
+        {/* {user && (
           <TouchableOpacity onPress={() => handleAddFavorite(listing)} style={styles.favButton}>
             {isFavorite ? (
               <AIcon name="heart" color={theme.colors.red} size={24} />
@@ -175,7 +175,7 @@ const Listing = ({ listing, onPress }: Props) => {
               <AIcon name="hearto" color={theme.colors.white} size={24} />
             )}
           </TouchableOpacity>
-        )}
+        )} */}
         <Box
           style={[
             styles.listingType,
@@ -208,18 +208,18 @@ const Listing = ({ listing, onPress }: Props) => {
           {listing.rooms}
         </Text>
         <Text variant="b1" color="text">
-          {`room${listing.rooms === '1' ? '' : 's'}`}
+          {`bedroom${listing.rooms === '1' ? '' : 's'}`}
         </Text>
         <Text variant="b1" color="text" mr="s" ml="l">
           {listing.baths}
         </Text>
         <Text variant="b1" color="text" mr="l">
-          {`bath${listing.rooms === '1' ? '' : 's'}`}
+          {`bathroom${listing.rooms === '1' ? '' : 's'}`}
         </Text>
-        <Area />
+        {/* <Area />
         <Text variant="b1" color="text" mr="m" ml="s">
           {listing.area !== '' ? `${listing.area} m2` : 'n/a'}
-        </Text>
+        </Text> */}
       </Box>
     </Box>
   );

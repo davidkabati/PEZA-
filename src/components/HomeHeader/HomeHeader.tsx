@@ -54,18 +54,6 @@ const HomeHeader = () => {
     <Box style={styles.container}>
       {user ? (
         <>
-          <Box
-            style={[
-              styles.imageContainer,
-              { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
-            ]}>
-            <Image
-              {...{ uri: userDetails.avatar ? userDetails.avatar : '' }}
-              tint="light"
-              transitionDuration={300}
-              style={{ width: hp(7), height: hp(7), borderRadius: hp(3.5) }}
-            />
-          </Box>
           <Box style={styles.textContainer}>
             <Text variant="b2" color="text">
               Welcome,

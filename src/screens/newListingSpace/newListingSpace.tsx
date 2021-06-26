@@ -191,7 +191,7 @@ const NewListingSpace = ({
           />
 
           <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Partying
+            Events
           </Text>
 
           <Tabs
@@ -203,7 +203,7 @@ const NewListingSpace = ({
           />
 
           <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-            Daily Lease
+            Daily Stay
           </Text>
 
           <Tabs

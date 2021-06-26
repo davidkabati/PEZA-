@@ -100,7 +100,7 @@ const NewListingInfo = ({
         visibilityTime: 4000,
         autoHide: true,
         text1: 'Listing Info',
-        text2: 'Property field is empty, add to contiue.',
+        text2: 'Property type is empty, add to contiue.',
       });
     }
     navigation.navigate('NewListingSpace', { listing: data });
@@ -130,16 +130,16 @@ const NewListingInfo = ({
         />
 
         <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-          Then, lets narrow things down
-        </Text>
-
-        <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
-
-        <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
           Now choose property type
         </Text>
 
         <Multiselect items={propertyType} setSelection={setListingType} multiple={false} />
+
+        <Text mb="xl" mt="xl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+          Then, lets narrow things down
+        </Text>
+
+        <Multiselect items={amenities} setSelection={setSelectedAmenity} multiple />
 
         <Box marginVertical="xxl">
           <Button

@@ -38,6 +38,7 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
   const loadFavorites = async () => {
     setIsLoading(true);
     const favs = await favoritesApi.getUserFavorites(user ? user.uid : '');
+    // console.log(favs);
     setFavorites(favs);
     setIsLoading(false);
   };

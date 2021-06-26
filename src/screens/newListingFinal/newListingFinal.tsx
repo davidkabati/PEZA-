@@ -45,10 +45,7 @@ const NewListingFinal = ({
   // Dropdown
   const [open, setOpen] = useState<boolean>(false);
   const [location, setLocation] = useState<any>(null);
-  const [items, setItems] = useState([
-    { label: 'Lusaka', value: 'lusaka' },
-    { label: 'Lagos', value: 'lagos' },
-  ]);
+  const [items, setItems] = useState([{ label: 'Lusaka', value: 'lusaka' }]);
 
   const [title, setTitle] = useState<string>('');
   const [price, setPrice] = useState<number>(0);
@@ -136,7 +133,7 @@ const NewListingFinal = ({
             />
 
             <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-              Set the price
+              Set the price (ZK)
             </Text>
 
             <TextInput

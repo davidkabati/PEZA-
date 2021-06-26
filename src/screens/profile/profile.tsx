@@ -9,15 +9,16 @@ import {
 import { Feather as Icon } from '@expo/vector-icons';
 import firebase from 'firebase';
 import Toast from 'react-native-toast-message';
-import { Image } from 'react-native-expo-image-cache';
+// import { Image } from 'react-native-expo-image-cache';
 
 import { Box, theme, Text } from '../../components';
 import ProfileItem from '../../components/ProfileItem';
 import { ProfileNavParamList } from '../../types/navigation.types';
-import ProfileSvg from '../agentDetail/profileSvg';
+// import ProfileSvg from '../agentDetail/profileSvg';
 import firebaseAuthApi from '../../firebase/auth';
 import { CommonActions } from '@react-navigation/routers';
 import authApi from '../../firebase/auth';
+import Logo from '../../svg/logo';
 
 const styles = StyleSheet.create({
   container: {
@@ -63,9 +64,6 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
 
   useEffect(() => {
     void fetchUserDetails();
-    return () => {
-      void fetchUserDetails();
-    };
   }, [user]);
 
   const handleAuth = async () => {
@@ -103,7 +101,8 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
     <Box style={styles.container}>
       {user ? (
         <>
-          <Box
+          <Logo width={127.2} height={74} />
+          {/* <Box
             style={[
               styles.profileImg,
               { backgroundColor: user.photoURL ? undefined : theme.colors.dark },
@@ -119,7 +118,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           </Box>
           <Box style={styles.svg}>
             <ProfileSvg />
-          </Box>
+          </Box> */}
 
           <Text variant="h1M" color="dark" mt="xl">
             {user.displayName}
@@ -138,16 +137,29 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
       )}
 
       <Box style={styles.lowerContainer}>
-        <ProfileItem
+        {/* <ProfileItem
           icon={<Icon name="user" color={theme.colors.veryLightPurple} size={24} />}
           label="My Account"
           onPress={() => navigation.navigate('EditAccount')}
-        />
+        /> */}
 
         <ProfileItem
           icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
           label="My Listings"
-          onPress={() => navigation.navigate('MyListings')}
+          onPress={() => {
+            if (user) {
+              navigation.navigate('MyListings');
+            } else {
+              Toast.show({
+                type: 'info',
+                position: 'top',
+                visibilityTime: 2000,
+                autoHide: true,
+                text1: 'Login required',
+                text2: 'Please login/sign up to access listings',
+              });
+            }
+          }}
         />
 
         <ProfileItem
