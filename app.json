@@ -2,7 +2,7 @@
   "expo": {
     "name": "peza-mobile-apps",
     "slug": "peza-mobile-apps",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#181059"
-      }
+      },
+      "package": "com.jacquesikot.pezamobileapps"
     },
     "web": {
       "favicon": "./assets/favicon.png"
