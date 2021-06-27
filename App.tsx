@@ -20,6 +20,7 @@ export default function App() {
     require('./assets/images/forgotPassword.png'),
     require('./assets/images/underConstruction.png'),
     require('./assets/icon.png'),
+    require('./assets/images/orderSuccess.png'),
   ];
 
   firebaseInit();

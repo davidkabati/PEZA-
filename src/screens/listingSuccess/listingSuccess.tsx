@@ -27,7 +27,7 @@ const ListingSuccess = ({
 
       <Box style={{ marginVertical: 40 }}>
         <Image
-          source={require('../../../assets/images/noContent.png')}
+          source={require('../../../assets/images/orderSuccess.png')}
           style={{ width: theme.constants.screenWidth, height: 300 }}
         />
       </Box>

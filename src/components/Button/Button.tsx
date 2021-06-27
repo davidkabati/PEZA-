@@ -46,7 +46,7 @@ const Button = ({ width, height, label, onPress, type, loading, borderRad, icon 
   return (
     <TouchableOpacity
       activeOpacity={0.9}
-      onPress={onPress}
+      onPress={loading ? () => true : onPress}
       style={[
         styles.container,
         {

@@ -13,6 +13,7 @@ import { Feather as Icon } from '@expo/vector-icons';
 import { StackScreenProps } from '@react-navigation/stack';
 import { useQuery } from 'react-query';
 import { View, AnimatePresence } from 'moti';
+import { useScrollToTop } from '@react-navigation/native';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -82,6 +83,9 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
   ];
 
   const scrollRef = useRef<any>();
+  const scrollToTopRef = useRef<any>();
+
+  useScrollToTop(scrollToTopRef);
 
   const [active, setActive] = useState<any>(data[0]);
   const [tab, setTab] = useState<string>('for_sale');
@@ -91,7 +95,13 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     setActive(item);
   };
 
-  const { data: listingData, isLoading } = useQuery('listings', () => listingsApi.getAllListings());
+  const { data: listingData, isLoading } = useQuery(
+    'listings',
+    () => listingsApi.getAllListings(),
+    {
+      refetchInterval: 5000,
+    },
+  );
 
   const loadData = () => {
     if (!active.label) {
@@ -154,7 +164,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
       <Box style={styles.container}>
         <Logo width={87.2} height={34} />
 
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false} ref={scrollToTopRef}>
           <Text variant="h1" color="primary" style={styles.headText}>
             Get your dream properties
           </Text>

@@ -16,7 +16,7 @@ const addListing = async (listing: any) => {
 
 const getAllListings = async () => {
   const data: any[] = [];
-  const querySnapshot = await db.collection('listing').get();
+  const querySnapshot = await db.collection('listing').where('verified', '==', true).get();
   querySnapshot.forEach((doc) => {
     data.push({
       id: doc.id,

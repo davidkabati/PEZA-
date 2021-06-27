@@ -130,6 +130,7 @@ const NewListingFinal = ({
             <TextInput
               placeholder="Type listing title here"
               onChange={(e) => setTitle(e.nativeEvent.text)}
+              autoCapitalize="words"
             />
 
             <Text mt="xxl" mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
@@ -162,6 +163,7 @@ const NewListingFinal = ({
               height={hp(15)}
               onChange={(e) => setAddress(e.nativeEvent.text)}
               multiline
+              autoCapitalize="words"
             />
 
             <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
