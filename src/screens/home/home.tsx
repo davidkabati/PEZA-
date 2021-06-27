@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -20,7 +20,6 @@ import { Listing } from '../../components/ListingItem';
 import { HomeNavParamList } from '../../types/navigation.types';
 import listingsApi from '../../firebase/listing';
 import ActivityIndicator from '../../components/ActivityIndicator';
-// import Status from '../../components/Status';
 import { Tabs } from '../../components/Tabs';
 import Logo from '../../svg/logo';
 
@@ -82,21 +81,17 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     },
   ];
 
+  const scrollRef = useRef<any>();
+
   const [active, setActive] = useState<any>(data[0]);
   const [tab, setTab] = useState<string>('for_sale');
   const [sortData, setSortData] = useState<any[]>([]);
-
-  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   const handleFilter = (item: any) => {
     setActive(item);
   };
 
-  const {
-    data: listingData,
-    error,
-    isLoading,
-  } = useQuery('listings', () => listingsApi.getAllListings());
+  const { data: listingData, isLoading } = useQuery('listings', () => listingsApi.getAllListings());
 
   const loadData = () => {
     if (!active.label) {
@@ -153,12 +148,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     }
   };
 
-  useEffect(() => {
-    setIsMounted(true);
-    isMounted && loadData();
-    return () => setIsMounted(false);
-  }, [active, tab]);
-
   return (
     <>
       <ActivityIndicator visible={isLoading} />
@@ -172,16 +161,19 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
           <FlatList
             data={data}
+            ref={scrollRef}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
+            renderItem={({ item, index }) => (
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
                   handleFilter(item);
+                  loadData();
+                  scrollRef.current.scrollToIndex({ animated: true, index: index });
                 }}
-                style={{ marginRight: 20 }}>
+                style={{ marginRight: 10 }}>
                 <HomeCard
                   width={wp(35)}
                   active={active.id === item.id ? true : false}
@@ -212,45 +204,40 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             text2="For rent"
             value2="for_rent"
             setSelected={setTab}
+            onChange={loadData}
           />
 
           <Box style={{ paddingBottom: 100, marginTop: hp(4) }}>
-            {error ? (
-              <Text variant="b1B" color="primary">
-                No Listings found matching your filter
-              </Text>
-            ) : (
-              <FlatList
-                data={sortData.length < 1 ? listingData : sortData}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(item) => item.id.toString()}
-                ListEmptyComponent={() => (
-                  <Text variant="b1B" color="primary">
-                    Sorry, error from server, reload app.
-                  </Text>
-                )}
-                renderItem={({ item }) => (
-                  <AnimatePresence>
-                    <View
-                      from={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ type: 'timing', duration: 750 }}
-                      exit={{
-                        opacity: 0,
-                      }}>
-                      <Listing
-                        listing={item}
-                        onPress={() =>
-                          navigation.navigate('ListingDetail', {
-                            listing: item,
-                          })
-                        }
-                      />
-                    </View>
-                  </AnimatePresence>
-                )}
-              />
-            )}
+            <FlatList
+              data={sortData.length < 1 ? listingData : sortData}
+              showsVerticalScrollIndicator={false}
+              keyExtractor={(item) => item.id.toString()}
+              ListEmptyComponent={() => (
+                <Text variant="b1B" color="primary">
+                  Sorry, no data available. Try again later...
+                </Text>
+              )}
+              renderItem={({ item }) => (
+                <AnimatePresence>
+                  <View
+                    from={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: 'timing', duration: 750 }}
+                    exit={{
+                      opacity: 0,
+                    }}>
+                    <Listing
+                      listing={item}
+                      onPress={() =>
+                        navigation.navigate('ListingDetail', {
+                          listing: item,
+                        })
+                      }
+                    />
+                  </View>
+                </AnimatePresence>
+              )}
+            />
           </Box>
         </ScrollView>
       </Box>

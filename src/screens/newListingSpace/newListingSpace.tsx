@@ -11,7 +11,7 @@ import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
-import Toast from 'react-native-toast-message';
+// import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
 import { StackHeader } from '../../components/StackHeader';
@@ -105,7 +105,7 @@ const NewListingSpace = ({
           contentContainerStyle={{ alignItems: 'center' }}
           showsVerticalScrollIndicator={false}>
           <Text variant="h1Max" color="dark" style={styles.headerText}>
-            How many guests can stay?
+            Some more details...
           </Text>
 
           <Text mb="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
