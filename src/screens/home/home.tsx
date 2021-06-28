@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 import {
   heightPercentageToDP as hp,
@@ -28,11 +28,11 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.secondary,
     paddingHorizontal: theme.constants.screenPadding / 2,
-    paddingTop: theme.constants.screenPadding,
+    paddingTop: theme.constants.screenPadding - 20,
     flex: 1,
   },
   headText: {
-    marginTop: hp(3),
+    marginTop: hp(1),
     marginBottom: hp(4),
   },
   subHeadText: {
@@ -87,21 +87,17 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
   useScrollToTop(scrollToTopRef);
 
+  const { data: listingData, isLoading } = useQuery('listings', () => listingsApi.getAllListings());
+
   const [active, setActive] = useState<any>(data[0]);
   const [tab, setTab] = useState<string>('for_sale');
   const [sortData, setSortData] = useState<any[]>([]);
 
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+
   const handleFilter = (item: any) => {
     setActive(item);
   };
-
-  const { data: listingData, isLoading } = useQuery(
-    'listings',
-    () => listingsApi.getAllListings(),
-    {
-      refetchInterval: 5000,
-    },
-  );
 
   const loadData = () => {
     if (!active.label) {
@@ -158,11 +154,19 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     }
   };
 
+  useEffect(() => {
+    setIsMounted(true);
+    isMounted && loadData();
+    return () => setIsMounted(false);
+  }, [active, tab, listingData]);
+
   return (
     <>
       <ActivityIndicator visible={isLoading} />
       <Box style={styles.container}>
-        <Logo width={87.2} height={34} />
+        <Logo width={107.2} height={54} />
+
+        <Box style={{ height: 20 }} />
 
         <ScrollView showsVerticalScrollIndicator={false} ref={scrollToTopRef}>
           <Text variant="h1" color="primary" style={styles.headText}>
@@ -180,7 +184,6 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
                 activeOpacity={0.8}
                 onPress={() => {
                   handleFilter(item);
-                  loadData();
                   scrollRef.current.scrollToIndex({ animated: true, index: index });
                 }}
                 style={{ marginRight: 10 }}>
@@ -214,18 +217,27 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
             text2="For rent"
             value2="for_rent"
             setSelected={setTab}
-            onChange={loadData}
           />
 
           <Box style={{ paddingBottom: 100, marginTop: hp(4) }}>
             <FlatList
-              data={sortData.length < 1 ? listingData : sortData}
+              data={sortData}
               showsVerticalScrollIndicator={false}
               keyExtractor={(item) => item.id.toString()}
               ListEmptyComponent={() => (
-                <Text variant="b1B" color="primary">
-                  Sorry, no data available. Try again later...
-                </Text>
+                <AnimatePresence>
+                  <View
+                    from={{ opacity: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: 'timing', duration: 750 }}
+                    exit={{
+                      opacity: 0,
+                    }}>
+                    <Text variant="b1B" color="primary">
+                      Sorry, no listing available for this category yet
+                    </Text>
+                  </View>
+                </AnimatePresence>
               )}
               renderItem={({ item }) => (
                 <AnimatePresence>

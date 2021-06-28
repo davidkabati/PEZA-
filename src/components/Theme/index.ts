@@ -11,7 +11,7 @@ const theme = createTheme({
     dark: '#1A1A1A',
     text: '#757575',
     veryLightPurple: '#ABA3CF',
-    purple: '#8645FF',
+    purple: '#7a33ff',
     yellow: '#FDCA00',
     red: '#F44336',
     green: '#4CD964',
