@@ -13,6 +13,7 @@ import { Image } from 'react-native-expo-image-cache';
 import { Box, theme, Text } from '..';
 import IListing from '../../types/listing.type';
 import { numberWithCommas } from '../../utils/numberWithComma';
+import capitalize from '../../utils/capitalize';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,9 +47,10 @@ interface Props {
   bgColor: 'white' | 'secondary';
   onPressButton: () => void;
   onPress?: () => void;
+  showVerified?: boolean;
 }
 
-const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
+const FavoriteItem = ({ listing, bgColor, onPressButton, onPress, showVerified }: Props) => {
   return (
     <Box style={[styles.container, { backgroundColor: theme.colors[bgColor] }]}>
       <Image {...{ uri: listing.images[0] }} style={{ width: 90, height: 70, borderRadius: 16 }} />
@@ -64,9 +66,11 @@ const FavoriteItem = ({ listing, bgColor, onPressButton, onPress }: Props) => {
         <Text numberOfLines={1} variant="b1B" color="dark">{`ZK ${numberWithCommas(
           listing.price.toString(),
         )}`}</Text>
-        <Text variant="b1" color={listing.verified ? 'green' : 'red'}>
-          {listing.verified ? 'Verified' : 'Not Verified'}
-        </Text>
+        {showVerified && (
+          <Text variant="b1" color={listing.verified === 'verified' ? 'green' : 'red'}>
+            {capitalize(listing.verified)}
+          </Text>
+        )}
       </TouchableOpacity>
 
       <Box style={{ flex: 1 }} />

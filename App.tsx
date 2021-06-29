@@ -21,6 +21,7 @@ export default function App() {
     require('./assets/images/underConstruction.png'),
     require('./assets/icon.png'),
     require('./assets/images/orderSuccess.png'),
+    require('./assets/images/noLogin.png'),
   ];
 
   firebaseInit();

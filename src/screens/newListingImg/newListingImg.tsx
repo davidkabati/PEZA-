@@ -9,8 +9,6 @@ import {
 } from 'react-native-responsive-screen';
 import { Feather as Icon } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import firebase from 'firebase';
-import * as ImageManipulator from 'expo-image-manipulator';
 import Toast from 'react-native-toast-message';
 
 import { Box, theme, Text } from '../../components';
@@ -18,7 +16,6 @@ import { StackHeader } from '../../components/StackHeader';
 import { ProfileNavParamList } from '../../types/navigation.types';
 import { Button } from '../../components/Button';
 import ImageInputList from '../../components/ImageInputList';
-import IListing from '../../types/listing.type';
 
 const styles = StyleSheet.create({
   container: {
@@ -58,16 +55,12 @@ const NewListingImg = ({
 
   const [imgUris, setImgUris] = useState<string[]>([]);
 
-  const [avatar, setAvatar] = useState<string[]>([]);
-
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const data: Partial<IListing> = {
+  const data: any = {
     ...listing,
-    images: avatar,
+    images: imgUris,
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
     if (imgUris.length < 5) {
       return Toast.show({
         type: 'error',
@@ -78,49 +71,8 @@ const NewListingImg = ({
         text2: 'Add at least 5 images to continue.',
       });
     } else {
-      setLoading(true);
-      let i;
-      for (i = 0; i < imgUris.length; i++) {
-        await imageUpload(imgUris[i]);
-      }
-
-      setTimeout(() => {
-        setLoading(false);
-        navigation.navigate('NewListingFinal', { listing: data });
-      }, 5000);
+      navigation.navigate('NewListingFinal', { listing: data });
     }
-  };
-  const imageUpload = async (uri: string) => {
-    const userData = firebase.auth().currentUser;
-
-    const actions = [];
-
-    actions.push({ resize: { width: 300 } });
-
-    const manipulatorResult = await ImageManipulator.manipulateAsync(uri, actions, {
-      compress: 0.8,
-    });
-
-    const localUri = await fetch(manipulatorResult.uri);
-
-    const localBlob = await localUri.blob();
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    const filename = userData && userData.uid + new Date().getTime();
-
-    const storageRef = firebase
-      .storage()
-      .ref()
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-      .child('avatar/' + filename);
-
-    const putTask = storageRef.put(localBlob);
-
-    // eslint-disable-next-line @typescript-eslint/await-thenable
-    putTask.on('state_changed', () => {
-      void putTask.snapshot.ref.getDownloadURL().then((URL) => {
-        avatar.push(URL);
-      });
-    });
   };
 
   const onAddImage = (uri: string | null) => {
@@ -186,8 +138,7 @@ const NewListingImg = ({
           type="purple"
           width={theme.constants.screenWidth}
           onPress={handleNext}
-          label={'Next Step'}
-          loading={loading}
+          label={'Final Step'}
         />
       </Box>
     </Box>

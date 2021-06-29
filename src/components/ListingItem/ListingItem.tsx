@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   priceContainer: {
-    backgroundColor: theme.colors.green,
+    backgroundColor: theme.colors.primary,
     borderRadius: wp(3),
     height: hp(4.5),
     padding: wp(2),
@@ -83,7 +83,7 @@ const Listing = ({ listing, onPress, width }: Props) => {
           style={[
             styles.listingType,
             {
-              backgroundColor: theme.colors.green,
+              backgroundColor: theme.colors.primary,
             },
           ]}>
           <Text variant="b1" color="white">

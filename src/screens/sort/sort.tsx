@@ -95,6 +95,34 @@ export const amenities = [
     value: 'CCTV',
   },
 ];
+const propertyType = [
+  {
+    id: 1,
+    value: 'House',
+  },
+
+  {
+    id: 3,
+    value: 'Appartment',
+  },
+  {
+    id: 4,
+    value: 'Lots/Land',
+  },
+
+  {
+    id: 6,
+    value: 'Condos',
+  },
+  {
+    id: 7,
+    value: 'Office Space',
+  },
+  {
+    id: 8,
+    value: 'Event Space',
+  },
+];
 
 // interface Props {}
 const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
@@ -104,7 +132,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedAmenity, setSelectedAmenity] = useState<string[]>([]);
   const [typeValue, setType] = useState<string>('for_sale');
-  // const [buildingType, setBuildingType] = useState<string>('Any');
+  const [selectedType, setSelectedType] = useState<string>('');
 
   const [min, setMinValue] = useState<number>(0);
   const [max, setMaxValue] = useState<number>(0);
@@ -160,6 +188,9 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
     ...(buildingTypeValue !== '' && {
       building_type: (building_type: string) => building_type === valueBT,
     }),
+    ...(selectedType !== '' && {
+      property_type: (property_type: string) => property_type === selectedType,
+    }),
   };
 
   const handleSort = () => {
@@ -206,7 +237,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           <Box style={styles.dash} />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
-            Building Type
+            House Type
           </Text>
 
           <DropDownPicker
@@ -219,6 +250,12 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             style={{ borderColor: theme.colors.white }}
             textStyle={{ color: theme.colors.text }}
           />
+
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
+            Property Type
+          </Text>
+
+          <Multiselect items={propertyType} setSelection={setSelectedType} multiple={false} />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
             Minimum Price
@@ -240,7 +277,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             keyboardType="number-pad"
           />
 
-          <Text variant="h2" color="dark" mt="xxl" mb="l">
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
             Location
           </Text>
 
@@ -259,7 +296,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             The average price in this area is ZK 4000
           </Text> */}
 
-          <Text variant="h2" color="dark" mt="xxl">
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
             Bedrooms
           </Text>
 
@@ -279,7 +316,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             ))}
           </Box>
 
-          <Text variant="h2" color="dark" mt="xxl">
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
             Bathrooms
           </Text>
 
@@ -299,7 +336,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
             ))}
           </Box>
 
-          <Text variant="h2" color="dark" mt="xxl" mb="m">
+          <Text variant="b1B" color="dark" mb="m" mt="xl">
             Amenities
           </Text>
 

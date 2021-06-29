@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Feather as Icon } from '@expo/vector-icons';
 
 import { theme } from '../../components';
 import { AppNavParamList } from '../../types/navigation.types';
@@ -29,7 +30,7 @@ const AppNav = () => {
           component={HomeNav}
           options={{
             tabBarIcon: ({ color }) => {
-              return <HomeIcon color={color} />;
+              return <Icon name="home" size={24} color={color} />;
             },
           }}
         />
@@ -38,7 +39,7 @@ const AppNav = () => {
           component={SortNav}
           options={{
             tabBarIcon: ({ color }) => {
-              return <CategoryIcon color={color} />;
+              return <Icon name="search" size={24} color={color} />;
             },
           }}
         />
@@ -47,7 +48,7 @@ const AppNav = () => {
           component={FavoritesNav}
           options={{
             tabBarIcon: ({ color }) => {
-              return <FavoriteIcon color={color} />;
+              return <Icon name="heart" size={24} color={color} />;
             },
             unmountOnBlur: true,
           }}
@@ -57,7 +58,7 @@ const AppNav = () => {
           component={ProfileNav}
           options={{
             tabBarIcon: ({ color }) => {
-              return <ProfileIcon color={color} />;
+              return <Icon name="user" size={24} color={color} />;
             },
             unmountOnBlur: true,
           }}

@@ -26,7 +26,7 @@ const About = ({ navigation }: StackScreenProps<ProfileNavParamList, 'About'>) =
       <StackHeader onPressBack={() => navigation.goBack()} padding />
       <Logo width={127.2} height={74} />
 
-      <Box style={styles.textContainer}>
+      <Box style={[styles.textContainer, { marginTop: 15 }]}>
         <Text variant="h2" color="dark" style={{ lineHeight: 40, textAlign: 'justify' }}>
           Peza is an online property portal that provides the fastest and most convinient means to
           access properties of different types, sizes, functions, costs, locations and more.
@@ -35,8 +35,8 @@ const About = ({ navigation }: StackScreenProps<ProfileNavParamList, 'About'>) =
 
       <Box mt="xxl" style={styles.textContainer}>
         <Text variant="h2" color="dark" style={{ lineHeight: 40, textAlign: 'justify' }}>
-          We do more thatn that. With Peza, any home owner can post their home availablity and get
-          PEZAs qualified agents to manage customer requests, viewing, scheduling and other tidoius
+          We do more than that. With Peza, any home owner can publish their home availablity and get
+          PEZAs qualified agents to manage customer requests, viewing, scheduling and other tedious
           tasks
         </Text>
       </Box>

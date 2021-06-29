@@ -1,6 +1,10 @@
 export default interface IListing {
   id: string;
   agent_id: string;
+  agent_name: string;
+  agent_email: string;
+  agent_phone: string;
+  agent_code: string;
   title: string;
   description: string;
   address_area: string;
@@ -16,7 +20,7 @@ export default interface IListing {
   images: string[];
   amenities: string[];
   property_type: string;
-  verified: boolean;
+  verified: string;
   created_at: string;
   furnish: boolean;
   floors: string;
@@ -24,6 +28,7 @@ export default interface IListing {
   daily_lease: boolean;
   party_allowed: boolean;
   building_type: string;
+  owner: string;
 }
 
 export type IAddListing = Omit<IListing, 'id'>;

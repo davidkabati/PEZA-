@@ -36,7 +36,6 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
   const loadFavorites = async () => {
     setIsLoading(true);
     const favs = await favoritesApi.getUserFavorites(user ? user.uid : '');
-    // console.log(favs);
     setFavorites(favs);
     setIsLoading(false);
   };
@@ -68,17 +67,22 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
 
   return (
     <Box style={styles.container}>
-      <ActivityIndicator visible={isLoading} />
+      <ActivityIndicator visible={isLoading} opacity={1} />
       <Text variant="h1" mb="xl" ml="xl" style={{ alignSelf: 'flex-start' }}>
         Favorites
       </Text>
-      {favorites.length < 1 || !user?.uid ? (
-        <Status
-          image={require('../../../assets/images/noContent.png')}
-          text="Sorry, you have no favorites"
-          onPress={false}
-          bgColor="white"
-        />
+      {!user?.uid ? (
+        <View
+          from={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ type: 'timing', duration: 750 }}>
+          <Status
+            image={require('../../../assets/images/noLogin.png')}
+            text="Login to add favorites"
+            onPress={false}
+            bgColor="white"
+          />
+        </View>
       ) : (
         <Box
           mt="xl"
@@ -91,6 +95,20 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
             data={favorites}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item) => item.id.toString()}
+            ListEmptyComponent={() => (
+              <View
+                from={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ type: 'timing', duration: 750 }}
+                style={{ alignItems: 'center' }}>
+                <Status
+                  image={require('../../../assets/images/noContent.png')}
+                  text="Sorry, you have no favorites"
+                  onPress={false}
+                  bgColor="white"
+                />
+              </View>
+            )}
             renderItem={({ item }) => (
               <View
                 from={{ opacity: 0, scale: 0.5 }}

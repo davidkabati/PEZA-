@@ -101,19 +101,23 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
     <Box style={styles.container}>
       {userDetails.id ? (
         <>
-          {/* <Logo width={127.2} height={74} /> */}
+          <Box style={{ alignItems: 'center' }}>
+            <Text variant="b1" color="dark" mt="xl">
+              Logged in as:
+            </Text>
 
-          <Text variant="b1" color="dark" mt="xl">
-            Logged in as:
-          </Text>
+            <Text variant="h1M" color="dark" mt="xl">
+              {userDetails.full_name}
+            </Text>
 
-          <Text variant="h1M" color="dark" mt="xl">
-            {userDetails.full_name}
-          </Text>
+            <Text variant="b2" color="lightGrey" mt="m">
+              {userDetails.email}
+            </Text>
 
-          <Text variant="b2" color="lightGrey" mt="m">
-            {userDetails.email}
-          </Text>
+            <Text variant="b2" color="lightGrey" mt="m">
+              {userDetails.phoneNumber}
+            </Text>
+          </Box>
         </>
       ) : (
         <Box style={styles.noLoginContainer}>
@@ -122,11 +126,13 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
       )}
 
       <Box style={styles.lowerContainer}>
-        {/* <ProfileItem
-          icon={<Icon name="user" color={theme.colors.veryLightPurple} size={24} />}
-          label="My Account"
-          onPress={() => navigation.navigate('EditAccount')}
-        /> */}
+        {userDetails.id && (
+          <ProfileItem
+            icon={<Icon name="user" color={theme.colors.veryLightPurple} size={24} />}
+            label="My Account"
+            onPress={() => navigation.navigate('EditAccount')}
+          />
+        )}
 
         <ProfileItem
           icon={<Icon name="home" color={theme.colors.veryLightPurple} size={24} />}
@@ -154,6 +160,12 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
         />
 
         <ProfileItem
+          icon={<Icon name="book" color={theme.colors.veryLightPurple} size={24} />}
+          label="Terms & Conditions"
+          onPress={() => navigation.navigate('Terms')}
+        />
+
+        <ProfileItem
           icon={
             <Icon
               name={userDetails.id ? 'log-out' : 'log-in'}
@@ -164,6 +176,10 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           label={userDetails.id ? 'Logout' : 'Login/Register'}
           onPress={handleAuth}
         />
+
+        <Text variant="b1" color="dark" marginVertical="xl">
+          Version: 1.1.0
+        </Text>
       </Box>
     </Box>
   );

@@ -27,11 +27,7 @@ const Status = ({ onPress, image, text, bgColor }: Props) => {
         <Image source={image} style={{ width: theme.constants.screenWidth, height: 300 }} />
       </Box>
 
-      <Text
-        marginVertical="xxl"
-        variant="h3"
-        color="text"
-        style={{ textAlign: 'center', lineHeight: 30 }}>
+      <Text variant="h2B" color="dark" style={{ textAlign: 'center', lineHeight: 30 }}>
         {text}
       </Text>
 

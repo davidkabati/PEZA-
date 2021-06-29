@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
@@ -14,6 +15,7 @@ import {
 import * as Linking from 'expo-linking';
 import { useDispatch } from 'react-redux';
 import Toast from 'react-native-toast-message';
+import * as Haptics from 'expo-haptics';
 
 import { Box, theme, Text } from '../../components';
 import { ListingImgSlider } from '../../components/ListingImgSlider';
@@ -25,6 +27,7 @@ import favoritesApi from '../../firebase/favorite';
 import { useQuery } from 'react-query';
 import store from '../../utils/storage';
 import { numberWithCommas } from '../../utils/numberWithComma';
+import capitalize from '../../utils/capitalize';
 
 const styles = StyleSheet.create({
   container: {
@@ -159,6 +162,7 @@ const listingDetail = ({
   };
 
   const handleFavorite = (listingToAdd: any) => {
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!user.id)
       return Toast.show({
         text1: 'Login Required',
@@ -338,7 +342,7 @@ const listingDetail = ({
         <Box style={styles.propertyDetail}>
           <Box>
             <Text variant="h2B" color="dark">
-              Asking
+              Price
             </Text>
             <Text variant="h2B" color="primary" mt="l">
               {`ZK ${numberWithCommas(price.toString())}`}
@@ -445,7 +449,7 @@ const listingDetail = ({
                   Area
                 </Text>
                 <Text variant="h3" color="dark" mt="m">
-                  {address_area}
+                  {capitalize(address_area)}
                 </Text>
               </Box>
 

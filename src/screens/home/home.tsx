@@ -3,8 +3,8 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import React, { useState, useRef, useEffect } from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { StyleSheet, TouchableOpacity, ScrollView, FlatList, RefreshControl } from 'react-native';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
@@ -14,6 +14,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { useQuery } from 'react-query';
 import { View, AnimatePresence } from 'moti';
 import { useScrollToTop } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 
 import { Box, theme, Text } from '../../components';
 import { HomeCard } from '../../components/HomeCard';
@@ -49,6 +50,8 @@ const styles = StyleSheet.create({
 const ICON_COLOR = theme.colors.yellow;
 
 const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+
   const data = [
     {
       id: 1,
@@ -87,7 +90,11 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
   useScrollToTop(scrollToTopRef);
 
-  const { data: listingData, isLoading } = useQuery('listings', () => listingsApi.getAllListings());
+  const {
+    data: listingData,
+    isLoading,
+    refetch,
+  } = useQuery('listings', () => listingsApi.getAllListings());
 
   const [active, setActive] = useState<any>(data[0]);
   const [tab, setTab] = useState<string>('for_sale');
@@ -154,6 +161,12 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     }
   };
 
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  }, []);
+
   useEffect(() => {
     setIsMounted(true);
     isMounted && loadData();
@@ -168,7 +181,10 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
 
         <Box style={{ height: 20 }} />
 
-        <ScrollView showsVerticalScrollIndicator={false} ref={scrollToTopRef}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          ref={scrollToTopRef}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Text variant="h1" color="primary" style={styles.headText}>
             Get your dream properties
           </Text>
@@ -183,6 +199,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
+                  void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   handleFilter(item);
                   scrollRef.current.scrollToIndex({ animated: true, index: index });
                 }}

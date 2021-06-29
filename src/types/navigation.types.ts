@@ -31,13 +31,14 @@ export type ProfileNavParamList = {
   ManageListings: undefined;
   NewListingInfo: undefined;
   NewListingSpace: { listing: Partial<IListing> };
-  NewListingImg: { listing: Partial<IListing> };
-  NewListingFinal: { listing: Partial<IListing> };
+  NewListingImg: { listing: any };
+  NewListingFinal: { listing: any };
   ListingSuccess: undefined;
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
   About: undefined;
+  Terms: undefined;
 };
 
 export type FavoritesNavParamList = {

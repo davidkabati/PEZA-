@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
 const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyListings'>) => {
   const [user, setUser] = useState<any>({});
 
+  const [deleteLoading, setDeleteLoading] = useState<boolean>(false);
+
   const getUser = async () => {
     const user = await store.getData('user');
     if (user) {
@@ -75,6 +77,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
     () => listingsApi.getUserListings(user.id),
     {
       enabled: !!user.id,
+      refetchInterval: 5000,
     },
   );
 
@@ -88,8 +91,10 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
         text: 'Yes',
         style: 'destructive',
         onPress: async () => {
+          setDeleteLoading(true);
+          await listingsApi.deleteUserListing(user ? user?.id : '', listing_id);
+          setDeleteLoading(false);
           navigation.navigate('Profile');
-          await listingsApi.deleteUserListing(user ? user?.uid : '', listing_id);
           Toast.show({
             type: 'success',
             position: 'top',
@@ -109,11 +114,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
   return (
     <Box style={styles.container}>
-      <StackHeader
-        onPressBack={() => navigation.goBack()}
-        bgColor="primary"
-        title="Listing Product"
-      />
+      <StackHeader onPressBack={() => navigation.goBack()} bgColor="primary" title="Listings" />
 
       <Box style={styles.lowerContainer}>
         <Box style={styles.userProfile}>
@@ -135,7 +136,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
           )}
         </Box>
 
-        {isLoading ? (
+        {isLoading || deleteLoading ? (
           <Box style={{ marginTop: hp(30) }}>
             <ActivityIndicator />
           </Box>
@@ -185,6 +186,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
                     listing={item}
                     bgColor="secondary"
                     onPressButton={() => handleRemoveListing(item.id)}
+                    showVerified
                   />
                 </View>
               )}

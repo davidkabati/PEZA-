@@ -17,6 +17,7 @@ import firebaseAuthApi from '../../firebase/auth';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import firebase from 'firebase';
 import store from '../../utils/storage';
+import authApi from '../../firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -68,10 +69,12 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
       await firebaseAuthApi.signInUser(values.email, values.password);
       const user = firebase.auth().currentUser;
       if (user) {
+        const userDetails = await authApi.getUsersFullDetails(user.uid);
         const data = {
           id: user.uid,
           full_name: user.displayName,
           email: user.email,
+          phoneNumber: userDetails?.phone,
         };
         await store.storeData('user', JSON.stringify(data));
       }

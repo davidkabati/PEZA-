@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 import { Box, theme, Text } from '..';
 
@@ -42,6 +43,7 @@ const Tabs = ({ text1, text2, setSelected, value1, value2, onChange }: Props) =>
     <Box style={styles.container}>
       <TouchableOpacity
         onPress={() => {
+          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           setActive(value1);
           setSelected(value1);
           onChange && onChange();
@@ -56,6 +58,7 @@ const Tabs = ({ text1, text2, setSelected, value1, value2, onChange }: Props) =>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
+          void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
           setActive(value2);
           setSelected(value2);
           onChange && onChange();

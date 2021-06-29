@@ -23,7 +23,7 @@ const ListingSuccess = ({
 }: StackScreenProps<ProfileNavParamList, 'ListingSuccess'>) => {
   return (
     <Box style={styles.container}>
-      <StackHeader onPressBack={() => navigation.goBack()} title="Success Add" />
+      <StackHeader onPressBack={() => navigation.goBack()} title="Success" />
 
       <Box style={{ marginVertical: 40 }}>
         <Image

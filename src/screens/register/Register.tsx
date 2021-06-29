@@ -22,6 +22,7 @@ import ActivityIndicator from '../../components/ActivityIndicator';
 import firebaseAuthApi from '../../firebase/auth';
 import store from '../../utils/storage';
 import firebase from 'firebase';
+import authApi from '../../firebase/auth';
 
 const styles = StyleSheet.create({
   container: {
@@ -79,10 +80,12 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
       );
       const user = firebase.auth().currentUser;
       if (user) {
+        const userDetails = await authApi.getUsersFullDetails(user.uid);
         const data = {
           id: user.uid,
           full_name: user.displayName,
           email: user.email,
+          phoneNumber: userDetails?.phone,
         };
         await store.storeData('user', JSON.stringify(data));
       }
