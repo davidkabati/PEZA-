@@ -39,6 +39,11 @@ export type ProfileNavParamList = {
   ForgotPassword: undefined;
   About: undefined;
   Terms: undefined;
+  RentalUserTerms: undefined;
+  ListingsQualityPolicy: undefined;
+  GoodNeighborPolicy: undefined;
+  TermsOfUse: undefined;
+  RespectfulRentingPledge: undefined;
 };
 
 export type FavoritesNavParamList = {

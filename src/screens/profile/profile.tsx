@@ -153,11 +153,11 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
           }}
         />
 
-        <ProfileItem
+        {/* <ProfileItem
           icon={<Icon name="info" color={theme.colors.veryLightPurple} size={24} />}
           label="About"
           onPress={() => navigation.navigate('About')}
-        />
+        /> */}
 
         <ProfileItem
           icon={<Icon name="book" color={theme.colors.veryLightPurple} size={24} />}

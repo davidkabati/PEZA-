@@ -20,3 +20,8 @@ export { default as Register } from './register/Register';
 export { default as ForgotPassword } from './forgotPassword/ForgotPassword';
 export { default as About } from './about/About';
 export { default as Terms } from './t&c/Terms';
+export { default as RentalUserTerms } from './rentalUserTerms/RentalUserTerms';
+export { default as ListingsQualityPolicy } from './listingQualityPolicy/ListingQualityPolicy';
+export { default as GoodNeighborPolicy } from './goodNeighborPolicy/GoodNeighborPolicy';
+export { default as TermsOfUse } from './termsOfUse/TermsOfUse';
+export { default as RespectfulRentingPledge } from './respectfulRentingPledge/RespectfulRentingPledge';

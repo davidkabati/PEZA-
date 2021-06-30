@@ -17,6 +17,11 @@ import {
   ForgotPassword,
   About,
   Terms,
+  RentalUserTerms,
+  ListingsQualityPolicy,
+  GoodNeighborPolicy,
+  TermsOfUse,
+  RespectfulRentingPledge,
 } from '../../screens';
 
 const ProfileStack = createStackNavigator<ProfileNavParamList>();
@@ -38,6 +43,11 @@ const ProfileNav = () => {
       <ProfileStack.Screen name="ForgotPassword" component={ForgotPassword} />
       <ProfileStack.Screen name="About" component={About} />
       <ProfileStack.Screen name="Terms" component={Terms} />
+      <ProfileStack.Screen name="RentalUserTerms" component={RentalUserTerms} />
+      <ProfileStack.Screen name="ListingsQualityPolicy" component={ListingsQualityPolicy} />
+      <ProfileStack.Screen name="GoodNeighborPolicy" component={GoodNeighborPolicy} />
+      <ProfileStack.Screen name="TermsOfUse" component={TermsOfUse} />
+      <ProfileStack.Screen name="RespectfulRentingPledge" component={RespectfulRentingPledge} />
     </ProfileStack.Navigator>
   );
 };

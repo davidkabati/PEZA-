@@ -61,27 +61,27 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
     {
       id: 2,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Live on a budget',
+      label: 'Live on a Budget',
     },
     {
       id: 3,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Live in style',
+      label: 'Live in Style',
     },
     {
       id: 4,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Live in luxury',
+      label: 'Live in Luxury',
     },
     {
       id: 5,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Throw an event',
+      label: 'Throw an Event',
     },
     {
       id: 6,
       icon: <Icon name="home" color={ICON_COLOR} size={24} />,
-      label: 'Spend a night',
+      label: 'Spend a Night',
     },
   ];
 
@@ -115,7 +115,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
         });
 
       setSortData(result ? result : []);
-    } else if (active.label === 'Live on a budget') {
+    } else if (active.label === 'Live on a Budget') {
       const result =
         listingData &&
         listingData.filter((l) => {
@@ -123,14 +123,14 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
         });
 
       setSortData(result ? result : []);
-    } else if (active.label === 'Live in style') {
+    } else if (active.label === 'Live in Style') {
       const result =
         listingData &&
         listingData.filter((l) => {
           if (l.type === tab && l.price > 4000 && l.price < 10000) return l;
         });
       setSortData(result ? result : []);
-    } else if (active.label === 'Live in luxury') {
+    } else if (active.label === 'Live in Luxury') {
       const result =
         listingData &&
         listingData.filter((l) => {
@@ -144,14 +144,14 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
           if (l.type === tab) return l;
         });
       setSortData(result ? result : []);
-    } else if (active.label === 'Throw an event') {
+    } else if (active.label === 'Throw an Event') {
       const result =
         listingData &&
         listingData.filter((l) => {
           if (l.type === tab && l.party_allowed === true) return l;
         });
       setSortData(result ? result : []);
-    } else if (active.label === 'Spend a night') {
+    } else if (active.label === 'Spend a Night') {
       const result =
         listingData &&
         listingData.filter((l) => {
@@ -186,7 +186,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
           ref={scrollToTopRef}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
           <Text variant="h1" color="primary" style={styles.headText}>
-            Get your dream properties
+            Get your dream property
           </Text>
 
           <FlatList
@@ -229,9 +229,9 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
           </AnimatePresence>
 
           <Tabs
-            text1="For sale"
+            text1="For Sale"
             value1="for_sale"
-            text2="For rent"
+            text2="For Rent"
             value2="for_rent"
             setSelected={setTab}
           />
