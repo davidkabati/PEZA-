@@ -237,7 +237,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           <Box style={styles.dash} />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
-            House Type
+            Property Type
           </Text>
 
           <DropDownPicker
@@ -252,7 +252,7 @@ const Sort = ({ navigation }: StackScreenProps<SortNavParamList, 'Sort'>) => {
           />
 
           <Text variant="b1B" color="dark" mb="m" mt="xl">
-            Property Type
+            House Type
           </Text>
 
           <Multiselect items={propertyType} setSelection={setSelectedType} multiple={false} />

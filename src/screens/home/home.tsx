@@ -199,7 +199,7 @@ const home = ({ navigation }: StackScreenProps<HomeNavParamList, 'Home'>) => {
               <TouchableOpacity
                 activeOpacity={0.8}
                 onPress={() => {
-                  void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  // void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   handleFilter(item);
                   scrollRef.current.scrollToIndex({ animated: true, index: index });
                 }}
