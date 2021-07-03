@@ -108,6 +108,22 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
     ]);
   };
 
+  const handleAddListing = () => {
+    if (user.phoneNumber === '') {
+      Toast.show({
+        type: 'info',
+        position: 'top',
+        visibilityTime: 2000,
+        autoHide: true,
+        text1: 'Listings',
+        text2: 'Click me to add phone number in My Account and continue.',
+        onPress: () => navigation.navigate('EditAccount'),
+      });
+    } else {
+      navigation.navigate('NewListingInfo');
+    }
+  };
+
   useEffect(() => {
     void getUser();
   }, []);
@@ -129,7 +145,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
           {data && data.length > 0 && (
             <>
               <Box style={{ flex: 1 }} />
-              <TouchableOpacity onPress={() => navigation.navigate('NewListingInfo')}>
+              <TouchableOpacity onPress={handleAddListing}>
                 <Icon name="plus-circle" size={34} color={theme.colors.veryLightPurple} />
               </TouchableOpacity>
             </>
@@ -170,7 +186,7 @@ const MyListings = ({ navigation }: StackScreenProps<ProfileNavParamList, 'MyLis
 
                     <Button
                       type="purple"
-                      onPress={() => navigation.navigate('NewListingInfo')}
+                      onPress={handleAddListing}
                       label="Add New Listing"
                       width={theme.constants.screenWidth}
                     />

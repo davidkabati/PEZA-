@@ -75,12 +75,6 @@ const NewListingImg = ({
     }
   };
 
-  // BFAE06600A60.png
-  // 28043D69E0F0.png
-  // 1E0ABF3A94B7.png
-  // 69591ACE5630.png
-  // E8C79968955D.png
-
   const onAddImage = (uri: string | null) => {
     const newUris = [...imgUris, uri as string];
     // console.log(newUris);

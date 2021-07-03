@@ -12,6 +12,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import * as Browser from 'expo-web-browser';
 
 import { theme, Box, Text } from '../../components';
 import TextInput from '../../components/TextInput/TextInput';
@@ -23,6 +24,8 @@ import firebaseAuthApi from '../../firebase/auth';
 import store from '../../utils/storage';
 import firebase from 'firebase';
 import authApi from '../../firebase/auth';
+
+const TERMS_OF_USE_URL = 'https://pdfhost.io/v/kAexqHgPS_Peza_Terms_of_Usepdf.pdf';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,7 +46,7 @@ const styles = StyleSheet.create({
     marginVertical: hp(3),
   },
   formContainer: {
-    height: hp(40),
+    height: hp(28),
     justifyContent: 'space-between',
   },
   termsOfUseContainer: {
@@ -56,28 +59,21 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
   const [loading, setLoading] = useState<boolean>(false);
 
   const registerSchema = yup.object().shape({
-    fullName: yup.string().min(2).required(),
-    email: yup.string().email().required(),
-    phone: yup.string().min(10).required(),
-    password: yup.string().required(),
+    fullName: yup.string().min(2).required('Full name is required'),
+    email: yup.string().email().required('Email is required'),
+    password: yup.string().required('Password is required'),
   });
 
   interface RegisterProps {
     fullName: string;
     email: string;
     password: string;
-    phone: string;
   }
 
   const onSubmit = async (values: RegisterProps) => {
     try {
       setLoading(true);
-      await firebaseAuthApi.registerUser(
-        values.email,
-        values.password,
-        values.fullName,
-        values.phone,
-      );
+      await firebaseAuthApi.registerUser(values.email, values.password, values.fullName);
       const user = firebase.auth().currentUser;
       if (user) {
         const userDetails = await authApi.getUsersFullDetails(user.uid);
@@ -85,7 +81,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
           id: user.uid,
           full_name: user.displayName,
           email: user.email,
-          phoneNumber: userDetails?.phone,
+          phoneNumber: userDetails?.phone ? userDetails.phone : '',
         };
         await store.storeData('user', JSON.stringify(data));
       }
@@ -122,7 +118,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
       <ActivityIndicator visible={loading} />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Formik
-          initialValues={{ fullName: '', email: '', phone: '', password: '' }}
+          initialValues={{ fullName: '', email: '', password: '' }}
           validationSchema={registerSchema}
           onSubmit={onSubmit}>
           {({ errors, touched, handleChange, handleBlur, handleSubmit }) => (
@@ -138,7 +134,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
                   </Text>
                 </TouchableOpacity>
                 <Box style={styles.headingContainer}>
-                  <Text variant="h1Max" color="dark">
+                  <Text variant="h1Max" color="dark" mt="l">
                     Create Account
                   </Text>
                 </Box>
@@ -165,16 +161,6 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
                     autoCompleteType="email"
                   />
                   <TextInput
-                    placeholder="Phone Number"
-                    onChangeText={handleChange('phone')}
-                    onBlur={handleBlur('phone')}
-                    touched={touched.phone}
-                    error={errors.phone}
-                    keyboardType="phone-pad"
-                    autoCapitalize="none"
-                    autoCompleteType="tel"
-                  />
-                  <TextInput
                     placeholder="Password"
                     onChangeText={handleChange('password')}
                     onBlur={handleBlur('password')}
@@ -186,7 +172,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
                   />
                 </Box>
               </KeyboardAvoidingView>
-              <Box style={{ height: hp(10) }} />
+              <Box style={{ height: hp(22) }} />
               <Box mb="xxxl">
                 <Button
                   label="Complete Registeration"
@@ -202,7 +188,7 @@ const Register = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Registe
           <Text variant="b1" color="text">
             By creating an account you agree with our
           </Text>
-          <TouchableOpacity onPress={() => true}>
+          <TouchableOpacity onPress={async () => await Browser.openBrowserAsync(TERMS_OF_USE_URL)}>
             <Text mt="s" variant="b1" color="primary">
               Terms of Use and Privacy Policy
             </Text>

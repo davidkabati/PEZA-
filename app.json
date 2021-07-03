@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jacquesikot.peza-mobile-apps",
-      "buildNumber": "1.13.0"
+      "buildNumber": "1.14.0"
     },
     "android": {
       "adaptiveIcon": {

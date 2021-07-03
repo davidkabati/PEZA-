@@ -8,7 +8,7 @@ const registerUser = async (
   email: string,
   password: string,
   displayName: string,
-  phone: string,
+  phone?: string,
 ) => {
   await firebase.auth().createUserWithEmailAndPassword(email, password);
   await firebase.auth().signInWithEmailAndPassword(email, password);
@@ -21,7 +21,7 @@ const registerUser = async (
     await userRef.doc(user.uid).set({
       id: user.uid,
       email,
-      phone,
+      phone: phone ? phone : '',
       img_uri: '',
       is_premium: false,
       whatsapp_link: '',

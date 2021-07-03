@@ -74,7 +74,7 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
           id: user.uid,
           full_name: user.displayName,
           email: user.email,
-          phoneNumber: userDetails?.phone,
+          phoneNumber: userDetails?.phone ? userDetails.phone : '',
         };
         await store.storeData('user', JSON.stringify(data));
       }
@@ -159,7 +159,7 @@ const Login = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Login'>) =
                   activeOpacity={0.8}
                   onPress={() => navigation.navigate('ForgotPassword')}
                   style={styles.forgotPasswordContainer}>
-                  <Text variant="b1" color="text">
+                  <Text variant="b1" color="text" mt="m">
                     Forgot password?
                   </Text>
                 </TouchableOpacity>

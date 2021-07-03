@@ -146,7 +146,7 @@ const EditAccount = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Edit
 
                 <TextInput
                   placeholder={`Phone Number - ${
-                    userDetails.phoneNumber ? userDetails.phoneNumber : 'loading...'
+                    userDetails.phoneNumber ? userDetails.phoneNumber : 'None Available'
                   }`}
                   onChangeText={handleChange('phone')}
                   onBlur={handleBlur('phone')}
