@@ -2,7 +2,7 @@
   "expo": {
     "name": "Peza",
     "slug": "peza-mobile-apps",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -19,7 +19,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jacquesikot.peza-mobile-apps",
-      "buildNumber": "1.15.0"
+      "buildNumber": "1.16.0"
     },
     "android": {
       "adaptiveIcon": {
