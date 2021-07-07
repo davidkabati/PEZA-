@@ -87,7 +87,6 @@ const favorites = ({ navigation }: StackScreenProps<FavoritesNavParamList, 'Favo
         <Box
           mt="xl"
           style={{
-            paddingBottom: 100,
             width: theme.constants.screenWidth,
             height: hp(75),
           }}>
