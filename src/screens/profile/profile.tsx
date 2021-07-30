@@ -103,7 +103,7 @@ const Profile = ({ navigation }: StackScreenProps<ProfileNavParamList, 'Profile'
         <>
           <Box style={{ alignItems: 'center' }}>
             <Text variant="b1" color="dark" mt="xl">
-              Logged in as:
+              Logged in as
             </Text>
 
             <Text variant="h1M" color="dark" mt="xl">

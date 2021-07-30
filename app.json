@@ -10,6 +10,14 @@
       "resizeMode": "cover",
       "backgroundColor": "#181059"
     },
+    "extra": {
+      "API_KEY": "AIzaSyAqg9hS0qLUrJ-WePZV08UnEnVM_vxHLqY",
+      "AUTH_DOMAIN": "peza-mobile-app.firebaseapp.com",
+      "DATABASE_URL": "https://peza-mobile-app-default-rtdb.firebaseio.com/",
+      "PROJECT_ID": "peza-mobile-app",
+      "STORAGE_BUCKET": "peza-mobile-app.appspot.com",
+      "MESSAGING_SENDER_ID": "736624304188"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
