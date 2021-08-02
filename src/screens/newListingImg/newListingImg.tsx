@@ -61,7 +61,7 @@ const NewListingImg = ({
   };
 
   const handleNext = () => {
-    if (imgUris.length < 5) {
+    if (imgUris.length < 1) {
       return Toast.show({
         type: 'error',
         position: 'top',

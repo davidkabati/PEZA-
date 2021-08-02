@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -6,6 +7,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import DropDownPicker from 'react-native-dropdown-picker';
+
 import Toast from 'react-native-toast-message';
 import firebase from 'firebase';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -43,14 +45,75 @@ const NewListingFinal = ({
 }: StackScreenProps<ProfileNavParamList, 'NewListingImg'>) => {
   const { listing } = route.params;
 
-  const user = firebase.auth().currentUser;
+  // const user = firebase.auth().currentUser;
 
   const [userDetails, setUserDetails] = useState<any>({});
 
   // Dropdown Location
   const [open, setOpen] = useState<boolean>(false);
   const [location, setLocation] = useState<any>(null);
-  const [items, setItems] = useState([{ label: 'Lusaka', value: 'lusaka' }]);
+  const [items, setItems] = useState([
+    { label: 'Lusaka', value: 'Lusaka' },
+    { label: 'Chalala', value: 'Chalala' },
+    { label: 'Avondale', value: 'Avondale' },
+    { label: 'Bauleni', value: 'Bauleni' },
+    { label: 'Cathedrall Hill', value: 'Cathedrall Hill' },
+    { label: 'Chainda', value: 'Chainda' },
+    { label: 'Chaisa', value: 'Chaisa' },
+    { label: 'Chamba Valley', value: 'Chamba Valley' },
+    { label: 'Chandamali', value: 'Chandamali' },
+    { label: 'Chawama', value: 'Chawama' },
+    { label: 'Chelston', value: 'Chelston' },
+    { label: 'Chibolya', value: 'Chibolya' },
+    { label: 'Chilenje', value: 'Chilenje' },
+    { label: 'Chilenje South', value: 'Chilenje South' },
+    { label: 'Chipata', value: 'Chipata' },
+    { label: 'Chiwala Mambwe', value: 'Chiwala Mambwe' },
+    { label: 'Chunga', value: 'Chunga' },
+    { label: 'Desai', value: 'Desai' },
+    { label: 'Emmasdale', value: 'Emmasdale' },
+    { label: 'Frank', value: 'Frank' },
+    { label: 'George', value: 'George' },
+    { label: 'Handsworth', value: 'Handsworth' },
+    { label: 'Ibex Hill', value: 'Ibex Hill' },
+    { label: 'Chakunkula', value: 'Chakunkula' },
+    { label: 'Industrial Area', value: 'Industrial Area' },
+    { label: 'Jack', value: 'Jack' },
+    { label: 'John Howard', value: 'John Howard' },
+    { label: 'Kabanana', value: 'Kabanana' },
+    { label: 'Kabulonga', value: 'Kabulonga' },
+    { label: 'Kalikiliki', value: 'Kalikiliki' },
+    { label: 'Kalingalinga', value: 'Kalingalinga' },
+    { label: 'Kalundu', value: 'Kalundu' },
+    { label: 'Kamanga', value: 'Kamanga' },
+    { label: 'Kamwala', value: 'Kamwala' },
+    { label: 'Kamwala South', value: 'Kamwala South' },
+    { label: 'Kaunda Square', value: 'Kaunda Square' },
+    { label: 'Libala', value: 'Libala' },
+    { label: 'Lilinda', value: 'Lilinda' },
+    { label: 'Longacres', value: 'Longacres' },
+    { label: 'Luneta', value: 'Luneta' },
+    { label: 'Makeni', value: 'Makeni' },
+    { label: 'Mandevu', value: 'Mandevu' },
+    { label: 'Matero', value: 'Matero' },
+    { label: 'Msisi', value: 'Msisi' },
+    { label: 'Mulobela', value: 'Mulobela' },
+    { label: 'Mutambe', value: 'Mutambe' },
+    { label: 'Mwambula', value: 'Mwambula' },
+    { label: 'Namununga', value: 'Namununga' },
+    { label: 'New Kasama', value: 'New Kasama' },
+    { label: 'New Woodlands Extension', value: 'New Woodlands Extension' },
+    { label: 'Ngombe', value: 'Ngombe' },
+    { label: 'Northmead', value: 'Northmead' },
+    { label: 'Nyumba Yanga', value: 'Nyumba Yanga' },
+    { label: 'Olympia Extension', value: 'Olympia Extension' },
+    { label: 'Paradise', value: 'Paradise' },
+    { label: 'Rhodes Park', value: 'Rhodes Park' },
+    { label: 'Ridgeway', value: 'Ridgeway' },
+    { label: 'State Lodge', value: 'State Lodge' },
+    { label: 'Woodlands', value: 'Woodlands' },
+    { label: 'Woodlands Extension', value: 'Woodlands Extension' },
+  ]);
 
   // Dropdown Owner
   const [openO, setOpenO] = useState<boolean>(false);
@@ -83,7 +146,7 @@ const NewListingFinal = ({
     actions.push({ resize: { width: 300 } });
 
     const manipulatorResult = await ImageManipulator.manipulateAsync(uri, actions, {
-      compress: 0.8,
+      compress: 0.99,
     });
 
     const localUri = await fetch(manipulatorResult.uri);
@@ -108,10 +171,39 @@ const NewListingFinal = ({
     });
   };
 
+  const imageUpload2 = async (uri: string) => {
+    // Implement a new Blob promise with XMLHTTPRequest
+    const blob: Blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+
+    // Create a ref in Firebase (I'm using my user's ID)
+    const ref = firebase.storage().ref().child(`avatars/${Math.random()}`);
+
+    // Upload blob to Firebase
+    const snapshot = await ref.put(blob, { contentType: 'image/png' });
+
+    // Create a download URL
+    const remoteURL = await snapshot.ref.getDownloadURL();
+
+    // Return the URL
+    return remoteURL;
+  };
+
   const upload = async () => {
     let i;
     for (i = 0; i < listing.images.length; i++) {
-      await imageUpload(listing.images[i]);
+      const url = await imageUpload2(listing.images[i]);
+      avatar.push(url);
     }
   };
 
@@ -147,19 +239,21 @@ const NewListingFinal = ({
           sale_price: '',
           on_sale: false,
           agent_code: agentCode,
-          agent_id: user?.uid as string,
-          agent_name: user?.displayName,
-          agent_email: user?.email,
+          agent_id: userDetails.id,
+          agent_name: userDetails.full_name,
+          agent_email: userDetails.email,
           agent_phone: userDetails.phoneNumber,
           verified: 'not verified',
           owner: owner,
         };
 
-        setTimeout(() => {
-          void listingApi.addListing(finalListing);
-          navigation.navigate('ListingSuccess');
-          setLoading(false);
-        }, 6500);
+        // setTimeout(() => {
+
+        // }, 7500);
+
+        void listingApi.addListing(finalListing);
+        navigation.navigate('ListingSuccess');
+        setLoading(false);
       }
     } catch (error) {
       setLoading(false);
@@ -251,25 +345,6 @@ const NewListingFinal = ({
             />
 
             <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
-              Select location
-            </Text>
-
-            <Box style={{ marginVertical: 20 }}>
-              <DropDownPicker
-                min={0}
-                max={5}
-                open={open}
-                items={items}
-                value={location}
-                setOpen={setOpen}
-                setValue={setLocation}
-                setItems={setItems}
-                style={{ borderColor: theme.colors.white }}
-                textStyle={{ color: theme.colors.text }}
-              />
-            </Box>
-
-            <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
               Are you the owner of the listing?
             </Text>
 
@@ -286,14 +361,43 @@ const NewListingFinal = ({
               />
             </Box>
 
-            <Box style={{ marginVertical: 70 }} pb="xxxl">
-              <Button
-                type="purple"
-                width={theme.constants.screenWidth}
-                onPress={handleSubmit}
-                label="Submit for review"
-              />
-            </Box>
+            {!openO ? (
+              <>
+                <Text mt="xxl" variant="h2B" color="dark" style={{ alignSelf: 'flex-start' }}>
+                  Select location
+                </Text>
+
+                <Box style={{ marginVertical: 20 }}>
+                  <DropDownPicker
+                    min={0}
+                    max={5}
+                    open={open}
+                    items={items}
+                    value={location}
+                    setOpen={setOpen}
+                    setValue={setLocation}
+                    setItems={setItems}
+                    style={{ borderColor: theme.colors.white }}
+                    textStyle={{ color: theme.colors.text }}
+                  />
+                </Box>
+              </>
+            ) : (
+              <Box style={{ marginVertical: 20, height: 55 }} />
+            )}
+
+            {!open ? (
+              <Box style={{ marginVertical: 70 }} pb="xxxl">
+                <Button
+                  type="purple"
+                  width={theme.constants.screenWidth}
+                  onPress={handleSubmit}
+                  label="Submit for review"
+                />
+              </Box>
+            ) : (
+              <Box style={{ marginVertical: 70, height: 56 }} />
+            )}
 
             <Box style={{ height: 50 }} />
           </ScrollView>

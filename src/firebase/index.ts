@@ -5,7 +5,7 @@ import 'firebase/firestore';
 export default () => {
   // Initialize Firebase
   const firebaseConfig = {
-    apiKey: '"AIzaSyAqg9hS0qLUrJ-WePZV08UnEnVM_vxHLqY"',
+    apiKey: 'AIzaSyAqg9hS0qLUrJ-WePZV08UnEnVM_vxHLqY',
     authDomain: 'peza-mobile-app.firebaseapp.com',
     databaseURL: 'https://peza-mobile-app-default-rtdb.firebaseio.com/',
     projectId: 'peza-mobile-app',
